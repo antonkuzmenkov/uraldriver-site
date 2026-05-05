@@ -147,6 +147,112 @@ button { font: inherit; background:none; border:none; color:inherit; cursor:poin
   pointer-events: none;
   z-index: 0;
 }
+
+/* ─── Глобальный backdrop по маршруту (внутренние страницы) ─────────────── */
+/* body — чёрный, .app — прозрачный, .route-backdrop fixed на z-index 0,
+   все остальные дети .app поднимаем на z-index 1+, чтобы не перекрывать. */
+body { background: #05070b !important; }
+.app { background: transparent !important; }
+.route-backdrop {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.route-backdrop .space-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.app > .nav,
+.app > main,
+.app > footer,
+.app > section,
+.app > .scene-section,
+.app > .page,
+.app > article,
+.app > .scroll-progress {
+  position: relative;
+  z-index: 1;
+}
+.app > .scroll-progress { z-index: 100; }
+.app > .nav { z-index: 50; }
+/* Контент внутренних страниц — выше фона */
+.app[data-route="concept"] .page,
+.app[data-route="site"] .page,
+.app[data-route="economics"] .page,
+.app[data-route="roadmap"] .page,
+.app[data-route="phase05"] .page,
+.app[data-route="competitors"] .page,
+.app[data-route="blog"] .page,
+.app[data-route="support"] .page {
+  position: relative;
+  z-index: 2;
+}
+/* Карточки на внутренних страницах с фоном — полупрозрачные с blur */
+.app[data-route="concept"] .frame,
+.app[data-route="site"] .frame,
+.app[data-route="economics"] .frame,
+.app[data-route="roadmap"] .frame,
+.app[data-route="phase05"] .frame,
+.app[data-route="competitors"] .frame,
+.app[data-route="blog"] .frame,
+.app[data-route="support"] .frame {
+  background-color: rgba(20, 24, 29, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.app[data-route="phase05"] .page-title,
+.app[data-route="phase05"] .feature-title,
+.app[data-route="concept"] .page-title,
+.app[data-route="site"] .page-title,
+.app[data-route="economics"] .page-title,
+.app[data-route="roadmap"] .page-title,
+.app[data-route="competitors"] .page-title,
+.app[data-route="blog"] .page-title,
+.app[data-route="support"] .page-title {
+  text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+}
+
+/* ─── Секции-планеты на главной (вниз — продолжение космоса) ────────────── */
+.scene-section {
+  position: relative;
+  overflow: hidden;
+  /* Внутри лежит .space-bg + контент section */
+}
+.scene-section > .section {
+  position: relative;
+  z-index: 2;
+}
+/* Карточки на фоне планет — полупрозрачный фон + размытие */
+.scene-section .frame,
+.scene-section .pillar,
+.scene-section .tech,
+.scene-section .chapters-acc,
+.scene-section .changelog,
+.scene-section .phasebar-track,
+.scene-section .phasebar-detail {
+  background-color: rgba(20, 24, 29, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.scene-section .chapter-acc-head,
+.scene-section .chapter-acc-body,
+.scene-section .phasebar-cell {
+  background-color: transparent;
+}
+.scene-section .chapter-acc-head:hover,
+.scene-section .phasebar-cell:hover {
+  background-color: rgba(255,255,255,0.04);
+}
+.scene-section .chapter-acc.is-open .chapter-acc-head,
+.scene-section .phasebar-cell.is-open {
+  background-color: rgba(255,91,31,0.06);
+}
+/* Заголовки секций должны хорошо читаться поверх планет */
+.scene-section .section-title,
+.scene-section .feature-title,
+.scene-section .quote-body {
+  text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+}
 .hero-cosmic .hero-meta,
 .hero-cosmic .hero-grid,
 .hero-cosmic .hero-facts {
@@ -1552,11 +1658,391 @@ const PhaseTimelineExpandable = ({ phases, onSelect }) => {
   );
 };
 
+// ─── Звёздное поле (используется во всех backdrop'ах) ──────────────────────
+const StarField = ({ seed = 1337, count = 150, vbW = 1600, vbH = 800 }) => {
+  const stars = React.useMemo(() => {
+    const arr = [];
+    let s = seed;
+    const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    for (let i = 0; i < count; i++) {
+      const r = rand();
+      arr.push({
+        cx: rand() * vbW,
+        cy: rand() * vbH,
+        r: r < 0.85 ? 0.6 : r < 0.97 ? 1.0 : 1.6,
+        o: 0.25 + rand() * 0.65,
+        twinkle: rand() > 0.7,
+        delay: rand() * 4,
+      });
+    }
+    return arr;
+  }, [seed, count, vbW, vbH]);
+  return (
+    <g className="stars">
+      {stars.map((s, i) => (
+        <circle key={i} cx={s.cx} cy={s.cy} r={s.r} fill="#dfe7f4" opacity={s.o}>
+          {s.twinkle && (
+            <animate attributeName="opacity" values={`${s.o};${s.o * 0.25};${s.o}`}
+                     dur={`${3 + s.delay}s`} repeatCount="indefinite" begin={`${s.delay}s`}/>
+          )}
+        </circle>
+      ))}
+    </g>
+  );
+};
+
+// ─── Луна (Прометей-РФ — первый шаг) ──────────────────────────────────────
+const MoonBackdrop = ({ side = 'right' }) => {
+  const cx = side === 'right' ? 1300 : 300;
+  return (
+    <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <radialGradient id="moonGrad" cx="38%" cy="35%" r="60%">
+          <stop offset="0%" stopColor="#d8d4c8"/>
+          <stop offset="55%" stopColor="#8b8579"/>
+          <stop offset="100%" stopColor="#2b2925"/>
+        </radialGradient>
+        <radialGradient id="moonVignette" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+        </radialGradient>
+      </defs>
+      <rect width="1600" height="800" fill="#05070b"/>
+      <StarField seed={2222} count={180}/>
+      {/* Луна */}
+      <circle cx={cx} cy="420" r="240" fill="url(#moonGrad)"/>
+      {/* Кратеры */}
+      <g opacity="0.4" fill="#3a3733">
+        <circle cx={cx - 80} cy="370" r="22"/>
+        <circle cx={cx + 60} cy="340" r="14"/>
+        <circle cx={cx - 30} cy="460" r="30"/>
+        <circle cx={cx + 100} cy="490" r="18"/>
+        <circle cx={cx - 120} cy="490" r="10"/>
+        <circle cx={cx + 30} cy="400" r="8"/>
+        <circle cx={cx - 60} cy="540" r="12"/>
+      </g>
+      {/* Mare (тёмные пятна) */}
+      <g opacity="0.5" fill="#5a5550">
+        <ellipse cx={cx - 50} cy="380" rx="60" ry="40"/>
+        <ellipse cx={cx + 80} cy="450" rx="80" ry="50"/>
+        <ellipse cx={cx - 90} cy="470" rx="50" ry="35"/>
+      </g>
+      {/* Тёмная сторона */}
+      <ellipse cx={cx + 100} cy="420" rx="180" ry="240" fill="rgba(0,0,0,0.5)"/>
+      <rect width="1600" height="800" fill="url(#moonVignette)"/>
+    </svg>
+  );
+};
+
+// ─── Марс (Дорожная карта — путь к красной планете) ───────────────────────
+const MarsBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="marsGrad" cx="38%" cy="38%" r="62%">
+        <stop offset="0%" stopColor="#e08a55"/>
+        <stop offset="50%" stopColor="#a04525"/>
+        <stop offset="100%" stopColor="#3d1610"/>
+      </radialGradient>
+      <radialGradient id="marsAtm" cx="50%" cy="50%" r="50%">
+        <stop offset="78%" stopColor="rgba(220,140,80,0)"/>
+        <stop offset="92%" stopColor="rgba(220,140,80,0.15)"/>
+        <stop offset="100%" stopColor="rgba(220,140,80,0)"/>
+      </radialGradient>
+      <radialGradient id="marsVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#05070b"/>
+    <StarField seed={4444} count={160}/>
+    {/* Атмосфера */}
+    <ellipse cx="200" cy="500" rx="380" ry="380" fill="url(#marsAtm)"/>
+    {/* Марс — слева */}
+    <circle cx="200" cy="500" r="320" fill="url(#marsGrad)"/>
+    {/* Полярная шапка */}
+    <ellipse cx="200" cy="240" rx="100" ry="35" fill="#f0e8e0" opacity="0.7"/>
+    {/* Континентальные тёмные области */}
+    <g opacity="0.35" fill="#5a2010">
+      <path d="M120 480 Q160 450 220 480 Q280 520 270 580 Q200 600 140 570 Z"/>
+      <path d="M250 420 Q310 410 360 440 Q380 490 340 510 Q280 490 240 460 Z"/>
+      <ellipse cx="160" cy="640" rx="80" ry="30"/>
+    </g>
+    {/* Долина Маринера (большой шрам) */}
+    <path d="M100 500 Q200 510 320 495" fill="none" stroke="#3d1610" strokeWidth="3" opacity="0.6"/>
+    {/* Терминатор */}
+    <ellipse cx="380" cy="500" rx="200" ry="320" fill="rgba(0,0,0,0.5)"/>
+    {/* Орбитальная траектория */}
+    <path d="M 1600 100 Q 800 250 0 200" fill="none"
+          stroke="rgba(255,91,31,0.4)" strokeWidth="1.2" strokeDasharray="6,8"/>
+    <rect width="1600" height="800" fill="url(#marsVignette)"/>
+  </svg>
+);
+
+// ─── Юпитер (Экономика — масштаб $30 млрд) ────────────────────────────────
+const JupiterBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="jupiterGrad" cx="38%" cy="38%" r="65%">
+        <stop offset="0%" stopColor="#e8c9a0"/>
+        <stop offset="55%" stopColor="#9a6840"/>
+        <stop offset="100%" stopColor="#2a1a10"/>
+      </radialGradient>
+      <radialGradient id="jupVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#05070b"/>
+    <StarField seed={6666} count={170}/>
+    {/* Юпитер — огромный, частично виден */}
+    <circle cx="1200" cy="900" r="650" fill="url(#jupiterGrad)"/>
+    {/* Полосы атмосферы */}
+    <g opacity="0.4">
+      <path d="M 600 700 Q 1200 670 1800 720" fill="none" stroke="#7a4520" strokeWidth="22"/>
+      <path d="M 580 780 Q 1200 760 1820 790" fill="none" stroke="#5a3010" strokeWidth="16"/>
+      <path d="M 620 850 Q 1200 830 1780 860" fill="none" stroke="#8a5530" strokeWidth="20"/>
+      <path d="M 600 920 Q 1200 900 1800 930" fill="none" stroke="#6a3818" strokeWidth="14"/>
+    </g>
+    {/* Большое красное пятно */}
+    <ellipse cx="1100" cy="780" rx="80" ry="40" fill="#c04020" opacity="0.6"/>
+    {/* Терминатор */}
+    <ellipse cx="1450" cy="900" rx="500" ry="650" fill="rgba(0,0,0,0.45)"/>
+    <rect width="1600" height="800" fill="url(#jupVignette)"/>
+  </svg>
+);
+
+// ─── Сатурн с кольцами (11 глав — структура) ─────────────────────────────
+const SaturnBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="saturnGrad" cx="40%" cy="38%" r="60%">
+        <stop offset="0%" stopColor="#e8d8a0"/>
+        <stop offset="55%" stopColor="#a08850"/>
+        <stop offset="100%" stopColor="#2a2010"/>
+      </radialGradient>
+      <radialGradient id="satVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#05070b"/>
+    <StarField seed={8888} count={150}/>
+    {/* Кольца дальние */}
+    <g transform="translate(800, 400) rotate(-18)" opacity="0.55">
+      <ellipse rx="520" ry="110" fill="none" stroke="#a08850" strokeWidth="1.5"/>
+      <ellipse rx="500" ry="100" fill="none" stroke="#c0a060" strokeWidth="2.5"/>
+      <ellipse rx="475" ry="92" fill="none" stroke="#806840" strokeWidth="1"/>
+      <ellipse rx="450" ry="83" fill="none" stroke="#b09058" strokeWidth="2"/>
+      <ellipse rx="420" ry="74" fill="none" stroke="#907040" strokeWidth="1.5"/>
+      <ellipse rx="395" ry="66" fill="none" stroke="#a08850" strokeWidth="1"/>
+    </g>
+    {/* Сатурн */}
+    <circle cx="800" cy="400" r="200" fill="url(#saturnGrad)"/>
+    {/* Полосы */}
+    <g opacity="0.3" fill="none" stroke="#5a4520" strokeWidth="6">
+      <path d="M 620 380 Q 800 370 980 390"/>
+      <path d="M 620 420 Q 800 415 980 425"/>
+    </g>
+    {/* Кольца передние (перед сферой) */}
+    <g transform="translate(800, 400) rotate(-18)" opacity="0.7">
+      <path d="M -520 0 A 520 110 0 0 0 520 0" fill="none" stroke="#c0a060" strokeWidth="3" opacity="0"/>
+    </g>
+    {/* Тень от сферы на дальних кольцах */}
+    <ellipse cx="800" cy="400" rx="200" ry="200" fill="none"/>
+    {/* Терминатор */}
+    <ellipse cx="900" cy="400" rx="120" ry="200" fill="rgba(0,0,0,0.45)"/>
+    <rect width="1600" height="800" fill="url(#satVignette)"/>
+  </svg>
+);
+
+// ─── Нептун (Конкуренты — глубокий космос, дальние горизонты) ─────────────
+const NeptuneBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="neptuneGrad" cx="38%" cy="38%" r="60%">
+        <stop offset="0%" stopColor="#6abce0"/>
+        <stop offset="55%" stopColor="#2455a8"/>
+        <stop offset="100%" stopColor="#0a1a3a"/>
+      </radialGradient>
+      <radialGradient id="nepVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#040610"/>
+    <StarField seed={9999} count={200}/>
+    {/* Нептун */}
+    <circle cx="1300" cy="380" r="220" fill="url(#neptuneGrad)"/>
+    {/* Атмосферные облака */}
+    <g opacity="0.4" fill="#a0d8f0">
+      <ellipse cx="1280" cy="320" rx="60" ry="14"/>
+      <ellipse cx="1340" cy="400" rx="80" ry="18"/>
+      <ellipse cx="1260" cy="450" rx="50" ry="12"/>
+    </g>
+    {/* Большое тёмное пятно */}
+    <ellipse cx="1340" cy="370" rx="40" ry="22" fill="#0a1a3a" opacity="0.6"/>
+    {/* Тонкие кольца */}
+    <g transform="translate(1300, 380) rotate(-8)" opacity="0.3">
+      <ellipse rx="320" ry="60" fill="none" stroke="#3a70b0" strokeWidth="1"/>
+      <ellipse rx="290" ry="52" fill="none" stroke="#3a70b0" strokeWidth="0.5"/>
+    </g>
+    {/* Терминатор */}
+    <ellipse cx="1410" cy="380" rx="120" ry="220" fill="rgba(0,0,0,0.55)"/>
+    <rect width="1600" height="800" fill="url(#nepVignette)"/>
+  </svg>
+);
+
+// ─── Туманность (Блог — открытое пространство мыслей) ────────────────────
+const NebulaBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="nebula1" cx="40%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="rgba(255,91,31,0.45)"/>
+        <stop offset="100%" stopColor="rgba(255,91,31,0)"/>
+      </radialGradient>
+      <radialGradient id="nebula2" cx="60%" cy="40%" r="55%">
+        <stop offset="0%" stopColor="rgba(80,140,220,0.4)"/>
+        <stop offset="100%" stopColor="rgba(80,140,220,0)"/>
+      </radialGradient>
+      <radialGradient id="nebula3" cx="50%" cy="55%" r="40%">
+        <stop offset="0%" stopColor="rgba(180,80,200,0.35)"/>
+        <stop offset="100%" stopColor="rgba(180,80,200,0)"/>
+      </radialGradient>
+      <radialGradient id="nebVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(5,7,11,0.9)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#04060e"/>
+    <StarField seed={11111} count={260}/>
+    {/* Облака туманности */}
+    <ellipse cx="640" cy="400" rx="600" ry="320" fill="url(#nebula1)"/>
+    <ellipse cx="960" cy="320" rx="500" ry="280" fill="url(#nebula2)"/>
+    <ellipse cx="800" cy="440" rx="350" ry="200" fill="url(#nebula3)"/>
+    <rect width="1600" height="800" fill="url(#nebVignette)"/>
+  </svg>
+);
+
+// ─── Галактика-спираль (Поддержать — большая идея в глубоком космосе) ────
+const GalaxyBackdrop = () => {
+  const arms = React.useMemo(() => {
+    const arr = [];
+    let s = 13579;
+    const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    for (let i = 0; i < 800; i++) {
+      const armN = i % 3;
+      const t = (i / 800) * Math.PI * 4;
+      const r = 50 + (i / 800) * 380 + (rand() - 0.5) * 60;
+      const angle = t + (armN * Math.PI * 2 / 3);
+      arr.push({
+        cx: 800 + Math.cos(angle) * r,
+        cy: 400 + Math.sin(angle) * r * 0.4,
+        r: 0.5 + rand() * 1.5,
+        o: 0.2 + rand() * 0.7,
+      });
+    }
+    return arr;
+  }, []);
+  return (
+    <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <radialGradient id="galCore" cx="50%" cy="50%" r="20%">
+          <stop offset="0%" stopColor="rgba(255,220,160,0.85)"/>
+          <stop offset="100%" stopColor="rgba(255,180,100,0)"/>
+        </radialGradient>
+        <radialGradient id="galVignette" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="100%" stopColor="rgba(5,7,11,0.9)"/>
+        </radialGradient>
+      </defs>
+      <rect width="1600" height="800" fill="#03050a"/>
+      <StarField seed={22222} count={220}/>
+      {/* Ядро */}
+      <ellipse cx="800" cy="400" rx="200" ry="100" fill="url(#galCore)"/>
+      {/* Звёзды в спиралях */}
+      <g>
+        {arms.map((p, i) => (
+          <circle key={i} cx={p.cx} cy={p.cy} r={p.r} fill="#dfe7f4" opacity={p.o}/>
+        ))}
+      </g>
+      <rect width="1600" height="800" fill="url(#galVignette)"/>
+    </svg>
+  );
+};
+
+// ─── Гора Народная + Урал (Площадка — приземлённая) ──────────────────────
+const UralBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <linearGradient id="uralSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#0a1428"/>
+        <stop offset="60%" stopColor="#1a2548"/>
+        <stop offset="100%" stopColor="#2a3560"/>
+      </linearGradient>
+      <linearGradient id="uralRange" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#3a4865"/>
+        <stop offset="100%" stopColor="#0a0e18"/>
+      </linearGradient>
+      <radialGradient id="uralVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(5,7,11,0.9)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="url(#uralSky)"/>
+    <StarField seed={33333} count={140} vbH={500}/>
+    {/* Луна на небе */}
+    <circle cx="1300" cy="180" r="60" fill="#dfd8c8" opacity="0.85"/>
+    <circle cx="1280" cy="170" r="6" fill="#8a8478" opacity="0.5"/>
+    <circle cx="1320" cy="200" r="4" fill="#8a8478" opacity="0.5"/>
+    {/* Дальние горы */}
+    <path d="M 0 600 L 200 480 L 300 520 L 450 440 L 600 500 L 750 460 L 900 480 L 1050 430 L 1200 470 L 1400 440 L 1600 480 L 1600 800 L 0 800 Z"
+          fill="url(#uralRange)" opacity="0.6"/>
+    {/* Передний хребет */}
+    <path d="M 0 680 L 150 580 L 280 620 L 420 540 L 560 600 L 700 560 L 820 580 L 940 540 L 1080 590 L 1200 550 L 1320 600 L 1450 570 L 1600 610 L 1600 800 L 0 800 Z"
+          fill="#0a0e18"/>
+    {/* Гора Народная — выделенная */}
+    <path d="M 700 560 L 760 480 L 800 520 L 840 460 L 880 510 L 920 540"
+          fill="none" stroke="#ff5b1f" strokeWidth="1.5" opacity="0.6"/>
+    <text x="780" y="450" fontFamily="JetBrains Mono, monospace" fontSize="10"
+          fill="#ff5b1f" opacity="0.7" textAnchor="middle">НАРОДНАЯ · 1895 м</text>
+    <rect width="1600" height="800" fill="url(#uralVignette)"/>
+  </svg>
+);
+
+// ─── Подбор фона по маршруту ─────────────────────────────────────────────
+const RouteBackdrop = ({ route }) => {
+  const map = {
+    home:        null,             // у главной свой фон в hero, тут не нужен
+    concept:     <SpaceBackdrop/>, // Земля + орбита (где разгоняется капсула)
+    site:        <UralBackdrop/>,  // гора Народная
+    economics:   <JupiterBackdrop/>,
+    roadmap:     <MarsBackdrop/>,
+    phase05:     <MoonBackdrop side="right"/>,
+    competitors: <NeptuneBackdrop/>,
+    blog:        <NebulaBackdrop/>,
+    support:     <GalaxyBackdrop/>,
+  };
+  const bg = map[route];
+  if (!bg) return null;
+  return <div className="route-backdrop">{bg}</div>;
+};
+
 Object.assign(window, {
   IconRocket, IconMoney, IconWindow, IconArrow, IconStar, IconHeart, IconExternal,
   Eyebrow, SectionHead, Corners, Tag, Stat, Btn, Frame,
   PhaseTimeline, PhaseTimelineExpandable, GridPattern, DimLine,
   SpaceBackdrop, ChaptersAccordion,
+  StarField, MoonBackdrop, MarsBackdrop, JupiterBackdrop,
+  SaturnBackdrop, NeptuneBackdrop, NebulaBackdrop, GalaxyBackdrop,
+  UralBackdrop, RouteBackdrop,
 });
 
 </script>
@@ -1757,7 +2243,9 @@ const PageHome = ({ data, setRoute }) => {
         </div>
       </section>
 
-      {/* PILLARS */}
+      {/* PILLARS — фон Луны слева (первый шаг от Земли) */}
+      <div className="scene-section">
+        <MoonBackdrop side="left"/>
       <section className="section">
         <SectionHead code="// 01" kicker="три тезиса" title="Почему этот проект может быть реален" />
         <div className="pillars">
@@ -1779,8 +2267,11 @@ const PageHome = ({ data, setRoute }) => {
           })}
         </div>
       </section>
+      </div>
 
-      {/* FEATURE: Прометей-РФ */}
+      {/* FEATURE: Прометей-РФ — крупная Луна */}
+      <div className="scene-section">
+        <MoonBackdrop side="right"/>
       <section className="section feature">
         <div className="feature-bar mono">
           <span><IconStar/> {data.feature.eyebrow}</span>
@@ -1824,8 +2315,11 @@ const PageHome = ({ data, setRoute }) => {
           </div>
         </div>
       </section>
+      </div>
 
-      {/* ROADMAP STRIP — раскрытие на клик */}
+      {/* ROADMAP — Марс (путь к красной планете) */}
+      <div className="scene-section">
+        <MarsBackdrop/>
       <section className="section">
         <SectionHead code="// 07" kicker="6 фаз · 19 лет" title="Дорожная карта" sub="Кликни по фазе чтобы развернуть детали бюджета и gate-review."/>
         <PhaseTimelineExpandable phases={data.phases}/>
@@ -1836,8 +2330,11 @@ const PageHome = ({ data, setRoute }) => {
           <span><span className="dot dot-horizon"/>горизонт</span>
         </div>
       </section>
+      </div>
 
-      {/* TECH STACK */}
+      {/* TECH STACK — Юпитер (мощь, масштаб) */}
+      <div className="scene-section">
+        <JupiterBackdrop/>
       <section className="section">
         <SectionHead code="// 05" kicker="опора на существующее" title="Российский технологический стек" />
         <div className="techgrid">
@@ -1851,14 +2348,20 @@ const PageHome = ({ data, setRoute }) => {
           ))}
         </div>
       </section>
+      </div>
 
-      {/* CHAPTERS INDEX — аккордеон */}
+      {/* CHAPTERS — Сатурн (структура с кольцами) */}
+      <div className="scene-section">
+        <SaturnBackdrop/>
       <section className="section">
         <SectionHead code="// DOC" kicker="концепт-документ" title="11 глав" sub="Документ открыт. Кликни по главе чтобы развернуть краткое содержание; полные markdown — в репозитории."/>
         <ChaptersAccordion chapters={data.chapters}/>
       </section>
+      </div>
 
-      {/* QUOTE */}
+      {/* QUOTE — Нептун (далёкая большая идея) */}
+      <div className="scene-section">
+        <NeptuneBackdrop/>
       <section className="section quote-section">
         <div className="quote">
           <div className="quote-mark mono">«</div>
@@ -1866,8 +2369,11 @@ const PageHome = ({ data, setRoute }) => {
           <p className="quote-after">{data.quote.after}</p>
         </div>
       </section>
+      </div>
 
-      {/* CHANGELOG */}
+      {/* CHANGELOG — Туманность (хроника) */}
+      <div className="scene-section">
+        <NebulaBackdrop/>
       <section className="section">
         <SectionHead code="// LOG" kicker="журнал обновлений" title="Что изменилось"/>
         <div className="changelog">
@@ -1884,6 +2390,7 @@ const PageHome = ({ data, setRoute }) => {
           ))}
         </div>
       </section>
+      </div>
     </>
   );
 };
@@ -2277,7 +2784,8 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app" data-route={route}>
+      <RouteBackdrop route={route}/>
       <ScrollProgress/>
       <ChromeNav data={data} route={route} setRoute={setRoute}/>
       {Page}
