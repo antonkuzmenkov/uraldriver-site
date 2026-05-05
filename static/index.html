@@ -702,6 +702,162 @@ body { background: #05070b !important; }
   .chapter-acc-head { grid-template-columns: 40px 1fr auto; gap: 10px; }
 }
 
+/* ─── 4 СЦЕНАРИЯ ЗАГРУЗКИ (loadgrid) ───────────────────────────────────── */
+.loadgrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+@media (max-width: 900px) { .loadgrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .loadgrid { grid-template-columns: 1fr; } }
+.loadcard {
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.loadcard-name {
+  font-size: 11px; letter-spacing: 0.08em;
+  color: var(--dim); margin-bottom: 6px;
+}
+.loadcard-traffic {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.loadcard-cost {
+  font-family: var(--serif);
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.loadcard-desc {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+}
+.loadcard-best  .loadcard-cost { color: var(--signal); }
+.loadcard-best  { border-color: var(--signal); }
+.loadcard-good  .loadcard-cost { color: var(--accent); }
+.loadcard-good  { border-color: var(--accent); }
+.loadcard-med   .loadcard-cost { color: var(--warn); }
+.loadcard-bad   .loadcard-cost { color: var(--danger); }
+.loadcard-bad   { border-color: var(--danger); }
+
+/* ─── РЫЧАГИ $/кг (LeversAccordion) ────────────────────────────────────── */
+.levers-acc {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  margin-bottom: 32px;
+}
+.levers-acc-head,
+.lev-row-head {
+  display: grid;
+  grid-template-columns: 40px 1fr 90px 110px 90px 90px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 18px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.levers-acc-head {
+  cursor: default;
+  background: var(--surface-2);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--line);
+}
+.lev-row { border-bottom: 1px solid var(--line); }
+.lev-row:last-child { border-bottom: 0; }
+.lev-row-head:hover { background: var(--surface); }
+.lev-row.is-open .lev-row-head {
+  background: var(--surface-2);
+  border-bottom: 1px dashed var(--line-strong);
+}
+.lev-n { color: var(--accent); font-size: 12px; }
+.lev-name { font-size: 14.5px; }
+.lev-cap, .lev-load, .lev-cost, .lev-tier {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.lev-cost { color: var(--accent); font-weight: 500; }
+.lev-tier { color: var(--dim); }
+.tier-1 .lev-cost { font-size: 14px; }
+.lev-row-body {
+  padding: 12px 24px 20px 70px;
+  background: var(--surface-2);
+  animation: chapterSlide .25s ease-out;
+}
+.lev-row-body p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 70ch;
+}
+.lev-row-total {
+  background: rgba(255,91,31,0.08);
+  border-top: 2px solid var(--accent);
+}
+.lev-row-total .lev-row-head { cursor: default; padding: 18px; }
+.lev-row-total .lev-name b { color: var(--ink); }
+.lev-row-total .lev-cost { font-size: 14px; }
+@media (max-width: 900px) {
+  .levers-acc-head, .lev-row-head {
+    grid-template-columns: 30px 1fr 70px 70px;
+    gap: 8px; font-size: 11px;
+  }
+  .lev-load, .lev-tier { display: none; }
+  .lev-row-body { padding: 12px 16px 16px 50px; }
+}
+
+.levers-bottom { margin-top: 32px; }
+.levers-final {
+  padding: 28px 32px;
+  border-color: var(--accent);
+}
+.levers-final-price {
+  font-family: var(--serif);
+  font-size: 56px;
+  letter-spacing: -0.025em;
+  color: var(--accent);
+  margin: 8px 0 12px;
+  line-height: 1;
+}
+.levers-final-note {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 80ch;
+}
+
+/* ─── Иллюстрации (chart-fig) ──────────────────────────────────────────── */
+.chart-fig {
+  margin: 32px 0 0;
+  padding: 24px;
+  background: rgba(20, 24, 29, 0.65);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+.chart-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+.chart-cap {
+  margin-top: 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+}
+
 /* ─── PHASE TIMELINE EXPANDABLE ────────────────────────────────────────── */
 .phasebar-x { width: 100%; }
 .phasebar-cell.is-open {
@@ -1184,6 +1340,53 @@ window.SITE_DATA = {
     { id: 'Курчатовский', what: 'Программа «Зевс»',
       proof: 'Соглашение с Роскосмосом, апр. 2026', city: 'Москва' },
   ],
+
+  // 4 сценария загрузки катапульты (Глава 4 концепта)
+  loadScenarios: [
+    { name: 'А — Проектная',     traffic: '15 000 т/год',    cost: '$100–125/кг',
+      desc: 'Полная загрузка: связка с Зевсом, ILRS, орбитальной экономикой.',
+      tone: 'best' },
+    { name: 'Б — Реалистичная',  traffic: '5 000 т/год',     cost: '$200–260/кг',
+      desc: 'Российско-союзный рынок + часть международного, орбитальная заправка.',
+      tone: 'good' },
+    { name: 'В — Консервативная', traffic: '1 000 т/год',     cost: '$900–1100/кг',
+      desc: 'Только российский периметр. Дешевле «Союза-5», но не прорыв.',
+      tone: 'med' },
+    { name: 'Г — «Грустный»',    traffic: '200 т/год',       cost: '$4 000–5 000/кг',
+      desc: 'Спрос не материализовался. «Дорогой памятник».',
+      tone: 'bad' },
+  ],
+
+  // Рычаги снижения $/кг (Глава 4.6 концепта + Хабр-статья раздел 8)
+  levers: [
+    { n: '01', name: 'Параллельная вторая нитка',
+      detail: 'Тоннель сразу под две катапульты (Ø 8 м вместо 5–6) — 2× пропускной способности за 1,3–1,4× CAPEX. Расширить «потом» физически невозможно — это решение принимается в Фазе 0.',
+      capex: '+30%', load: '×2', cost: '−37%', tier: 1 },
+    { n: '02', name: 'Капсула 8 → 12–15 т',
+      detail: 'Тоннель Ø 5–6 м физически тянет 12–15 т при той же геометрии. Накопители усиливаются на 30–40%. 7200–9000 т/год без увеличения операций.',
+      capex: '+3%', load: '+50%', cost: '−28%', tier: 1 },
+    { n: '03', name: 'Гибрид «катапульта + скайхук»',
+      detail: 'Тоннель сокращается до 25 км (−37%), катапульта разгоняет до 4–5 км/с, скайхук добирает остальное. Чистая экономия $3–5 млрд + гибкость по орбитам.',
+      capex: '−13%', load: '—', cost: '−10–15%', tier: 2 },
+    { n: '04', name: 'Существующие блоки АЭС (long-term PPA)',
+      detail: 'Балансировка с Белоярской АЭС: избыточная мощность ВВЭР ночью идёт в накопители. Не нужен новый блок ВВЭР-1200.',
+      capex: '−10%', load: '—', cost: '−7–10%', tier: 2 },
+    { n: '05', name: 'Унификация капсул с Союз-7 / ПТК НП',
+      detail: 'Корпуса, теплозащита, авионика — общие производственные линии с Роскосмосом. Серийное производство снижает себестоимость.',
+      capex: '−2%', load: '—', cost: '−5–8%', tier: 2 },
+    { n: '06', name: 'Заброшенные горные выработки Северного Урала',
+      detail: 'Использование старых шахт сокращает горнопроходку. Подходит для Фазы 1 — демонстратор 1,5 км.',
+      capex: '−2%', load: '—', cost: '−3–5%', tier: 3 },
+    { n: '07', name: 'Закрытый цикл криогеники',
+      detail: 'Рекуперация LHe и LN2. Снижает opex на криогенные расходники.',
+      capex: '0', load: '—', cost: '−2–4%', tier: 3 },
+  ],
+  // Сценарий «всё вместе»
+  leversTotal: {
+    capex: '−27%', load: '×2 (10 000 т/год)', cost: '−55–60%',
+    finalPrice: '$95–110/кг',
+    note: 'Применение интервенций 1–5 одновременно: $30 → $22 млрд CAPEX, 5000 → 10 000 т/год, $230 → $103/кг. Это паритет с Starship-S3 и решительная победа в S2.',
+  },
 
   // Главное меню
   menu: [
@@ -2017,6 +2220,95 @@ const UralBackdrop = () => (
   </svg>
 );
 
+// ─── Меркурий (Тех.стек — плотные компетенции, ближе к Солнцу) ────────────
+const MercuryBackdrop = () => (
+  <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <defs>
+      <radialGradient id="mercuryGrad" cx="38%" cy="38%" r="62%">
+        <stop offset="0%" stopColor="#c8b89a"/>
+        <stop offset="55%" stopColor="#7a6a52"/>
+        <stop offset="100%" stopColor="#251f15"/>
+      </radialGradient>
+      <radialGradient id="merVignette" cx="50%" cy="50%" r="75%">
+        <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+        <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="800" fill="#05070b"/>
+    <StarField seed={5555} count={140}/>
+    {/* Меркурий — справа */}
+    <circle cx="1300" cy="400" r="210" fill="url(#mercuryGrad)"/>
+    {/* Кратеры — много, плотно */}
+    <g opacity="0.4" fill="#3a3025">
+      <circle cx="1240" cy="350" r="18"/>
+      <circle cx="1320" cy="320" r="12"/>
+      <circle cx="1280" cy="430" r="24"/>
+      <circle cx="1360" cy="450" r="14"/>
+      <circle cx="1220" cy="450" r="10"/>
+      <circle cx="1340" cy="380" r="8"/>
+      <circle cx="1260" cy="490" r="11"/>
+      <circle cx="1380" cy="410" r="9"/>
+      <circle cx="1200" cy="400" r="7"/>
+      <circle cx="1300" cy="280" r="6"/>
+    </g>
+    {/* Caloris Basin — большой кратер */}
+    <ellipse cx="1280" cy="370" rx="55" ry="42" fill="#5a4a35" opacity="0.5"/>
+    <circle cx="1280" cy="370" r="42" fill="none" stroke="#8a7858" strokeWidth="1" opacity="0.5"/>
+    {/* Терминатор */}
+    <ellipse cx="1380" cy="400" rx="120" ry="210" fill="rgba(0,0,0,0.5)"/>
+    <rect width="1600" height="800" fill="url(#merVignette)"/>
+  </svg>
+);
+
+// ─── Аккордеон рычагов $/кг ──────────────────────────────────────────────
+const LeversAccordion = ({ levers, total }) => {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="levers-acc">
+      <div className="levers-acc-head mono dim">
+        <span className="lev-n">№</span>
+        <span className="lev-name">рычаг</span>
+        <span className="lev-cap">Δ CAPEX</span>
+        <span className="lev-load">Δ загрузка</span>
+        <span className="lev-cost">Δ $/кг</span>
+        <span className="lev-tier">уровень</span>
+      </div>
+      {levers.map(l => {
+        const isOpen = open === l.n;
+        return (
+          <div key={l.n} className={`lev-row tier-${l.tier} ${isOpen?'is-open':''}`}>
+            <button className="lev-row-head" onClick={()=>setOpen(isOpen?null:l.n)}
+                    aria-expanded={isOpen}>
+              <span className="lev-n mono">{l.n}</span>
+              <span className="lev-name">{l.name}</span>
+              <span className="lev-cap mono">{l.capex}</span>
+              <span className="lev-load mono">{l.load}</span>
+              <span className="lev-cost mono">{l.cost}</span>
+              <span className="lev-tier mono">{l.tier === 1 ? 'I порядок' : l.tier === 2 ? 'II' : 'III'}</span>
+            </button>
+            {isOpen && (
+              <div className="lev-row-body">
+                <p>{l.detail}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+      <div className="lev-row lev-row-total">
+        <div className="lev-row-head">
+          <span className="lev-n mono">Σ</span>
+          <span className="lev-name"><b>Все вместе (агрессивная архитектура)</b></span>
+          <span className="lev-cap mono">{total.capex}</span>
+          <span className="lev-load mono">{total.load}</span>
+          <span className="lev-cost mono">{total.cost}</span>
+          <span className="lev-tier mono">→ {total.finalPrice}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Подбор фона по маршруту ─────────────────────────────────────────────
 const RouteBackdrop = ({ route }) => {
   const map = {
@@ -2040,9 +2332,9 @@ Object.assign(window, {
   Eyebrow, SectionHead, Corners, Tag, Stat, Btn, Frame,
   PhaseTimeline, PhaseTimelineExpandable, GridPattern, DimLine,
   SpaceBackdrop, ChaptersAccordion,
-  StarField, MoonBackdrop, MarsBackdrop, JupiterBackdrop,
+  StarField, MoonBackdrop, MarsBackdrop, JupiterBackdrop, MercuryBackdrop,
   SaturnBackdrop, NeptuneBackdrop, NebulaBackdrop, GalaxyBackdrop,
-  UralBackdrop, RouteBackdrop,
+  UralBackdrop, RouteBackdrop, LeversAccordion,
 });
 
 </script>
@@ -2332,9 +2624,83 @@ const PageHome = ({ data, setRoute }) => {
       </section>
       </div>
 
-      {/* TECH STACK — Юпитер (мощь, масштаб) */}
+      {/* СЦЕНАРИИ ЗАГРУЗКИ — Юпитер (масштаб экономики) */}
       <div className="scene-section">
         <JupiterBackdrop/>
+      <section className="section">
+        <SectionHead code="// 04" kicker="экономика" title="4 сценария загрузки"
+          sub="Главный фактор $/кг — грузопоток. Постоянные расходы (амортизация ~$1 млрд/год) идут в любом случае; меняется только знаменатель."/>
+        <div className="loadgrid">
+          {data.loadScenarios.map(s => (
+            <Frame key={s.name} className={`loadcard loadcard-${s.tone}`}>
+              <div className="loadcard-name mono">{s.name}</div>
+              <div className="loadcard-traffic">{s.traffic}</div>
+              <div className="loadcard-cost">{s.cost}</div>
+              <p className="loadcard-desc">{s.desc}</p>
+            </Frame>
+          ))}
+        </div>
+        <figure className="chart-fig">
+          <img src="/img/charts/02_load_scenarios.png" alt="Сценарии загрузки катапульты"
+               className="chart-img" loading="lazy"/>
+          <figcaption className="chart-cap mono dim">FIG · 04.1 · сценарии загрузки катапульты — амортизация остаётся, переменные затраты пропорциональны</figcaption>
+        </figure>
+      </section>
+      </div>
+
+      {/* РЫЧАГИ $/кг — туманность (трансформация концепта) */}
+      <div className="scene-section">
+        <NebulaBackdrop/>
+      <section className="section">
+        <SectionHead code="// 04.6" kicker="что снижает цену" title="Рычаги $/кг"
+          sub="$230/кг → $95–110/кг через комбинацию инженерных и операционных интервенций. Кликни по рычагу чтобы развернуть детали."/>
+        <LeversAccordion levers={data.levers} total={data.leversTotal}/>
+        <figure className="chart-fig">
+          <img src="/img/charts/08_waterfall.png" alt="Водопад-диаграмма рычагов снижения цены"
+               className="chart-img" loading="lazy"/>
+          <figcaption className="chart-cap mono dim">FIG · 04.6 · водопад: каждый рычаг съедает кусок $/кг</figcaption>
+        </figure>
+        <div className="levers-bottom">
+          <div className="frame levers-final">
+            <div className="mono dim">↳ Сценарий «всё вместе» (рычаги 1–5)</div>
+            <div className="levers-final-price">{data.leversTotal.finalPrice}</div>
+            <p className="levers-final-note">{data.leversTotal.note}</p>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      {/* СТРУКТУРА CAPEX — Юпитер */}
+      <div className="scene-section">
+        <JupiterBackdrop/>
+      <section className="section">
+        <SectionHead code="// 04.1" kicker="структура $30 млрд" title="Из чего складывается CAPEX"
+          sub="Главная статья неопределённости — сверхпроводящие катушки (±50%). NbTi vs REBCO решает диапазон $25–50 млрд."/>
+        <figure className="chart-fig">
+          <img src="/img/charts/04_capex_breakdown.png" alt="Структура капитальных затрат"
+               className="chart-img" loading="lazy"/>
+          <figcaption className="chart-cap mono dim">FIG · 04.1.1 · структура капекса по статьям</figcaption>
+        </figure>
+      </section>
+      </div>
+
+      {/* МАТРИЦА STARSHIP — Нептун (далёкая угроза) */}
+      <div className="scene-section">
+        <NeptuneBackdrop/>
+      <section className="section">
+        <SectionHead code="// 06" kicker="чувствительность" title="Перекрёстная матрица Starship × загрузка"
+          sub="Главная внешняя переменная — ценовая траектория Starship 2032–2035. 4 сценария Starship × 4 сценария загрузки = матрица решений."/>
+        <figure className="chart-fig">
+          <img src="/img/charts/03_starship_matrix.png" alt="Перекрёстная матрица Starship vs Урал-Драйвер"
+               className="chart-img" loading="lazy"/>
+          <figcaption className="chart-cap mono dim">FIG · 06 · вероятность победы УД при разных комбинациях Starship-сценариев и загрузки</figcaption>
+        </figure>
+      </section>
+      </div>
+
+      {/* TECH STACK — Меркурий (опора, плотные компетенции) */}
+      <div className="scene-section">
+        <MercuryBackdrop/>
       <section className="section">
         <SectionHead code="// 05" kicker="опора на существующее" title="Российский технологический стек" />
         <div className="techgrid">
