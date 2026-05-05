@@ -2531,7 +2531,7 @@ const StarshipMatrix = () => {
                 <text x={x + colW/2} y={y + rowH/2 + 6}
                       fill="#fff" fontFamily="Source Serif 4, serif"
                       fontSize="18" textAnchor="middle">
-                  {v >= 0 ? '+' : ''}${v >= 0 ? v : -v}
+                  {v >= 0 ? '+$' : '−$'}{Math.abs(v).toLocaleString('ru')}
                 </text>
               </g>
             );
