@@ -124,6 +124,46 @@ button { font: inherit; background:none; border:none; color:inherit; cursor:poin
   color: var(--line);
   width: 100%; height: 100%;
 }
+
+/* ─── HERO COSMIC: Земля + орбита + звёзды ─────────────────────────────── */
+.hero-cosmic {
+  max-width: 100%;
+  padding: 56px 0 96px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.hero-cosmic > .hero-meta,
+.hero-cosmic > .hero-grid,
+.hero-cosmic > .hero-facts {
+  max-width: var(--maxw);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.space-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-cosmic .hero-meta,
+.hero-cosmic .hero-grid,
+.hero-cosmic .hero-facts {
+  position: relative;
+  z-index: 2;
+}
+.hero-cosmic .hero-title {
+  text-shadow: 0 2px 32px rgba(0,0,0,0.6);
+}
+.hero-cosmic .hero-meta {
+  border-bottom-color: rgba(38,44,52,0.55);
+  backdrop-filter: blur(2px);
+}
+.hero-cosmic .hero-facts {
+  border-top-color: rgba(38,44,52,0.55);
+  backdrop-filter: blur(2px);
+}
 .hero-meta {
   position: relative;
   display: flex; justify-content: space-between;
@@ -482,6 +522,133 @@ button { font: inherit; background:none; border:none; color:inherit; cursor:poin
 .chip-new { background: var(--accent); color: var(--bg); }
 .chip-upd { border: 1px solid var(--line-strong); color: var(--ink-2); }
 
+/* ─── CHAPTERS ACCORDION ───────────────────────────────────────────────── */
+.chapters-acc {
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+.chapter-acc {
+  border-bottom: 1px solid var(--line);
+}
+.chapter-acc:last-child { border-bottom: 0; }
+.chapter-acc-head {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  cursor: pointer;
+  transition: background .15s;
+}
+.chapter-acc-head:hover { background: var(--surface); }
+.chapter-acc.is-open .chapter-acc-head {
+  background: var(--surface-2);
+  border-bottom: 1px dashed var(--line-strong);
+}
+.chapter-acc.is-open .chapter-caret { color: var(--accent); }
+.chapter-caret {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--dim);
+  width: 16px; text-align: center;
+  transition: color .15s;
+}
+.chapter-d { font-size: 10.5px; }
+.chapter-acc-body {
+  padding: 20px 24px 28px 76px;
+  background: var(--surface-2);
+  border-top: 0;
+  animation: chapterSlide .25s ease-out;
+}
+@keyframes chapterSlide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chapter-acc-text {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+  max-width: 70ch;
+}
+.chapter-acc-kw {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 0 0 16px;
+}
+.chapter-acc-foot {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.chapter-acc-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.chapter-acc-link:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+  .chapter-acc-body { padding: 20px 20px 28px 20px; }
+  .chapter-acc-head { grid-template-columns: 40px 1fr auto; gap: 10px; }
+}
+
+/* ─── PHASE TIMELINE EXPANDABLE ────────────────────────────────────────── */
+.phasebar-x { width: 100%; }
+.phasebar-cell.is-open {
+  background: var(--surface-2);
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+.phasebar-detail {
+  margin-top: -1px;
+  padding: 28px 32px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  animation: chapterSlide .25s ease-out;
+}
+.phasebar-detail-head {
+  display: flex; justify-content: space-between; align-items: start; gap: 16px;
+  padding-bottom: 16px; border-bottom: 1px dashed var(--line-strong);
+  margin-bottom: 16px;
+}
+.phasebar-detail-title {
+  font-family: var(--serif);
+  font-size: 28px; font-weight: 400; letter-spacing: -0.02em;
+  margin: 4px 0 0;
+}
+.phasebar-detail-close {
+  background: none; border: 1px solid var(--line-strong);
+  padding: 6px 12px; cursor: pointer;
+  font-size: 11px; letter-spacing: 0.08em;
+  color: var(--ink-2);
+  transition: border-color .15s, color .15s;
+}
+.phasebar-detail-close:hover { border-color: var(--ink); color: var(--ink); }
+.phasebar-detail-what {
+  font-family: var(--serif);
+  font-size: 17px; line-height: 1.55;
+  color: var(--ink); margin: 0 0 20px;
+}
+.phasebar-detail-h {
+  font-size: 10.5px; letter-spacing: 0.1em;
+  margin-bottom: 8px; display: block;
+}
+.phasebar-detail-list {
+  margin: 0 0 20px; padding-left: 20px;
+  color: var(--ink-2); line-height: 1.7;
+}
+.phasebar-detail-list li { margin-bottom: 4px; font-size: 14.5px; }
+.phasebar-detail-gate {
+  padding: 14px 16px;
+  background: var(--accent-soft);
+  border-left: 2px solid var(--accent);
+}
+.phasebar-detail-gate p { margin: 6px 0 0; font-size: 14px; line-height: 1.55; color: var(--ink); }
+
 /* ─── QUOTE ────────────────────────────────────────────────────────────── */
 .quote-section { padding: 64px 24px; }
 .quote {
@@ -741,7 +908,7 @@ window.SITE_DATA = {
     tagline: 'Возвращаем мечту о Солнечной системе',
     version: '2026.05.05',
     lastUpdate: '2026-05-04',
-    author: 'Антон Кузьменков',
+    author: 'Антон Кузменков',
     status: 'OPEN CONCEPT · v3.0',
   },
 
@@ -812,22 +979,72 @@ window.SITE_DATA = {
   phases: [
     { id: '0', label: 'Фаза 0', title: 'Концепт', period: '2026–2028',
       budget: '$0,12 млрд', state: 'now',
-      what: 'Геология, эскизный проект, LOI с НИИЭФА, ВНИИЭФ, Белоярской АЭС.' },
+      what: 'Геология, эскизный проект, LOI с НИИЭФА, ВНИИЭФ, Белоярской АЭС.',
+      goals: [
+        'Концепт-инжиниринг всех систем ($30 млн)',
+        'Геологоразведка горы Народной — 5+ скважин 1500 м ($40 млн)',
+        'Эскизный проект тоннеля совместно с Метропроектом ($15 млн)',
+        'Энергобаланс с Росатомом по ВВЭР-1200 ($10 млн)',
+        'LOI заказчика — СБСП, ВПК, ОАК-Спутник ($5 млн)',
+        'Госэкспертиза + ЮНЕСКО + экологическая ($20 млн)',
+      ],
+      gate: 'Подтверждённая физика (через Прометея-РФ), геология, LOI на 200+ т/год, решение по ЮНЕСКО.' },
     { id: '0.5', label: 'Фаза 0.5', title: 'Прометей-РФ', period: '2027–2030',
       budget: '₽300–450 млн', state: 'next', star: true,
-      what: 'Лабораторный прототип маглев-катапульты 30–50 м.' },
+      what: 'Лабораторный прототип маглев-катапульты 30–50 м.',
+      goals: [
+        'Сборка лабораторного корпуса в Сарове или Дубне',
+        'Поставка магнитов НИИЭФА + криогеники Курчатовского',
+        'LSM в импульсном режиме — КПД 75%+',
+        'Программа испытаний: 100+ пусков, V до 500 м/с',
+        'Публикации в IEEE/AIAA, защиты PhD',
+      ],
+      gate: 'Достижение 200–500 м/с на 30–50 м прототипе. Открывает финансирование Фазы 1.' },
     { id: '1', label: 'Фаза 1', title: 'Демонстратор', period: '2028–2033',
       budget: '$2,5 млрд', state: 'next',
-      what: 'Тоннель 1,5 км, отработка LSM, маглев, MHD-окно.' },
+      what: 'Тоннель 1,5 км, отработка LSM, маглев, MHD-окно.',
+      goals: [
+        'Тоннель 1,5 км в скальном массиве — $800 млн',
+        'Сверхпроводящая инфраструктура — $700 млн',
+        'Импульсные накопители 100 МВт — $400 млн',
+        'Капсулы и автоматика — $300 млн',
+        'Энергоснабжение и инфраструктура — $300 млн',
+      ],
+      gate: '50% от расчётной скорости (3–4 км/с при цели 7,5 км/с), 100 успешных пусков, надёжность 95%+.' },
     { id: '2', label: 'Фаза 2', title: 'Стройка', period: '2033–2040',
       budget: '$18 млрд', state: 'planned',
-      what: 'Тоннель 40 км, ВВЭР-1200, полная маглев-линия.' },
+      what: 'Тоннель 40 км, ВВЭР-1200, полная маглев-линия.',
+      goals: [
+        'Тоннель 40 км в горе Народной — $9–11 млрд',
+        'Сверхпроводящая инфраструктура — $5 млрд',
+        'Новый блок ВВЭР-1200 на Белоярской АЭС — $4 млрд',
+        'MHD-окно полного размера — $1 млрд',
+        'Капсулы серийного производства — $0,5 млрд',
+        'Инфраструктура (посёлок, ЛЭП, логистика) — $0,5 млрд',
+      ],
+      gate: 'Все системы pass-test, тоннель эвакуирован, ВВЭР запущен в накопительный режим.' },
     { id: '3', label: 'Фаза 3', title: 'Лётно-конструкторские испытания', period: '2040–2045',
       budget: '$7 млрд', state: 'planned',
-      what: '200+ испытательных пусков, аттестация трассы.' },
+      what: '200+ испытательных пусков, аттестация трассы.',
+      goals: [
+        'Серийные капсулы 200+ единиц — $2 млрд',
+        'Полезные нагрузки и расходники — $1,5 млрд',
+        'Эксплуатационные расходы — $1,5 млрд',
+        'Доработка по результатам испытаний — $1 млрд',
+        'Резерв на нештатные ситуации — $1 млрд',
+      ],
+      gate: '95% надёжность, 5000+ т проектной мощности подтверждены, контракты на регулярную эксплуатацию.' },
     { id: '4', label: 'Фаза 4', title: 'Эксплуатация', period: '2045+',
       budget: 'опекс', state: 'horizon',
-      what: '1000+ пусков/год, $200/кг.' },
+      what: '1000+ пусков/год, $200/кг.',
+      goals: [
+        'СБСП-консорциум — 30–40% траффика, $200–250/кг',
+        'Орбитальные ДЦ (Starcloud-РФ) — 20–30%, $250–300/кг',
+        'ВПК — 15–20%, $300–400/кг',
+        'Международный коммерческий — 15–25%, $250–350/кг',
+        'Опция B (лунный масс-драйвер) — расширение к 2055',
+      ],
+      gate: 'Окупаемость $370 млн опекс / 5000 т → $74/кг операционных + амортизация.' },
   ],
 
   // Конкуренты на 2026.05
@@ -875,20 +1092,44 @@ window.SITE_DATA = {
     { id: 'support', label: 'Поддержать', code: '$', heart: true },
   ],
 
-  // Все 11 глав концепт-документа
+  // Все 11 глав концепт-документа — с раскрывающимся summary
   chapters: [
-    { n: '00', t: 'Executive summary', s: 'pub', d: '5 мин' },
-    { n: '01', t: 'Концепция и физика', s: 'pub', d: '14 мин' },
-    { n: '02', t: 'Анализ площадки — гора Народная', s: 'pub', d: '12 мин' },
-    { n: '03', t: 'Технический дизайн', s: 'pub', d: '22 мин' },
-    { n: '04', t: 'Экономика и Starship-чувствительность', s: 'updated', d: '24 мин' },
-    { n: '05', t: 'Синергия с Росатомом', s: 'pub', d: '11 мин' },
-    { n: '06', t: 'Спрос и рынок', s: 'updated', d: '18 мин' },
-    { n: '07', t: 'Дорожная карта', s: 'updated', d: '16 мин' },
-    { n: '08', t: 'Риски', s: 'pub', d: '13 мин' },
-    { n: '09', t: 'Сравнение альтернатив', s: 'updated', d: '20 мин' },
-    { n: '10', t: 'Стратегия продвижения', s: 'updated', d: '17 мин' },
-    { n: '11', t: 'Прометей-РФ — лабораторный прототип', s: 'new', d: '28 мин' },
+    { n: '00', t: 'Executive summary', s: 'pub', d: '5 мин',
+      body: 'Сжатая версия концепта на 5 страницах. Главные цифры ($30–35 млрд CAPEX, $200–300/кг, 19 лет программа), три сценария реализации (А — мегапроект, Б — опционный, В — лунный fallback), ключевые риски и почему окно возможностей открыто только до 2035–2038.',
+      kw: ['$30 млрд', '$200/кг', '3 сценария'] },
+    { n: '01', t: 'Концепция и физика', s: 'pub', d: '14 мин',
+      body: 'Что физически разгоняет капсулу. Архитектура маглев + LSM в эвакуированном тоннеле 40 км. Конечная скорость 7,2–7,8 км/с, перегрузка 50–100 g, время разгона 6–9 с. Что можно запускать (топливо, металлы, расходники) и что нельзя (люди, оптика, хрупкая электроника). Главное узкое место — MHD-окно (TRL 3–4).',
+      kw: ['маглев + LSM', '7,5 км/с', 'MHD-окно'] },
+    { n: '02', t: 'Анализ площадки — гора Народная', s: 'pub', d: '12 мин',
+      body: 'Почему именно Приполярный Урал. Сравнение с Кавказом (сейсмика 8–9 баллов), Камчаткой (вулкан) и Алтаем (логистика +1500 км). Гора Народная (1895 м) — архейская монолитная скала, сейсмика 3–6 баллов, восточная экспозиция на малонаселённые ХМАО/ЯНАО. Главный блокер — статус ЮНЕСКО парка «Югыд ва».',
+      kw: ['Народная 1895 м', 'архейская скала', 'ЮНЕСКО — блокер'] },
+    { n: '03', t: 'Технический дизайн', s: 'pub', d: '22 мин',
+      body: 'Шесть ключевых подсистем: тоннель TBM в скальном массиве, маглев Inductrack II на NbTi/BiSCCO, импульсный LSM на 50–100 кВ, трёхстадийная импульсная энергетика (ВВЭР → ГАЭС → СПИН → разряд), MHD-окно 5×5 м с плазменным удержанием, многоразовые капсулы 5 т с аблятивной защитой.',
+      kw: ['Inductrack II', '3 стадии накопителей', 'плазменное окно'] },
+    { n: '04', t: 'Экономика и Starship-чувствительность', s: 'updated', d: '24 мин',
+      body: 'CAPEX $30–35 млрд за 19 лет. Удельная стоимость $200/кг при полной загрузке 5000 т/год → $1000–1300/кг при реалистичной 300 т/год. Главная sensitivity-таблица: 3 сценария Starship 2032 → S1 (25%), S2 (50% ↑), S3 (25% ↓). Май 2026: orbital refueling Starship не работает — окно для УД расширилось.',
+      kw: ['$200–1300/кг', 'Starship S2=50%', 'refueling fail'] },
+    { n: '05', t: 'Синергия с Росатомом', s: 'pub', d: '11 мин',
+      body: 'Без Росатома проект не масштабируется. Четыре уникальные компетенции: магниты НИИЭФА (ИТЭР PF1), импульсная техника ВНИИЭФ (школа Сахарова), реакторы на быстрых нейтронах (Белоярская АЭС), атомное законодательство Ростехнадзор. In-kind вклад ~$5 млрд эквивалент в обмен на 15% выручки на 30 лет.',
+      kw: ['НИИЭФА PF1', 'школа Сахарова', 'БН-800'] },
+    { n: '06', t: 'Спрос и рынок', s: 'updated', d: '18 мин',
+      body: 'Главный риск проекта (вероятность 50%). Российский периметр спроса 50–300 т/год при проектной 5000. Встроенные customers: СБСП-консорциум (30%), Starcloud-РФ (20%), ВПК (15%), международный (25%). Validate май 2026: Starcloud $1.1B unicorn, Meta+Overview SBSP, Interlune $18M Lunar He-3.',
+      kw: ['50–300 т/год', 'Starcloud-РФ', 'SBSP-Meta'] },
+    { n: '07', t: 'Дорожная карта', s: 'updated', d: '16 мин',
+      body: '6 фаз за 19 лет с gate-review между ними. Фаза 0 концепт ($0,12 млрд) и Фаза 0.5 Прометей-РФ (₽300–450 млн) идут параллельно — это сокращает сроки на 5 лет. Каждая фаза самодостаточна: можно остановиться без катастрофических потерь.',
+      kw: ['6 фаз', '19 лет', 'gate-review'] },
+    { n: '08', t: 'Риски', s: 'pub', d: '13 мин',
+      body: 'Карта 10 рисков. Топ-3: Starship S3 = $80–150/кг (25%, митигация — Опция B лунный масс-драйвер), политическая смена (35%, митигация — национальный приоритет уровня АЭС), спрос < 100 т/год (50%, митигация — встроенный customer-mix). Опционность каждой фазы — главная защита.',
+      kw: ['Starship S3', 'политика 35%', 'спрос 50%'] },
+    { n: '09', t: 'Сравнение альтернатив', s: 'updated', d: '20 мин',
+      body: 'Конкурентный ландшафт май 2026. Auriga Space ($12,2M) — прямой технический бенчмарк (Winnie Lai, ex-VP SpinLaunch). Stoke Space ($860M Series D), Longshot Space ($5M+SHIELD), SpaceX Starship ($15B потрачено). Tethers Unlimited (Skyhook) в анабиозе, SpinLaunch pivot на Meridian. China Type 076 EMALS 78 МВт — параллельная программа.',
+      kw: ['Auriga $12,2M', 'Starship $15B', 'Type 076 EMALS'] },
+    { n: '10', t: 'Стратегия продвижения', s: 'updated', d: '17 мин',
+      body: 'Что делает одиночка без бюджета. 4 параллельных канала: государственный (МО НИОКР, РНФ, Сколково), общественный (сайт + MAX-канал + книга + фильм + крауд), международный (NIAC через US co-PI, ESA workshop), бизнес (LOI от российских customers). Краудфандинг ₽3–30 млн = signal-капитал, не финансирование.',
+      kw: ['4 канала', 'крауд = signal', '12-месячный план'] },
+    { n: '11', t: 'Прометей-РФ — лабораторный прототип', s: 'new', d: '28 мин',
+      body: 'Главное обновление мая 2026. Лабораторный электромагнитный разгонник 30–50 м, 200–500 м/с, ₽300–450 млн за 3 года — российский эквивалент Auriga Prometheus. Mix-финансирование: 35% МО НИОКР, 25% РНФ, 20% in-kind институтов, 12% Сколково, 8% краудфандинг. Главный шаг к снятию «valley of death» между концептом и демонстратором $2,5 млрд.',
+      kw: ['30–50 м', '₽300 млн', 'Auriga мирор'] },
   ],
 
   // Журнал обновлений
@@ -926,7 +1167,7 @@ window.SITE_DATA = {
     ],
     legal: 'Юридический wrapper (АНО / Фонд) — в работе. Реквизиты появятся к Q3 2026.',
     channels: [
-      { name: 'Telegram-канал', handle: '@uraldriver', url: 'https://t.me/uraldriver' },
+      { name: 'MAX мессенджер', handle: '@uraldriver', url: 'https://max.ru/uraldriver' },
       { name: 'Email', handle: 'anton@moyvedi.ru', url: 'mailto:anton@moyvedi.ru' },
       { name: 'GitHub', handle: 'antonkuzmenkov', url: 'https://github.com/antonkuzmenkov' },
       { name: 'Хабр', handle: 'песочница', url: 'https://habr.com/ru/sandbox/283360/' },
@@ -1085,10 +1326,237 @@ const DimLine = ({ children, axis='h' }) => (
   </div>
 );
 
+// ─── Космический фон: Земля + орбита + звёзды (за hero) ────────────────────
+const SpaceBackdrop = () => {
+  // Псевдослучайные звёзды с фиксированным сидом — стабильный layout
+  const stars = React.useMemo(() => {
+    const arr = [];
+    let seed = 1337;
+    const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed/233280; };
+    for (let i = 0; i < 220; i++) {
+      const r = rand();
+      arr.push({
+        cx: rand() * 1600,
+        cy: rand() * 600,
+        r: r < 0.85 ? 0.6 : r < 0.97 ? 1.0 : 1.6,
+        o: 0.25 + rand() * 0.65,
+        twinkle: rand() > 0.7,
+        delay: rand() * 4,
+      });
+    }
+    return arr;
+  }, []);
+  return (
+    <svg className="space-bg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <defs>
+        <radialGradient id="earthGrad" cx="35%" cy="40%" r="65%">
+          <stop offset="0%" stopColor="#2c4d6e"/>
+          <stop offset="55%" stopColor="#0b2440"/>
+          <stop offset="100%" stopColor="#020812"/>
+        </radialGradient>
+        <radialGradient id="atmGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="80%" stopColor="rgba(70,140,220,0)"/>
+          <stop offset="92%" stopColor="rgba(80,160,240,0.18)"/>
+          <stop offset="100%" stopColor="rgba(80,160,240,0)"/>
+        </radialGradient>
+        <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="rgba(255,91,31,0)"/>
+          <stop offset="50%" stopColor="rgba(255,91,31,0.55)"/>
+          <stop offset="100%" stopColor="rgba(255,91,31,0)"/>
+        </linearGradient>
+        <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+          <stop offset="0%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="80%" stopColor="rgba(0,0,0,0)"/>
+          <stop offset="100%" stopColor="rgba(11,13,16,0.85)"/>
+        </radialGradient>
+      </defs>
+
+      {/* deep space gradient */}
+      <rect width="1600" height="800" fill="#05070b"/>
+
+      {/* Звёзды */}
+      <g className="stars">
+        {stars.map((s,i) => (
+          <circle key={i} cx={s.cx} cy={s.cy} r={s.r}
+                  fill="#dfe7f4" opacity={s.o}>
+            {s.twinkle && (
+              <animate attributeName="opacity" values={`${s.o};${s.o*0.25};${s.o}`}
+                       dur={`${3 + s.delay}s`} repeatCount="indefinite" begin={`${s.delay}s`}/>
+            )}
+          </circle>
+        ))}
+      </g>
+
+      {/* Метеор / след — едва заметный диагональный штрих */}
+      <line x1="100" y1="80" x2="220" y2="20" stroke="#dfe7f4" strokeWidth="0.6" opacity="0.35"/>
+      <line x1="900" y1="160" x2="980" y2="120" stroke="#dfe7f4" strokeWidth="0.5" opacity="0.25"/>
+
+      {/* Атмосфера Земли */}
+      <ellipse cx="1700" cy="900" rx="650" ry="650" fill="url(#atmGrad)"/>
+
+      {/* Земля — большая полусфера справа-внизу, видна частично */}
+      <circle cx="1700" cy="900" r="600" fill="url(#earthGrad)"/>
+
+      {/* Континентальные пятна — упрощённо, для текстуры */}
+      <g opacity="0.32" fill="#5b8fb8">
+        <path d="M1280 600 Q1340 580 1400 620 Q1450 680 1420 720 Q1370 700 1320 670 Z"/>
+        <path d="M1500 540 Q1560 520 1620 560 Q1640 610 1600 640 Q1540 620 1490 580 Z"/>
+        <path d="M1380 750 Q1450 730 1520 770 Q1540 820 1490 840 Q1420 820 1370 790 Z"/>
+        <path d="M1640 680 Q1700 670 1740 700 Q1750 740 1710 750 Q1660 740 1630 720 Z"/>
+      </g>
+
+      {/* Терминатор — тёмная сторона */}
+      <ellipse cx="1820" cy="900" rx="500" ry="600" fill="rgba(0,0,0,0.45)"/>
+
+      {/* Низкая околоземная орбита (LEO) — пунктирная дуга */}
+      <path d="M 0 750 Q 800 380 1600 620"
+            fill="none" stroke="rgba(255,91,31,0.45)" strokeWidth="1.2" strokeDasharray="6,8"/>
+      {/* Активная орбита — сплошная с градиентом */}
+      <path d="M 0 760 Q 800 360 1600 600"
+            fill="none" stroke="url(#orbitGrad)" strokeWidth="2"/>
+
+      {/* Капсула на орбите */}
+      <g transform="translate(820, 388)">
+        <circle r="3" fill="#ff5b1f"/>
+        <circle r="6" fill="none" stroke="#ff5b1f" strokeWidth="0.8" opacity="0.6"/>
+        <circle r="10" fill="none" stroke="#ff5b1f" strokeWidth="0.4" opacity="0.3"/>
+      </g>
+
+      {/* Старт-точка — гора Народная (где-то слева) */}
+      <g transform="translate(140, 770)">
+        <line x1="0" y1="0" x2="40" y2="-30" stroke="#ff5b1f" strokeWidth="1" opacity="0.7"/>
+        <circle r="2" fill="#ff5b1f"/>
+        <text x="6" y="14" fill="#ff5b1f" fontSize="9"
+              fontFamily="JetBrains Mono, monospace" opacity="0.7">УРАЛ</text>
+      </g>
+
+      {/* Виньетка снизу-сверху */}
+      <rect width="1600" height="800" fill="url(#vignette)"/>
+    </svg>
+  );
+};
+
+// ─── Аккордеон глав концепт-документа ──────────────────────────────────────
+const ChaptersAccordion = ({ chapters }) => {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="chapters-acc">
+      {chapters.map(c => {
+        const isOpen = open === c.n;
+        return (
+          <div key={c.n} className={`chapter-acc chapter-${c.s} ${isOpen?'is-open':''}`}>
+            <button className="chapter-acc-head" onClick={()=>setOpen(isOpen?null:c.n)}
+                    aria-expanded={isOpen}>
+              <span className="chapter-n mono">{c.n}</span>
+              <span className="chapter-t">{c.t}</span>
+              <span className="chapter-meta mono dim">
+                {c.s==='new' && <span className="chip chip-new">NEW</span>}
+                {c.s==='updated' && <span className="chip chip-upd">UPD</span>}
+                <span className="chapter-d">{c.d}</span>
+                <span className="chapter-caret">{isOpen?'−':'+'}</span>
+              </span>
+            </button>
+            {isOpen && (
+              <div className="chapter-acc-body">
+                <p className="chapter-acc-text">{c.body}</p>
+                {c.kw && (
+                  <div className="chapter-acc-kw">
+                    {c.kw.map(k => <Tag key={k}>{k}</Tag>)}
+                  </div>
+                )}
+                <div className="chapter-acc-foot">
+                  <a href={`https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/${
+                    c.n==='00'?'00_executive_summary':
+                    c.n==='01'?'01_concept_and_physics':
+                    c.n==='02'?'02_site_analysis':
+                    c.n==='03'?'03_technical_design':
+                    c.n==='04'?'04_economics':
+                    c.n==='05'?'05_synergy_rosatom':
+                    c.n==='06'?'06_demand_and_market':
+                    c.n==='07'?'07_roadmap':
+                    c.n==='08'?'08_risks':
+                    c.n==='09'?'09_alternatives_comparison':
+                    c.n==='10'?'10_strategy_for_promotion':
+                    '11_prometheus_rf_lab_prototype'
+                  }.md`} target="_blank" className="chapter-acc-link mono">
+                    Читать главу целиком на GitHub <IconExternal/>
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ─── PhaseTimeline с раскрытием на клик ────────────────────────────────────
+const PhaseTimelineExpandable = ({ phases, onSelect }) => {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="phasebar-x">
+      <div className="phasebar-track">
+        {phases.map((p) => {
+          const isOpen = open === p.id;
+          return (
+            <button key={p.id}
+              className={`phasebar-cell phasebar-${p.state} ${isOpen?'is-open':''}`}
+              onClick={()=>{
+                setOpen(isOpen?null:p.id);
+                onSelect && onSelect(p.id);
+              }}
+              style={{flex: p.id==='4'?2:1}}>
+              <div className="phasebar-meta">
+                <span className="mono dim">{p.label}</span>
+                {p.star && <span className="phasebar-star"><IconStar/></span>}
+              </div>
+              <div className="phasebar-title">{p.title}</div>
+              <div className="phasebar-period mono">{p.period}</div>
+              <div className="phasebar-budget mono">{p.budget}</div>
+            </button>
+          );
+        })}
+      </div>
+      {open && (() => {
+        const p = phases.find(x => x.id === open);
+        if (!p) return null;
+        return (
+          <div className="phasebar-detail">
+            <div className="phasebar-detail-head">
+              <div>
+                <div className="mono dim">{p.label} · {p.period}</div>
+                <h3 className="phasebar-detail-title">{p.title}</h3>
+              </div>
+              <button className="phasebar-detail-close mono" onClick={()=>setOpen(null)}>× закрыть</button>
+            </div>
+            <p className="phasebar-detail-what">{p.what}</p>
+            {p.goals && (
+              <>
+                <div className="mono dim phasebar-detail-h">→ ключевые работы</div>
+                <ul className="phasebar-detail-list">
+                  {p.goals.map((g,i) => <li key={i}>{g}</li>)}
+                </ul>
+              </>
+            )}
+            {p.gate && (
+              <div className="phasebar-detail-gate">
+                <span className="mono dim">↳ Gate-review</span>
+                <p>{p.gate}</p>
+              </div>
+            )}
+          </div>
+        );
+      })()}
+    </div>
+  );
+};
+
 Object.assign(window, {
   IconRocket, IconMoney, IconWindow, IconArrow, IconStar, IconHeart, IconExternal,
   Eyebrow, SectionHead, Corners, Tag, Stat, Btn, Frame,
-  PhaseTimeline, GridPattern, DimLine,
+  PhaseTimeline, PhaseTimelineExpandable, GridPattern, DimLine,
+  SpaceBackdrop, ChaptersAccordion,
 });
 
 </script>
@@ -1220,8 +1688,9 @@ const PageHome = ({ data, setRoute }) => {
   return (
     <>
       {/* HERO */}
-      <section className="hero">
-        <GridPattern opacity={0.5}/>
+      <section className="hero hero-cosmic">
+        <SpaceBackdrop/>
+        <GridPattern opacity={0.18}/>
         <div className="hero-meta">
           <div className="mono dim">URAL-DRIVER · ОТКРЫТЫЙ КОНЦЕПТ · {data.meta.version}</div>
           <div className="mono dim">N 65°02′ · E 60°07′ · 1895 m</div>
@@ -1356,12 +1825,10 @@ const PageHome = ({ data, setRoute }) => {
         </div>
       </section>
 
-      {/* ROADMAP STRIP */}
+      {/* ROADMAP STRIP — раскрытие на клик */}
       <section className="section">
-        <SectionHead code="// 07" kicker="6 фаз · 19 лет" title="Дорожная карта" />
-        <PhaseTimeline phases={data.phases} onSelect={(id)=>{
-          if (id==='0.5') setRoute('phase05'); else setRoute('roadmap');
-        }} />
+        <SectionHead code="// 07" kicker="6 фаз · 19 лет" title="Дорожная карта" sub="Кликни по фазе чтобы развернуть детали бюджета и gate-review."/>
+        <PhaseTimelineExpandable phases={data.phases}/>
         <div className="phasebar-legend mono dim">
           <span><span className="dot dot-now"/>сейчас</span>
           <span><span className="dot dot-next"/>следующий шаг</span>
@@ -1385,22 +1852,10 @@ const PageHome = ({ data, setRoute }) => {
         </div>
       </section>
 
-      {/* CHAPTERS INDEX */}
+      {/* CHAPTERS INDEX — аккордеон */}
       <section className="section">
-        <SectionHead code="// DOC" kicker="концепт-документ" title="11 глав" sub="Документ открыт. Каждая глава — отдельный markdown в репозитории."/>
-        <div className="chapters">
-          {data.chapters.map(c => (
-            <a className={`chapter chapter-${c.s}`} key={c.n} href="#" onClick={(e)=>e.preventDefault()}>
-              <div className="chapter-n mono">{c.n}</div>
-              <div className="chapter-t">{c.t}</div>
-              <div className="chapter-meta mono dim">
-                {c.s==='new' && <span className="chip chip-new">NEW</span>}
-                {c.s==='updated' && <span className="chip chip-upd">UPD</span>}
-                {c.d}
-              </div>
-            </a>
-          ))}
-        </div>
+        <SectionHead code="// DOC" kicker="концепт-документ" title="11 глав" sub="Документ открыт. Кликни по главе чтобы развернуть краткое содержание; полные markdown — в репозитории."/>
+        <ChaptersAccordion chapters={data.chapters}/>
       </section>
 
       {/* QUOTE */}
