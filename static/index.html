@@ -2619,37 +2619,36 @@ const GlobalTrajectory = ({ enabled }) => {
 
   if (!enabled || pageH < 200) return null;
 
-  // Точки опор — соответствуют примерному положению планет в секциях главной.
-  // X в координатах viewBox 0–1600 (фиксированное), Y в реальных px (pageH).
-  // Старт точно от капсулы в hero (820, 388 в viewBox 1600×800 = ~820 / 388 в начале страницы).
+  // Точки опор — соответствуют положению планет в секциях главной.
+  // viewBox растягивается на ширину экрана (xMidYMin slice).
   const W = 1600;
-  // Опорные точки (vh-приближение): hero=600, тезисы=1200, прометей=1900, road=2700, load=3300, levers=4200, capex=4900, starship=5600, tech=6400, chapters=7100, quote=7600, log=8100
   const points = [
-    [820,   388],   // конец орбиты hero (где капсула)
-    [200,   pageH * 0.13],  // Луна слева (Pillars)
-    [1300,  pageH * 0.21],  // Луна справа (Прометей)
-    [200,   pageH * 0.31],  // Марс слева (Roadmap)
-    [1200,  pageH * 0.40],  // Юпитер (LoadScenarios)
-    [800,   pageH * 0.49],  // Нева туманности (Levers)
-    [1200,  pageH * 0.58],  // Юпитер (CAPEX)
-    [1300,  pageH * 0.66],  // Нептун (StarshipMatrix)
-    [1300,  pageH * 0.75],  // Меркурий (TechStack)
-    [800,   pageH * 0.83],  // Сатурн (Chapters)
-    [1300,  pageH * 0.91],  // Нептун (Quote)
-    [800,   pageH * 0.97],  // финал — туманность (Changelog)
+    [820,   388],            // конец орбиты hero (где капсула)
+    [220,   pageH * 0.13],   // Луна слева (Pillars)
+    [1280,  pageH * 0.21],   // Луна справа (Прометей)
+    [220,   pageH * 0.31],   // Марс слева (Roadmap)
+    [1280,  pageH * 0.40],   // Юпитер (LoadScenarios)
+    [800,   pageH * 0.49],   // Туманность (Levers)
+    [1280,  pageH * 0.58],   // Юпитер (CAPEX)
+    [1280,  pageH * 0.66],   // Нептун (StarshipMatrix)
+    [1280,  pageH * 0.75],   // Меркурий (TechStack)
+    [800,   pageH * 0.83],   // Сатурн (Chapters)
+    [1280,  pageH * 0.91],   // Нептун (Quote)
+    [800,   pageH * 0.97],   // финал — туманность (Changelog)
   ];
 
-  // Smooth path — каждые 2 точки соединяются Q-кривой через промежуточный control
+  // Smooth path с большим изгибом (control points отклонены)
   let d = `M ${points[0][0]} ${points[0][1]}`;
   for (let i = 1; i < points.length; i++) {
     const [x1, y1] = points[i - 1];
     const [x2, y2] = points[i];
-    const cx = (x1 + x2) / 2;
-    const cy = (y1 + y2) / 2 - 40;  // лёгкий изгиб вверх
-    d += ` Q ${cx} ${cy} ${x2} ${y2}`;
+    // Control points для C-кривой — мягкие S-образные изгибы
+    const c1x = x1, c1y = y1 + (y2 - y1) * 0.55;
+    const c2x = x2, c2y = y2 - (y2 - y1) * 0.55;
+    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`;
   }
 
-  // прогресс линии по скроллу — линия "проявляется" по мере чтения
+  // Прогресс по скроллу — для пульсирующих маркеров
   const docH = Math.max(1, pageH - window.innerHeight);
   const progress = Math.max(0, Math.min(1, scrollY / docH));
 
@@ -2660,12 +2659,13 @@ const GlobalTrajectory = ({ enabled }) => {
          style={{ height: pageH }}>
       <defs>
         <linearGradient id="trajGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%"   stopColor="rgba(255,91,31,0.85)"/>
-          <stop offset="50%"  stopColor="rgba(255,140,80,0.7)"/>
-          <stop offset="100%" stopColor="rgba(255,200,150,0.55)"/>
+          <stop offset="0%"   stopColor="rgba(255,91,31,1)"/>
+          <stop offset="40%"  stopColor="rgba(255,140,80,0.95)"/>
+          <stop offset="80%"  stopColor="rgba(255,200,140,0.85)"/>
+          <stop offset="100%" stopColor="rgba(255,240,200,0.7)"/>
         </linearGradient>
-        <filter id="trajGlow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
+        <filter id="trajGlow" x="-20%" y="-2%" width="140%" height="104%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
           <feMerge>
             <feMergeNode in="blur"/>
             <feMergeNode in="SourceGraphic"/>
@@ -2673,36 +2673,29 @@ const GlobalTrajectory = ({ enabled }) => {
         </filter>
       </defs>
 
-      {/* Тонкий пунктир — траектория целиком (визуальная подложка) */}
-      <path d={d} fill="none" stroke="rgba(255,91,31,0.35)"
-            strokeWidth="1.2" strokeDasharray="6,10"/>
+      {/* Glow-подложка — широкий мягкий ореол */}
+      <path d={d} fill="none" stroke="rgba(255,91,31,0.3)"
+            strokeWidth="14" strokeLinecap="round"
+            filter="url(#trajGlow)"/>
 
-      {/* Сплошная — "пройденный путь" по скроллу с glow */}
+      {/* Основная линия — яркая сплошная, видна сразу */}
       <path d={d} fill="none" stroke="url(#trajGrad)"
-            strokeWidth="2.5" strokeLinecap="round"
-            filter="url(#trajGlow)"
-            style={{
-              strokeDasharray: 20000,
-              strokeDashoffset: 20000 * (1 - progress),
-              transition: 'stroke-dashoffset .15s linear',
-            }}/>
+            strokeWidth="3" strokeLinecap="round"/>
 
-      {/* Маркер текущей позиции — летящая капсула */}
+      {/* Опорные точки — планеты на маршруте */}
       {points.map((p, i) => {
-        const isReached = (i / (points.length - 1)) <= progress + 0.02;
+        const isReached = (i / (points.length - 1)) <= progress + 0.05;
         return (
           <g key={i} transform={`translate(${p[0]}, ${p[1]})`}>
-            <circle r={isReached ? 3.5 : 2.5}
-                    fill={isReached ? '#ff5b1f' : 'rgba(255,91,31,0.4)'}/>
-            {isReached && (
-              <circle r="7" fill="none" stroke="#ff5b1f"
-                      strokeWidth="0.8" opacity="0.5">
-                <animate attributeName="r" values="7;12;7"
-                         dur="2.5s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.5;0;0.5"
-                         dur="2.5s" repeatCount="indefinite"/>
-              </circle>
-            )}
+            <circle r="6" fill={isReached ? '#ff5b1f' : 'rgba(255,91,31,0.55)'}/>
+            <circle r="3" fill="#fff" opacity="0.9"/>
+            <circle r="14" fill="none" stroke="#ff5b1f"
+                    strokeWidth="1" opacity="0.6">
+              <animate attributeName="r" values="10;20;10"
+                       dur="3s" repeatCount="indefinite" begin={`${i * 0.3}s`}/>
+              <animate attributeName="opacity" values="0.6;0;0.6"
+                       dur="3s" repeatCount="indefinite" begin={`${i * 0.3}s`}/>
+            </circle>
           </g>
         );
       })}
