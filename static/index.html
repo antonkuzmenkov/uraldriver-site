@@ -1194,6 +1194,231 @@ button:focus-visible, a:focus-visible {
 .placeholder-row { padding: 18px 24px; display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center; }
 .placeholder-row-t { font-size: 15px; }
 
+/* ─── FUNDING (3 раунда) ───────────────────────────────────────────────── */
+
+/* Прогрессбар Раунда 1 */
+.r1-progress { margin-bottom: 32px; }
+.r1-progress-meta {
+  display: flex; justify-content: space-between;
+  font-size: 11px; letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.r1-progress-bar {
+  height: 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--tbl-row-border);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.r1-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #ff8a55);
+  transition: width 0.3s;
+}
+.r1-progress-status {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Таблица целей Раунда 1 */
+.goals-table {
+  border: 1px solid var(--tbl-row-border);
+  background: var(--tbl-bg);
+  backdrop-filter: blur(var(--tbl-blur));
+  -webkit-backdrop-filter: blur(var(--tbl-blur));
+  margin-bottom: 24px;
+}
+.goals-head, .goal-row-head {
+  display: grid;
+  grid-template-columns: 50px 1fr 130px 110px;
+  gap: 12px;
+  align-items: center;
+  padding: var(--tbl-pad-y) var(--tbl-pad-x);
+}
+.goals-head {
+  background: var(--tbl-header-bg);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--tbl-row-border);
+}
+.goal-row { border-bottom: 1px solid var(--tbl-row-border); }
+.goal-row:last-child { border-bottom: 0; }
+.goal-row-head { cursor: default; }
+.goal-must .g-rank { color: var(--accent); }
+.goal-must .g-must { color: var(--accent); }
+.g-rank { color: var(--dim); font-size: 12px; }
+.g-what { font-size: 14.5px; }
+.g-amt { color: var(--accent); font-size: 13px; font-weight: 500; }
+.g-must { font-size: 11px; color: var(--dim); }
+.goal-why {
+  padding: 0 24px 16px 78px;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 80ch;
+}
+.goal-total {
+  background: rgba(255,91,31,0.08);
+  border-top: 2px solid var(--accent);
+}
+@media (max-width: 800px) {
+  .goals-head, .goal-row-head { grid-template-columns: 36px 1fr 90px 60px; gap: 8px; font-size: 11.5px; }
+  .goal-why { padding: 0 16px 16px 50px; }
+}
+
+/* Каналы Раунда 1 */
+.r1-channels {
+  margin-top: 16px;
+  padding: 16px 20px;
+  border: 1px dashed var(--line-strong);
+}
+.r1-channels ul { margin: 8px 0 0; padding: 0; list-style: none; }
+.r1-channels li { padding: 4px 0; font-size: 13px; color: var(--ink-2); }
+
+/* Раунд 2 — mix-каналы */
+.mix-bars {
+  display: flex; flex-direction: column; gap: 14px;
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid var(--tbl-row-border);
+  background: var(--tbl-bg);
+  backdrop-filter: blur(var(--tbl-blur));
+}
+.mix-row-top {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline;
+  margin-bottom: 6px;
+}
+.mix-name { font-size: 14.5px; }
+.mix-amt { font-size: 13px; color: var(--ink-2); }
+.mix-pct { font-size: 13px; color: var(--accent); font-weight: 500; min-width: 40px; text-align: right; }
+.mix-bar {
+  height: 6px; background: var(--bg-2); overflow: hidden;
+  border: 1px solid var(--tbl-row-border);
+}
+.mix-fill { height: 100%; background: var(--accent); }
+.mix-via { font-size: 10.5px; margin-top: 4px; letter-spacing: 0.04em; }
+
+.r2-note {
+  padding: 16px 20px;
+  background: rgba(255,91,31,0.07);
+  border-left: 2px solid var(--accent);
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.r2-note b { color: var(--ink); }
+
+/* Раунд 3 */
+.r3-card {
+  padding: 28px 32px;
+  border-color: var(--warn);
+}
+.r3-warn {
+  font-size: 11px; letter-spacing: 0.08em;
+  color: var(--warn);
+  margin-bottom: 12px;
+}
+.r3-card p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* Юр.wrapper чек-лист */
+.legal-checklist {
+  border: 1px solid var(--tbl-row-border);
+  background: var(--tbl-bg);
+  backdrop-filter: blur(var(--tbl-blur));
+}
+.legal-item {
+  display: grid;
+  grid-template-columns: 30px 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: var(--tbl-pad-y) var(--tbl-pad-x);
+  border-bottom: 1px solid var(--tbl-row-border);
+}
+.legal-item:last-child { border-bottom: 0; }
+.legal-check {
+  font-size: 18px;
+  color: var(--dim);
+  text-align: center;
+}
+.legal-item.is-done .legal-check { color: var(--signal); }
+.legal-item.is-done .legal-step { text-decoration: line-through; color: var(--dim); }
+.legal-step { font-size: 14.5px; }
+.legal-eta { font-size: 11px; }
+
+/* Прозрачность */
+.transparency-list {
+  margin: 0; padding: 24px 28px;
+  list-style: none;
+  border: 1px solid var(--tbl-row-border);
+  background: var(--tbl-bg);
+  backdrop-filter: blur(var(--tbl-blur));
+}
+.transparency-list li {
+  padding: 8px 0 8px 28px;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  position: relative;
+  border-bottom: 1px dashed var(--tbl-row-border);
+}
+.transparency-list li:last-child { border-bottom: 0; }
+.transparency-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0; top: 8px;
+  color: var(--signal);
+  font-weight: bold;
+}
+
+/* Что НЕ делаем */
+.dont-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+@media (max-width: 800px) { .dont-grid { grid-template-columns: 1fr; } }
+.dont-card { padding: 20px 24px; border-color: var(--danger); }
+.dont-what {
+  font-family: var(--serif);
+  font-size: 17px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.dont-why {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* Контакты крупных доноров */
+.big-contacts {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  background: var(--tbl-row-border);
+  border: 1px solid var(--tbl-row-border);
+}
+@media (max-width: 700px) { .big-contacts { grid-template-columns: 1fr; } }
+.big-contact {
+  padding: 24px 28px;
+  background: var(--tbl-bg);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: background .15s;
+}
+.big-contact:hover { background: var(--tbl-bg-hover); }
+.big-contact-val {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--accent);
+}
+
 /* ─── SUPPORT ──────────────────────────────────────────────────────────── */
 .support-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 800px) { .support-grid { grid-template-columns: 1fr; } }
@@ -1475,6 +1700,99 @@ window.SITE_DATA = {
     note: 'Применение интервенций 1–5 одновременно: $30 → $22 млрд CAPEX, 5000 → 10 000 т/год, $230 → $103/кг. Это паритет с Starship-S3 и решительная победа в S2.',
   },
 
+  // ─── ФИНАНСИРОВАНИЕ — 3 раунда ────────────────────────────────────────
+  funding: {
+    rounds: [
+      {
+        id: 'r1',
+        name: 'Раунд 1',
+        scale: '₽5 млн',
+        period: '12 месяцев · 2026',
+        purpose: 'Запуск: юр.wrapper, контент, концепт-инжиниринг, маркетинг',
+        channels: ['Краудфандинг (Planeta.ru)', 'Прямые пожертвования через АНО', 'СБП', 'Карты ЮKassa'],
+        progress: 0,
+        goals: [
+          { rank: 1, what: 'Регистрация АНО + юрист + бухгалтер на год',
+            amount: 400, must: true,
+            why: 'Без юр.лица нельзя принимать пожертвования и выпускать СОНКО-льготы.' },
+          { rank: 2, what: 'Документальный фильм 25–30 мин',
+            amount: 1500, must: false,
+            why: 'Главный signal-канал. Один сильный фильм даёт 100K+ просмотров и 1000 подписчиков.' },
+          { rank: 3, what: 'Концепт-инжиниринг (КБ-специалисты)',
+            amount: 800, must: true,
+            why: 'Эскизный проект тоннеля + геология. Без этого Прометея-РФ не подадут на МО НИОКР.' },
+          { rank: 4, what: 'Книга-эссе по концепту',
+            amount: 600, must: false,
+            why: 'Bombora/АСТ может покрыть аванс ₽200–500К — наша часть на редактуру + дизайн.' },
+          { rank: 5, what: 'Серия видео для YouTube/RUTUBE',
+            amount: 500, must: false,
+            why: '8–10 коротких роликов по разделам концепта.' },
+          { rank: 6, what: 'Маркетинг и продвижение',
+            amount: 400, must: false,
+            why: 'Таргет, бусты Хабр-статей, гонорары авторам-конкурентам' },
+          { rank: 7, what: 'Резерв 20%',
+            amount: 800, must: true,
+            why: 'Непредвиденные расходы (юр.споры, доп.экспертизы).' },
+        ],
+      },
+      {
+        id: 'r2',
+        name: 'Раунд 2',
+        scale: '₽300–450 млн',
+        period: '2027–2030 · Прометей-РФ',
+        purpose: 'Лабораторный прототип маглев-катапульты 30–50 м',
+        progress: 0,
+        mix: [
+          { src: 'МО НИОКР',           pct: 35, amount: '₽105–157 млн', via: 'Через 12-ЦНИИ или НПО Машиностроения' },
+          { src: 'РНФ + Минобрнауки',  pct: 25, amount: '₽75–112 млн',  via: 'Фундаментальные гранты на маглев' },
+          { src: 'In-kind институтов', pct: 20, amount: '₽60–90 млн',   via: 'НИИЭФА (магниты) + Курчатовский (криогеника)' },
+          { src: 'Сколково / частные', pct: 12, amount: '₽36–54 млн',   via: 'Sk-резидент + бизнес-ангелы' },
+          { src: 'Краудфандинг',       pct: 8,  amount: '₽24–36 млн',   via: 'Planeta.ru — signal-канал, не финансовый' },
+        ],
+      },
+      {
+        id: 'r3',
+        name: 'Раунд 3',
+        scale: '$30 млрд',
+        period: '2033–2045 · Главная стройка',
+        purpose: 'Тоннель 40 км в горе Народной + ВВЭР-1200 + полный маглев',
+        progress: 0,
+        note: 'Краудом такие суммы не собираются. Только государственный канал — Росатом + Роскосмос + Минобороны как национальный приоритет уровня АЭС.',
+      },
+    ],
+    legalChecklist: [
+      { step: 'Регистрация АНО в Минюсте',                done: false, eta: 'Q3 2026' },
+      { step: 'ОКВЭД 72.19 + 88.99 + 73.20',                done: false, eta: 'при регистрации' },
+      { step: 'Открытие расчётного счёта',                  done: false, eta: 'Q3 2026' },
+      { step: 'Регистрация оператора ПД (152-ФЗ)',          done: false, eta: 'Q3 2026' },
+      { step: 'Подключение СБП',                            done: false, eta: 'Q4 2026' },
+      { step: 'Эквайринг ЮKassa (карты + СБП)',             done: false, eta: 'Q4 2026' },
+      { step: 'Заявление о СОНКО-статусе',                  done: false, eta: 'Q4 2026' },
+      { step: 'Запуск кампании на Planeta.ru',              done: false, eta: 'Q1 2027' },
+    ],
+    transparencyCommit: [
+      'Ежемесячный отчёт о расходах в репозитории GitHub (Markdown + JSON)',
+      'Список крупных доноров (>₽10К) — с их согласия',
+      'Ежегодный аудит независимым аудитором',
+      'Все цели разбиваются на чек-поинты (₽100К каждый) с публичным отчётом',
+    ],
+    weDontDo: [
+      { what: 'Не выпускаем акции, токены, доли — это не стартап',
+        why: 'Урал-Драйвер — открытый концепт-документ, не коммерческий продукт. ROI пожертвования — кирпич в основание программы, не финансовая прибыль.' },
+      { what: 'Не принимаем иностранные пожертвования напрямую',
+        why: 'Закон об иноагентах: даже ₽1 из-за рубежа делает АНО иноагентом. Международные доноры — через Vedi-Workspace EU как отдельная юрлица.' },
+      { what: 'Не используем крипту',
+        why: 'В РФ статус крипты неопределённый. Налоговые риски для жертвователей.' },
+      { what: 'Не обещаем сроки запуска первой капсулы',
+        why: 'Это горизонт 19 лет с gate-review каждые 3–7 лет. Прометей-РФ к 2030 — единственное обещание.' },
+    ],
+    contactsForLargeDonors: {
+      email: 'anton@moyvedi.ru',
+      max: 'https://max.ru/uraldriver',
+      note: 'Пожертвования > ₽100К — обсуждаем индивидуально: чек-поинты, целевое назначение, отчётность, упоминание в благодарностях.',
+    },
+  },
+
   // Главное меню
   menu: [
     { id: 'home', label: 'Главная', code: '00' },
@@ -1485,6 +1803,7 @@ window.SITE_DATA = {
     { id: 'phase05', label: 'Прометей-РФ', code: '11', star: true },
     { id: 'competitors', label: 'Конкуренты', code: '09' },
     { id: 'blog', label: 'Блог', code: '··' },
+    { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
     { id: 'support', label: 'Поддержать', code: '$', heart: true },
   ],
 
@@ -2715,6 +3034,7 @@ const RouteBackdrop = ({ route }) => {
     competitors: <NeptuneBackdrop/>,
     blog:        <NebulaBackdrop/>,
     support:     <GalaxyBackdrop/>,
+    funding:     <GalaxyBackdrop/>,
   };
   const bg = map[route];
   if (!bg) return null;
@@ -3485,9 +3805,179 @@ const PageSupport = ({data, setRoute}) => (
   </article>
 );
 
+// ─── Page: Финансирование (3 раунда + юр.wrapper + прозрачность) ──────────
+const PageFunding = ({ data, setRoute }) => {
+  const f = data.funding;
+  const r1 = f.rounds[0], r2 = f.rounds[1], r3 = f.rounds[2];
+
+  return (
+    <article className="page">
+      <PageHead code="$$" eyebrow="три раунда · 2026 → 2045"
+        title="Финансирование"
+        lede="Урал-Драйвер собирается через три разных раунда: ₽5 млн запуск (краудфандинг + АНО) → ₽300–450 млн на Прометей-РФ (mix госканалов + крауд) → $30 млрд главная стройка (только государственный канал). Краудфандинг работает только в раундах 1 и 2 — на главную стройку он не масштабируется."/>
+
+      {/* RAUND 1 — детальная разбивка */}
+      <section className="section">
+        <SectionHead code="// R1" kicker={r1.period} title={`${r1.name} · ${r1.scale}`}
+          sub={r1.purpose}/>
+        <div className="r1-progress">
+          <div className="r1-progress-meta mono dim">
+            <span>СОБРАНО {r1.progress}%</span>
+            <span>ЦЕЛЬ {r1.scale}</span>
+          </div>
+          <div className="r1-progress-bar">
+            <div className="r1-progress-fill" style={{width: `${r1.progress}%`}}/>
+          </div>
+          <div className="r1-progress-status mono dim">
+            ⚠ Сбор начнётся после регистрации АНО (Q3 2026). Сейчас — подготовительный этап.
+          </div>
+        </div>
+
+        <div className="goals-table">
+          <div className="goals-head mono dim">
+            <span className="g-rank">№</span>
+            <span className="g-what">ЦЕЛЬ</span>
+            <span className="g-amt">СУММА</span>
+            <span className="g-must">КРИТИЧНО?</span>
+          </div>
+          {r1.goals.map(g => (
+            <div key={g.rank} className={`goal-row ${g.must ? 'goal-must' : ''}`}>
+              <div className="goal-row-head">
+                <span className="g-rank mono">{String(g.rank).padStart(2,'0')}</span>
+                <span className="g-what">{g.what}</span>
+                <span className="g-amt mono">{g.amount} тыс ₽</span>
+                <span className="g-must mono">{g.must ? '✓ да' : '·'}</span>
+              </div>
+              <p className="goal-why">{g.why}</p>
+            </div>
+          ))}
+          <div className="goal-row goal-total">
+            <div className="goal-row-head">
+              <span className="g-rank mono">Σ</span>
+              <span className="g-what"><b>Итого Раунд 1</b></span>
+              <span className="g-amt mono"><b>5 000 тыс ₽</b></span>
+              <span className="g-must mono">12 месяцев</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="r1-channels">
+          <div className="mono dim">КАНАЛЫ ПРИЁМА (после регистрации АНО):</div>
+          <ul>
+            {r1.channels.map((c,i) => <li key={i} className="mono">▸ {c}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      {/* RAUND 2 — Прометей-РФ mix */}
+      <section className="section">
+        <SectionHead code="// R2" kicker={r2.period} title={`${r2.name} · ${r2.scale}`}
+          sub={r2.purpose}/>
+        <div className="mix-bars">
+          {r2.mix.map((m,i) => (
+            <div key={i} className="mix-row">
+              <div className="mix-row-top">
+                <span className="mix-name">{m.src}</span>
+                <span className="mix-amt mono">{m.amount}</span>
+                <span className="mix-pct mono">{m.pct}%</span>
+              </div>
+              <div className="mix-bar">
+                <div className="mix-fill" style={{width: `${m.pct * 2.5}%`}}/>
+              </div>
+              <div className="mix-via mono dim">↳ {m.via}</div>
+            </div>
+          ))}
+        </div>
+        <p className="r2-note">
+          <b>Краудфандинг — только 8% от Прометея-РФ.</b> Это не способ профинансировать прототип, это
+          <b>signal-канал</b>: ₽24–36 млн = 5000 backers = политический капитал, который убеждает
+          МО НИОКР и Росатом что есть общественный спрос.
+        </p>
+      </section>
+
+      {/* RAUND 3 — главная стройка */}
+      <section className="section">
+        <SectionHead code="// R3" kicker={r3.period} title={`${r3.name} · ${r3.scale}`}
+          sub={r3.purpose}/>
+        <Frame className="r3-card">
+          <div className="r3-warn mono">⚠ КРАУДФАНДИНГ НЕ МАСШТАБИРУЕТСЯ ДО ЭТОГО УРОВНЯ</div>
+          <p>{r3.note}</p>
+        </Frame>
+      </section>
+
+      {/* Юр.wrapper статус */}
+      <section className="section">
+        <SectionHead code="// LEGAL" kicker="статус юридического оформления"
+          title="Юр.wrapper"
+          sub="Что нужно сделать ДО первого пожертвования. Без юр.лица в России принимать деньги нельзя."/>
+        <div className="legal-checklist">
+          {f.legalChecklist.map((c,i) => (
+            <div key={i} className={`legal-item ${c.done ? 'is-done' : ''}`}>
+              <span className="legal-check">{c.done ? '✓' : '○'}</span>
+              <span className="legal-step">{c.step}</span>
+              <span className="legal-eta mono dim">{c.eta}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Прозрачность */}
+      <section className="section">
+        <SectionHead code="// TR" kicker="прозрачность"
+          title="Как мы отчитываемся"/>
+        <ul className="transparency-list">
+          {f.transparencyCommit.map((t,i) => (
+            <li key={i}>{t}</li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Что НЕ делаем */}
+      <section className="section">
+        <SectionHead code="// !" kicker="чего мы НЕ делаем"
+          title="Принципиальные ограничения"/>
+        <div className="dont-grid">
+          {f.weDontDo.map((d,i) => (
+            <Frame key={i} className="dont-card">
+              <div className="dont-what">✗ {d.what}</div>
+              <p className="dont-why">{d.why}</p>
+            </Frame>
+          ))}
+        </div>
+      </section>
+
+      {/* Большие доноры */}
+      <section className="section">
+        <SectionHead code="// BIG" kicker="крупные доноры > ₽100К"
+          title="Индивидуальная связь"
+          sub={f.contactsForLargeDonors.note}/>
+        <div className="big-contacts">
+          <a href={`mailto:${f.contactsForLargeDonors.email}`} className="big-contact">
+            <span className="mono dim">EMAIL</span>
+            <span className="big-contact-val">{f.contactsForLargeDonors.email}</span>
+          </a>
+          <a href={f.contactsForLargeDonors.max} target="_blank" className="big-contact">
+            <span className="mono dim">MAX</span>
+            <span className="big-contact-val">@uraldriver</span>
+          </a>
+        </div>
+      </section>
+
+      <div className="page-foot">
+        <a href="#" className="btn btn-ghost" onClick={(e)=>{e.preventDefault();setRoute('phase05');}}>
+          ← Глава 11: Прометей-РФ
+        </a>
+        <a href="#" className="btn btn-primary" onClick={(e)=>{e.preventDefault();setRoute('support');}}>
+          Поддержать прямо сейчас →
+        </a>
+      </div>
+    </article>
+  );
+};
+
 Object.assign(window, {
   PagePhase05, PageRoadmap, PageCompetitors,
-  PageConcept, PageSite, PageEconomics, PageBlog, PageSupport,
+  PageConcept, PageSite, PageEconomics, PageBlog, PageSupport, PageFunding,
 });
 
 </script>
@@ -3532,6 +4022,7 @@ function App() {
     case 'site':        Page = <PageSite data={data} setRoute={setRoute}/>; break;
     case 'economics':   Page = <PageEconomics data={data} setRoute={setRoute}/>; break;
     case 'blog':        Page = <PageBlog data={data} setRoute={setRoute}/>; break;
+    case 'funding':     Page = <PageFunding data={data} setRoute={setRoute}/>; break;
     case 'support':     Page = <PageSupport data={data} setRoute={setRoute}/>; break;
     default:            Page = <PageHome data={data} setRoute={setRoute}/>;
   }
