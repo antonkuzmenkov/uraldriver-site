@@ -499,6 +499,50 @@ button:focus-visible, a:focus-visible {
 /* ─── PILLARS ──────────────────────────────────────────────────────────── */
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 900px) { .pillars { grid-template-columns: 1fr; } }
+
+/* Bullets внутри pillar-карточки */
+.pillar-bullets {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  border-top: 1px dashed var(--tbl-row-border);
+  padding-top: 14px;
+}
+.pillar-bullets li {
+  position: relative;
+  padding: 6px 0 6px 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  border-bottom: 1px dashed var(--tbl-row-border);
+}
+.pillar-bullets li:last-child { border-bottom: 0; }
+.pillar-bullets li::before {
+  content: '▸';
+  position: absolute;
+  left: 0; top: 6px;
+  color: var(--accent);
+  font-size: 11px;
+}
+
+/* Кнопка «Подробнее в [...]» */
+.pillar-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .15s;
+}
+.pillar-link:hover {
+  background: var(--accent);
+  color: #fff;
+}
 .pillar { padding: 32px 28px; }
 .pillar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .pillar-icon { color: var(--accent); }
@@ -1335,6 +1379,98 @@ button:focus-visible, a:focus-visible {
 .comp-sig { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin: 8px 0 0; }
 .comp-direct { border-color: var(--accent); }
 
+/* ─── ACCORDION для внутренних страниц (Концепция/Площадка/Экономика) ──── */
+.acc-list {
+  border: 1px solid var(--tbl-row-border);
+  background: var(--tbl-bg);
+  backdrop-filter: blur(var(--tbl-blur));
+  -webkit-backdrop-filter: blur(var(--tbl-blur));
+}
+.acc-row { border-bottom: 1px solid var(--tbl-row-border); }
+.acc-row:last-child { border-bottom: 0; }
+.acc-row-head {
+  display: grid;
+  grid-template-columns: 60px 1fr 30px;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 24px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background .15s;
+}
+.acc-row-head:hover { background: var(--tbl-bg-hover); }
+.acc-row.is-open .acc-row-head {
+  background: var(--tbl-bg-active);
+  border-bottom: 1px solid var(--tbl-row-border-active);
+}
+.acc-row-id {
+  color: var(--accent);
+  font-size: 14px;
+}
+.acc-row-title {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.acc-row-caret {
+  font-size: 18px;
+  color: var(--dim);
+  text-align: center;
+  transition: color .15s;
+}
+.acc-row.is-open .acc-row-caret { color: var(--accent); }
+.acc-row-body {
+  padding: 8px 28px 28px 100px;
+  background: var(--tbl-bg-active);
+  animation: chapterSlide .25s ease-out;
+}
+.acc-row-text {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+  max-width: 80ch;
+}
+.acc-row-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 0 0 20px;
+  padding: 16px 0;
+  border-top: 1px solid var(--tbl-row-border);
+  border-bottom: 1px solid var(--tbl-row-border);
+}
+@media (max-width: 800px) {
+  .acc-row-metrics { grid-template-columns: repeat(2, 1fr); }
+  .acc-row-head { grid-template-columns: 50px 1fr 24px; gap: 10px; padding: 16px; }
+  .acc-row-body { padding: 8px 16px 24px 60px; }
+}
+.acc-metric { font-size: 11px; }
+.acc-metric-v {
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.acc-row-sources .mono.dim {
+  display: block;
+  font-size: 10.5px; letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.acc-row-sources ul { list-style: none; margin: 0; padding: 0; }
+.acc-row-sources li { padding: 6px 0; }
+.acc-row-sources a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px;
+  color: var(--ink-2);
+  transition: color .15s;
+}
+.acc-row-sources a:hover { color: var(--accent); }
+
 /* ─── PLACEHOLDER ──────────────────────────────────────────────────────── */
 .placeholder-list { display: flex; flex-direction: column; gap: 12px; }
 .placeholder-row { padding: 18px 24px; display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center; }
@@ -1654,21 +1790,45 @@ window.SITE_DATA = {
       icon: 'rocket',
       title: 'Технология реалистична',
       body: 'В отличие от космического лифта (нет материала) или термояда (нужен прорыв), маглев-катапульта собирается из существующих компонентов. Сверхпроводящие магниты делает НИИЭФА. Импульсную электротехнику — ВНИИЭФ Саров. Реакторы — Белоярская АЭС.',
+      bullets: [
+        'Маглев-разгон до 7,5 км/с с использованием LSM на сверхпроводящих магнитах',
+        'MHD-окно на выходе для прохода через атмосферу',
+        'Перегрузки 30–50 g — приемлемо для топлива, металлов, rugged-электроники',
+        'Подземный туннель 40 км в скале экранирует акустику и удерживает форму трассы',
+      ],
       tags: ['НИИЭФА', 'ВНИИЭФ', 'Белоярская АЭС'],
+      linkTo: 'concept',
+      linkLabel: 'в концепции',
     },
     {
       n: '02',
       icon: 'money',
       title: 'Экономика сходится',
       body: 'Капитальные затраты — $30–35 млрд за 19 лет. Это два годовых бюджета Росатома. Удельная стоимость вывода — $200–300 за килограмм при реалистичной загрузке, в 12–25 раз дешевле «Союза-5» и сравнимо с целевыми параметрами SpaceX Starship.',
+      bullets: [
+        'CAPEX $30–35 млрд = 2 годовых бюджета Росатома',
+        '$/кг $200–300 при 1000+ пусков/год',
+        '12–25× дешевле Союза-5; на уровне целей Starship',
+        'Главный риск — Starship V4 reusable; main upside — SBSP-программы',
+      ],
       tags: ['CAPEX 19 лет', '12–25× дешевле Союз-5'],
+      linkTo: 'economics',
+      linkLabel: 'в экономике',
     },
     {
       n: '03',
       icon: 'window',
       title: 'Окно возможностей до 2035',
       body: 'К моменту запуска первой катапульты SpaceX будет работать на Starship V4–V5. Окно входа — 2032–2038 годы. После 2040 — почти наверняка нет. Поэтому начинать нужно сейчас, через лабораторный прототип «Прометей-РФ» за ₽300 миллионов.',
+      bullets: [
+        'Starship 2026: цена $250–600/кг, refueling не работает',
+        'Auriga Space (US) уже строит Prometheus 30 м — наш бенчмарк',
+        'Окно для УД 2032–2038: войти и зафиксировать нишу до Starship V5',
+        'Прометей-РФ к 2030 — обязательный шаг чтобы успеть',
+      ],
       tags: ['Starship V3–V5', 'Auriga 2026', 'Прометей-РФ'],
+      linkTo: 'roadmap',
+      linkLabel: 'в дорожной карте',
     },
   ],
 
@@ -3591,9 +3751,20 @@ const PageHome = ({ data, setRoute }) => {
                 </div>
                 <h3 className="pillar-title">{p.title}</h3>
                 <p className="pillar-body">{p.body}</p>
+                {p.bullets && (
+                  <ul className="pillar-bullets">
+                    {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                  </ul>
+                )}
                 <div className="pillar-tags">
                   {p.tags.map(t => <Tag key={t}>{t}</Tag>)}
                 </div>
+                {p.linkTo && (
+                  <button className="pillar-link mono"
+                          onClick={() => setRoute(p.linkTo)}>
+                    Подробнее {p.linkLabel} →
+                  </button>
+                )}
               </Frame>
             );
           })}
@@ -4015,56 +4186,140 @@ const PageCompetitors = ({ data }) => (
 );
 
 // ─── Generic placeholder page ──────────────────────────────────────────────
-const PagePlaceholder = ({ code, eyebrow, title, items, setRoute }) => (
-  <article className="page">
-    <PageHead code={code} eyebrow={eyebrow} title={title}
-      lede="Страница в работе. Контент собирается из соответствующей главы концепт-документа."/>
-    <div className="placeholder-list">
-      {items.map((it,i) => (
-        <Frame key={i} className="placeholder-row">
-          <div className="mono dim">{it[0]}</div>
-          <div className="placeholder-row-t">{it[1]}</div>
-        </Frame>
-      ))}
-    </div>
-    <div className="page-foot">
-      <Btn kind="ghost" onClick={()=>setRoute('home')}>← на главную</Btn>
-    </div>
-  </article>
-);
+// Универсальный аккордеон-страница: раскрытие пунктов на клик с деталями
+const PageAccordion = ({ code, eyebrow, title, lede, items, setRoute }) => {
+  const [openId, setOpenId] = useState(null);
+  return (
+    <article className="page">
+      <PageHead code={code} eyebrow={eyebrow} title={title} lede={lede}/>
+      <div className="acc-list">
+        {items.map((it) => {
+          const isOpen = openId === it.id;
+          return (
+            <div key={it.id} className={`acc-row ${isOpen ? 'is-open' : ''}`}>
+              <button className="acc-row-head" onClick={() => setOpenId(isOpen ? null : it.id)}
+                      aria-expanded={isOpen}>
+                <span className="acc-row-id mono">{it.id}</span>
+                <span className="acc-row-title">{it.title}</span>
+                <span className="acc-row-caret mono">{isOpen ? '−' : '+'}</span>
+              </button>
+              {isOpen && (
+                <div className="acc-row-body">
+                  <p className="acc-row-text">{it.detail}</p>
+                  {it.metrics && (
+                    <div className="acc-row-metrics">
+                      {it.metrics.map(([k, v], i) => (
+                        <div key={i} className="acc-metric">
+                          <div className="mono dim">{k}</div>
+                          <div className="acc-metric-v">{v}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {it.sources && it.sources.length > 0 && (
+                    <div className="acc-row-sources">
+                      <span className="mono dim">ИСТОЧНИКИ</span>
+                      <ul>
+                        {it.sources.map((s, i) => (
+                          <li key={i}>
+                            <a href={s.url} target="_blank" rel="noopener noreferrer">
+                              {s.title} <IconExternal/>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="page-foot">
+        <Btn kind="ghost" onClick={() => setRoute('home')}>← на главную</Btn>
+      </div>
+    </article>
+  );
+};
 
 const PageConcept = ({data, setRoute}) => (
-  <PagePlaceholder code="01" eyebrow="физика и архитектура" title="Концепция"
+  <PageAccordion code="01" eyebrow="физика и архитектура" title="Концепция"
     setRoute={setRoute}
+    lede="Маглев + LSM в эвакуированном тоннеле 40 км. Кликни по любому пункту чтобы развернуть детали."
     items={[
-      ['1.1', 'Маглев-разгон до 8 км/с с использованием LSM на сверхпроводящих магнитах'],
-      ['1.2', 'MHD-окно на выходе для прохода атмосферы'],
-      ['1.3', 'Подземное расположение: гора-экранирует акустику и удержвает форму трассы'],
-      ['1.4', 'Перегрузки 30–50 g — приемлемо для топлива, металлов, электроники rugged-класса'],
+      { id: '1.1', title: 'Маглев-разгон до 7,5 км/с с использованием LSM на сверхпроводящих магнитах',
+        detail: 'Архитектура: Inductrack II с пассивным маглевом + Linear Synchronous Motor. Сверхпроводящие магниты на капсуле и в путепроводе (NbTi/BiSCCO интерфейсы), импульсные катушки в стенках тоннеля создают бегущее магнитное поле. КПД 75–85% преобразования электрической энергии в кинетическую. Ускорение 6–9 секунд на длине 30–40 км до 7,2–7,8 км/с.',
+        metrics: [['Ускоритель', 'LSM импульсный'], ['Подвес', 'Inductrack II маглев'], ['КПД', '75–85%'], ['Длина разгона', '30–40 км']],
+        sources: [{ title: 'Концепт-документ — глава 3', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/03_technical_design.md' }] },
+      { id: '1.2', title: 'MHD-окно на выходе для прохода атмосферы',
+        detail: 'Магнитогидродинамическое окно 5×5 м на выходе из тоннеля удерживает вакуум 5·10⁻³ Па внутри при атмосферном давлении снаружи. Плазменный «занавес» удерживается магнитным полем 5–10 Т, источник плазмы — импульсный лазер + газовый разряд. Длительность открытия 0,3 сек на пуск. Главный технический риск проекта: TRL 3–4, требует прорыва на уровне физики плазмы.',
+        metrics: [['Размер', '5×5 м'], ['Магн. поле', '5–10 Т'], ['Время открытия', '0,3 сек'], ['TRL', '3–4 (главный риск)']],
+        sources: [{ title: 'Концепт — техническое описание MHD', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/03_technical_design.md' }] },
+      { id: '1.3', title: 'Подземное расположение: гора экранирует акустику и удерживает форму трассы',
+        detail: 'Тоннель 40 км × Ø 6 м в скальном массиве на глубине 100–1500 м (горизонтальный + последние 5 км под уклоном 25–30°). Скальный массив гасит акустический удар разгона, термостабилизирует трассу (постоянная температура круглый год), экранирует электромагнитное излучение от LSM. Аналог по сложности — Северомуйский тоннель БАМ (15,3 км в скальном массиве).',
+        metrics: [['Длина', '40 км'], ['Диаметр', '6 м'], ['Глубина', '100–1500 м'], ['Уклон финала', '25–30°']],
+        sources: [{ title: 'Анализ площадки — глава 2', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/02_site_analysis.md' }] },
+      { id: '1.4', title: 'Перегрузки 50–100 g — приемлемо для топлива, металлов, rugged-электроники',
+        detail: 'Капсулы массой 5 т (3 т полезный груз + 2 т структура) испытывают перегрузку 50–100 g за 6–9 секунд разгона + кратковременный пик 200–500 g на MHD-окне (0,3 сек). Это исключает запуск людей, оптики, хрупкой электроники. Подходит для топлива (гидростатическое выравнивание), воды, металлов, стандартных спутников после g-hardening (MIL-STD-810).',
+        metrics: [['Перегрузка разгон', '50–100 g'], ['Пик MHD-окна', '200–500 g'], ['Масса полная', '5 т'], ['Полезный груз', '3 т']],
+        sources: [{ title: 'Что можно/нельзя запускать', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/01_concept_and_physics.md' }] },
     ]}/>
 );
 
 const PageSite = ({data, setRoute}) => (
-  <PagePlaceholder code="02" eyebrow="гора Народная · Приполярный Урал" title="Площадка"
+  <PageAccordion code="02" eyebrow="гора Народная · Приполярный Урал" title="Площадка"
     setRoute={setRoute}
+    lede="Гора Народная — оптимальное сочетание скальной породы, сейсмики, высоты и логистики. Кликни по пункту для деталей."
     items={[
-      ['Высота вершины', '1895 м — высшая точка Урала'],
-      ['Перепад', 'до 1500 м непрерывного склона'],
-      ['Геология', 'кристаллический фундамент, кварциты, низкая сейсмика'],
-      ['Логистика', 'г/о Лабытнанги — 250 км, ж/д Воркута'],
-      ['Юрисдикция', 'ХМАО + ЯНАО · нац. парк «Югыд ва»'],
+      { id: '2.1', title: 'Высота вершины — 1895 м, высшая точка Урала',
+        detail: 'Гора Народная расположена на границе Республики Коми и ХМАО (Приполярный Урал). Естественный перепад высот 1500 м даёт возможность построить тоннель с уклоном 25–30° без чрезмерных земляных работ. Восточная экспозиция склона — на безопасную трассу полёта над малонаселёнными ХМАО и ЯНАО.',
+        metrics: [['Высота', '1895 м'], ['Координаты', 'N 65°02′ E 60°07′'], ['Регион', 'Респ. Коми / ХМАО'], ['Высший пик Урала', 'да']],
+        sources: [{ title: 'Анализ площадки — глава 2', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/02_site_analysis.md' }] },
+      { id: '2.2', title: 'Геология: монолитная архейско-протерозойская скала',
+        detail: 'Горная порода Народной — кристаллический фундамент архейско-протерозойского возраста (1.5–3 млрд лет). Кварциты с включениями гранитоидов. Сейсмика 3–6 баллов — на порядок ниже Кавказа (8–9) и Камчатки (9–10). Главный конкурент по сложности геологии — Северомуйский тоннель БАМ (15 км в скальном массиве).',
+        metrics: [['Тип породы', 'архейские кварциты'], ['Возраст', '1.5–3 млрд лет'], ['Сейсмика', '3–6 баллов'], ['Аналог', 'Северомуйский тоннель БАМ']],
+        sources: [{ title: 'Геология — research-приложение', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/research/03_sites_and_geology.md' }] },
+      { id: '2.3', title: 'Сравнение с альтернативами — почему не Кавказ или Камчатка',
+        detail: 'Кавказ (Эльбрус 5642 м): идеальная высота, но сейсмика 8–9 баллов и слоистая порода — тоннель в такой геологии катастрофичен за 20 лет эксплуатации. Камчатка (Ключевская 4754 м): активный вулкан, недопустимо. Алтай (Белуха 4506 м): монолитная скала, но удалена от энергоинфраструктуры на 1500+ км. Хибины (Кольский 1200 м): низкая высота, не хватает естественного градиента.',
+        metrics: [['Кавказ', 'сейсмика 8-9'], ['Камчатка', 'вулкан'], ['Алтай', '+1500 км до АЭС'], ['Хибины', 'мала высота']],
+        sources: [{ title: 'Сравнение площадок', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/02_site_analysis.md' }] },
+      { id: '2.4', title: 'Логистика — 250 км до Лабытнанги, ж/д Воркута',
+        detail: 'Лабытнанги — ближайший железнодорожный узел (250 км по прямой, ~400 км дорогой). Северный завоз через Обскую губу летом + автодорога зимой. Линия электропередач от Белоярской АЭС — 800 км по существующим коридорам. Стройка возможна только в сезон июнь–сентябрь (3 месяца в год).',
+        metrics: [['До ж/д', '250 км (Лабытнанги)'], ['До Воркуты', '400 км'], ['До Белоярской АЭС', '800 км'], ['Стройсезон', '3 мес/год']],
+        sources: [{ title: 'Площадка — research', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/research/03_sites_and_geology.md' }] },
+      { id: '2.5', title: 'Юрисдикция — ХМАО + ЯНАО, нац.парк «Югыд ва» (ЮНЕСКО)',
+        detail: 'Гора Народная находится в национальном парке «Югыд ва» — объект Всемирного наследия ЮНЕСКО с 1995. Это блокер №1 после политической воли: требуется изменение границ парка с компенсацией, согласование с ЮНЕСКО (через Минкульт РФ + комитет всемирного наследия), экологическая экспертиза федерального уровня. Без этих шагов любая капитальная стройка невозможна.',
+        metrics: [['Парк', 'Югыд ва'], ['Статус ЮНЕСКО', 'с 1995'], ['Площадь парка', '1,9 млн га'], ['Блокер', '№1 после политики']],
+        sources: [{ title: 'Югыд ва — UNESCO', url: 'https://whc.unesco.org/en/list/719' }] },
     ]}/>
 );
 
 const PageEconomics = ({data, setRoute}) => (
-  <PagePlaceholder code="04" eyebrow="CAPEX · OPEX · $/кг · чувствительность" title="Экономика"
+  <PageAccordion code="04" eyebrow="CAPEX · OPEX · $/кг · чувствительность" title="Экономика"
     setRoute={setRoute}
+    lede="$30 млрд CAPEX, $200/кг при полной загрузке. Главный фактор — грузопоток. Кликни по пункту для деталей."
     items={[
-      ['CAPEX', '$30–35 млрд за 19 лет — 2 годовых бюджета Росатома'],
-      ['$/кг', '$200–300 при 1000+ пусков/год'],
-      ['Сравнение', '12–25× дешевле Союз-5; на уровне целей Starship'],
-      ['Чувствительность', 'основной риск — Starship V4 reusable; main upside — SBSP-программы'],
-      ['Загрузка', '70%+ для break-even при заявленных тарифах'],
+      { id: '4.1', title: 'CAPEX $30–35 млрд за 19 лет — 2 годовых бюджета Росатома',
+        detail: 'Капитальные затраты: тоннель 40 км ($9–11 млрд, 30%), сверхпроводящие катушки ($7–8 млрд, 23%), импульсная энергетика ($5–6 млрд, 17%), новый блок ВВЭР-1200 ($4–5 млрд, 14%), капсулы + MHD ($3–4 млрд, 11%), инфраструктура ($2 млрд, 5%). Главная статья неопределённости — сверхпроводящие катушки (±50%): NbTi vs REBCO решает диапазон $25–50 млрд.',
+        metrics: [['Тоннель 40 км', '$9–11 млрд (30%)'], ['Магниты', '$7–8 млрд (23%)'], ['Энергетика', '$5–6 млрд (17%)'], ['ВВЭР-1200', '$4–5 млрд (14%)']],
+        sources: [{ title: 'Экономика — глава 4', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' }] },
+      { id: '4.2', title: '$/кг — $100–125 при полной загрузке, $900–1100 при консервативной',
+        detail: 'Удельная стоимость зависит от загрузки. Сценарий А (15 000 т/год): $100–125/кг при $1,3–1,6 млрд годовых затрат. Сценарий Б (5 000 т/год): $200–260/кг — паритет со Starship. Сценарий В (1 000 т/год): $900–1100/кг — дешевле Союза-5. Сценарий Г (200 т/год): $4 000–5 000/кг — «дорогой памятник».',
+        metrics: [['Сценарий А', '$100–125/кг (15 000 т/год)'], ['Сценарий Б', '$200–260/кг (5 000 т/год)'], ['Сценарий В', '$900–1100/кг (1 000 т/год)'], ['Сценарий Г', '$4–5 тыс/кг (200 т/год)']],
+        sources: [{ title: '4 сценария загрузки', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' }] },
+      { id: '4.3', title: 'Сравнение с конкурентами — 12–25× дешевле Союза-5',
+        detail: 'Союз-5: $3500/кг (с 2026). Союз-7/Амур-СПГ: $1500/кг (после 2030). Falcon 9 reused: $3000–7000 рыночная, $629 себестоимость SpaceX. Falcon Heavy: $4400–5800/кг. Starship целевая: $100–150/кг. Урал-Драйвер сценарий А ($100–125/кг) — единственный российский носитель, способный конкурировать со Starship по стоимости.',
+        metrics: [['Союз-5', '$3500/кг'], ['Союз-7', '$1500/кг'], ['Falcon 9', '$3000–7000'], ['Starship цель', '$100–150/кг']],
+        sources: [{ title: 'Экономика — таблица сравнения', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' }] },
+      { id: '4.4', title: 'Чувствительность к Starship — главная внешняя переменная',
+        detail: '4 сценария Starship 2032–2035: S1 «Плато» (25%) $1750/кг — УД конкурентен; S2 «База» (50% ↑) $400/кг — УД нишевый, окно 2032–2038; S3 «Цель» (25% ↓) $125/кг — переключаемся на Опцию B; S4 «Гипер» (10%) $40/кг — земной УД невозможен. Май 2026: SpaceX потратил $15 млрд, refueling не работает — S2 ↑ до 50%, S3 ↓ до 25%.',
+        metrics: [['S1 «Плато»', '$1750/кг · 25%'], ['S2 «База»', '$400/кг · 50% ↑'], ['S3 «Цель»', '$125/кг · 25% ↓'], ['S4 «Гипер»', '$40/кг · 10%']],
+        sources: [{ title: 'Starship-чувствительность 4.5', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' }] },
+      { id: '4.5', title: 'Рычаги снижения $/кг — $230 → $103 через 7 интервенций',
+        detail: 'В реалистичном сценарии Б ($230/кг при 5000 т/год) можно довести до $95–110/кг через комбинацию: 2-я нитка тоннеля (×2 загрузка, −37%), капсула 8→12-15 т (−28%), гибрид со скайхуком (−10–15%), существующие блоки АЭС (−7–10%), унификация с Союз-7 (−5–8%), заброшенные шахты Северного Урала (−3–5%), закрытый цикл криогеники (−2–4%). Сумма Σδ = −127 → итог $103.',
+        metrics: [['Базовая Б', '$230/кг'], ['Все рычаги', '$95–110/кг'], ['Σ дельт', '−55–60%'], ['Загрузка', '×2 (10 000 т/год)']],
+        sources: [{ title: 'Глава 4.6 — рычаги снижения цены', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' }] },
     ]}/>
 );
 
