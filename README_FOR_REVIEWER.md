@@ -57,7 +57,7 @@
 - HTTP→HTTPS redirect (https_enforced)
 - DNS защита: SPF + DMARC + DKIM-revoked + CAA letsencrypt.org
 - ✏️ Имя: Антон **Кузменков** (без мягкого знака)
-- 💬 Контакт: **MAX мессенджер** @uraldriver (вместо Telegram)
+- 💬 Канал в **MAX**: [УралДрайвер](https://max.ru/join/9IoXLvPCQB7c5Dn92VfS56A1Co_gi7E7AYOGhgngCV8) (вместо Telegram)
 
 ---
 
@@ -152,7 +152,7 @@ UralDriver/
 ## Контакты автора
 
 **Антон Кузменков**
-- MAX мессенджер: @uraldriver
+- MAX-канал: [УралДрайвер](https://max.ru/join/9IoXLvPCQB7c5Dn92VfS56A1Co_gi7E7AYOGhgngCV8)
 - Email: anton@moyvedi.ru
 - GitHub: https://github.com/antonkuzmenkov
 
