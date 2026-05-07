@@ -1373,7 +1373,7 @@ button:focus-visible, a:focus-visible {
   margin-bottom: 6px;
   text-transform: uppercase;
 }
-.funding-block p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.65; }
+.funding-block p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.65; max-width: 72ch; }
 .funding-block-risk {
   border-left: 2px solid var(--warn);
   padding-left: 14px;
@@ -1384,11 +1384,8 @@ button:focus-visible, a:focus-visible {
 
 .mini-roadmap { border-top: 1px solid var(--line); }
 .mini-roadmap-row {
-  display: grid; grid-template-columns: 200px 1fr; gap: 24px;
-  padding: 20px 0;
   border-bottom: 1px solid var(--line);
 }
-.mini-roadmap-row-clickable { display: block; padding: 0; }
 .mini-roadmap-trigger {
   display: grid; grid-template-columns: 200px 1fr; gap: 24px;
   width: 100%; text-align: left; background: transparent; border: 0; cursor: pointer;
@@ -1462,7 +1459,7 @@ button:focus-visible, a:focus-visible {
   margin-bottom: 8px;
   text-transform: uppercase;
 }
-.roadmap-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+.roadmap-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; max-width: 72ch; }
 .roadmap-goals {
   list-style: none; margin: 0; padding: 0;
   display: grid; gap: 6px;
@@ -1514,6 +1511,18 @@ button:focus-visible, a:focus-visible {
 .comp-row:last-of-type { border-bottom: 0; margin-bottom: 12px; }
 .comp-sig { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin: 8px 0 12px; }
 .comp-direct { border-color: var(--accent); }
+.comp-high { border-color: var(--ink-2); }
+.comp-med { border-color: var(--warn); }
+.comp-low { border-color: var(--line-strong); }
+
+/* Focus-visible для всех новых триггеров */
+.roadmap-card-trigger:focus-visible,
+.comp-trigger:focus-visible,
+.funding-card-trigger:focus-visible,
+.mini-roadmap-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 .comp-toggle {
   font-size: 11px; letter-spacing: 0.05em;
   padding: 8px 0 0; border-top: 1px dashed var(--line);
@@ -1542,7 +1551,7 @@ button:focus-visible, a:focus-visible {
   margin-bottom: 8px;
   text-transform: uppercase;
 }
-.comp-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+.comp-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; max-width: 72ch; }
 .comp-for-ud {
   border-left: 2px solid var(--accent);
   padding-left: 16px;
@@ -4324,6 +4333,30 @@ const PagePhase05 = ({ data, setRoute }) => {
   const f = data.feature;
   const [openFund, setOpenFund] = useState(null);
   const [openStep, setOpenStep] = useState(null);
+  useEffect(() => {
+    if (!openFund) return;
+    const idx = (data.feature.funding || []).findIndex(s => s.src === openFund);
+    if (idx < 0) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`funding-panel-${idx}`);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 80) {
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }, [openFund]);
+  useEffect(() => {
+    if (!openStep) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`step-panel-${openStep}`);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 80) {
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }, [openStep]);
   return (
     <article className="page">
       <PageHead code="11" eyebrow="лабораторный прототип · 2027–2030"
@@ -4438,7 +4471,8 @@ const PagePhase05 = ({ data, setRoute }) => {
               <Frame key={src.src} className={`funding-card ${isOpen ? 'is-open' : ''}`}>
                 <button className="funding-card-trigger"
                         onClick={() => setOpenFund(isOpen ? null : src.src)}
-                        aria-expanded={isOpen}>
+                        aria-expanded={isOpen}
+                        aria-controls={`funding-panel-${i}`}>
                   <div className="funding-card-head">
                     <span className="mono dim">0{i+1}</span>
                     <span className="funding-card-share">{src.share}%</span>
@@ -4452,11 +4486,11 @@ const PagePhase05 = ({ data, setRoute }) => {
                     <div className="funding-card-amt mono">{src.amount}</div>
                   )}
                   <div className="funding-card-toggle mono dim">
-                    {isOpen ? '− свернуть' : '+ подробнее'}
+                    <span aria-hidden="true">{isOpen ? '−' : '+'}</span> {isOpen ? 'свернуть' : 'подробнее'}
                   </div>
                 </button>
                 {isOpen && (
-                  <div className="funding-card-body">
+                  <div className="funding-card-body" id={`funding-panel-${i}`} role="region" aria-label={`Детали — ${src.src}`}>
                     {src.details && (
                       <div className="funding-block">
                         <div className="mono dim funding-block-h">ОПИСАНИЕ КАНАЛА</div>
@@ -4499,19 +4533,20 @@ const PagePhase05 = ({ data, setRoute }) => {
               <div key={step.id} className={`mini-roadmap-row mini-roadmap-row-clickable ${isOpen ? 'is-open' : ''}`}>
                 <button className="mini-roadmap-trigger"
                         onClick={() => setOpenStep(isOpen ? null : step.id)}
-                        aria-expanded={isOpen}>
+                        aria-expanded={isOpen}
+                        aria-controls={`step-panel-${step.id}`}>
                   <div className="mini-roadmap-time mono">{step.period}</div>
                   <div className="mini-roadmap-content">
                     <div className="mini-roadmap-h">
                       {step.title}
                       <span className="mono dim mini-roadmap-budget"> · {step.budget}</span>
-                      <span className="mono mini-roadmap-caret">{isOpen ? ' −' : ' +'}</span>
+                      <span className="mono mini-roadmap-caret" aria-hidden="true">{isOpen ? ' −' : ' +'}</span>
                     </div>
                     <div className="mini-roadmap-b">{step.what}</div>
                   </div>
                 </button>
                 {isOpen && (
-                  <div className="mini-roadmap-body">
+                  <div className="mini-roadmap-body" id={`step-panel-${step.id}`} role="region" aria-label={`Детали этапа — ${step.title}`}>
                     {step.deliverables && (
                       <div className="funding-block">
                         <div className="mono dim funding-block-h">DELIVERABLES</div>
@@ -4545,6 +4580,17 @@ const PagePhase05 = ({ data, setRoute }) => {
 // ─── Page: Roadmap ─────────────────────────────────────────────────────────
 const PageRoadmap = ({ data, setRoute }) => {
   const [openId, setOpenId] = useState(null);
+  useEffect(() => {
+    if (!openId) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`roadmap-panel-${openId}`);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 80) {
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }, [openId]);
   return (
     <article className="page">
       <PageHead code="07" eyebrow="6 фаз · 2026–2045+"
@@ -4560,20 +4606,21 @@ const PageRoadmap = ({ data, setRoute }) => {
             <Frame key={p.id} className={`roadmap-card roadmap-${p.state} ${isOpen ? 'is-open' : ''}`}>
               <button className="roadmap-card-head roadmap-card-trigger"
                       onClick={() => setOpenId(isOpen ? null : p.id)}
-                      aria-expanded={isOpen}>
+                      aria-expanded={isOpen}
+                      aria-controls={`roadmap-panel-${p.id}`}>
                 <div>
                   <div className="mono dim">{p.label}</div>
-                  <h3 className="roadmap-card-title">{p.title} {p.star && <span className="phasebar-star"><IconStar/></span>}</h3>
+                  <h3 className="roadmap-card-title">{p.title} {p.star && <span className="phasebar-star" aria-hidden="true"><IconStar/></span>}</h3>
                 </div>
                 <div className="roadmap-card-meta">
                   <div className="mono">{p.period}</div>
                   <div className="mono dim">{p.budget}</div>
-                  <div className="mono acc-row-caret">{isOpen ? '−' : '+'}</div>
+                  <div className="mono acc-row-caret" aria-hidden="true">{isOpen ? '−' : '+'}</div>
                 </div>
               </button>
               <p className="roadmap-card-what">{p.what}</p>
               {isOpen && (
-                <div className="roadmap-card-body">
+                <div className="roadmap-card-body" id={`roadmap-panel-${p.id}`} role="region" aria-label={`Детали — ${p.title}`}>
                   {p.goals && (
                     <div className="roadmap-block">
                       <div className="mono dim roadmap-block-h">ЦЕЛИ ФАЗЫ</div>
@@ -4630,8 +4677,20 @@ const PageRoadmap = ({ data, setRoute }) => {
 };
 
 // ─── Page: Competitors ─────────────────────────────────────────────────────
-const PageCompetitors = ({ data }) => {
+const PageCompetitors = ({ data, setRoute }) => {
   const [openName, setOpenName] = useState(null);
+  const slug = (s) => s.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase();
+  useEffect(() => {
+    if (!openName) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`comp-panel-${slug(openName)}`);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 80) {
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }, [openName]);
   return (
     <article className="page">
       <PageHead code="09" eyebrow="ландшафт 2026.05"
@@ -4643,6 +4702,7 @@ const PageCompetitors = ({ data }) => {
           return (
             <Frame key={c.name} className={`comp comp-${c.threat} ${isOpen ? 'is-open' : ''}`}>
               <button className="comp-trigger" aria-expanded={isOpen}
+                      aria-controls={`comp-panel-${slug(c.name)}`}
                       onClick={() => setOpenName(isOpen ? null : c.name)}>
                 <div className="comp-head">
                   <h3 className="comp-name">{c.name}</h3>
@@ -4652,11 +4712,11 @@ const PageCompetitors = ({ data }) => {
                 <div className="comp-row"><span className="mono dim">status</span><span>{c.status}</span></div>
                 <p className="comp-sig">{c.sig}</p>
                 <div className="comp-toggle mono dim">
-                  {isOpen ? '− свернуть' : '+ подробнее'}
+                  <span aria-hidden="true">{isOpen ? '−' : '+'}</span> {isOpen ? 'свернуть' : 'подробнее'}
                 </div>
               </button>
               {isOpen && (
-                <div className="comp-body">
+                <div className="comp-body" id={`comp-panel-${slug(c.name)}`} role="region" aria-label={`Детали — ${c.name}`}>
                   {(c.hq || c.founded) && (
                     <div className="comp-meta-grid">
                       {c.hq && (
@@ -4703,9 +4763,9 @@ const PageCompetitors = ({ data }) => {
                       <ul className="comp-sources">
                         {c.sources.map((s, i) => (
                           <li key={i}>
-                            <a href={s.url} target="_blank" rel="noopener noreferrer">
-                              {s.title} <IconExternal/>
-                            </a>
+                            {s.url.startsWith('#')
+                              ? <a href={s.url} onClick={(e)=>{e.preventDefault(); setRoute(s.url.slice(1));}}>{s.title} →</a>
+                              : <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title} <IconExternal/></a>}
                           </li>
                         ))}
                       </ul>
