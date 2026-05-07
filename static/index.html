@@ -571,10 +571,11 @@ button:focus-visible, a:focus-visible {
   color: var(--ink-2);
   border: 1px solid var(--line-strong);
 }
-.tag-high { color: var(--danger); border-color: var(--danger); }
+.tag-high { color: var(--ink-2); border-color: var(--ink-2); }
 .tag-direct { color: var(--accent); border-color: var(--accent); }
+.tag-peer { color: var(--signal); border-color: var(--signal); }
 .tag-med { color: var(--warn); border-color: var(--warn); }
-.tag-low { color: var(--signal); border-color: var(--signal); }
+.tag-low { color: var(--dim); border-color: var(--dim); }
 
 /* ─── FEATURE (Прометей-РФ) ────────────────────────────────────────────── */
 .feature {
@@ -1284,7 +1285,14 @@ button:focus-visible, a:focus-visible {
   padding: 32px 0 40px;
   margin-bottom: 40px;
 }
-.page-head-meta { display: flex; gap: 20px; margin-bottom: 20px; font-size: 11px; }
+.page-head-meta { display: flex; gap: 12px; margin-bottom: 20px; font-size: 11px; align-items: center; }
+.page-head-stamp {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.02);
+  letter-spacing: 0.08em;
+}
 .page-title {
   font-family: var(--serif);
   font-size: clamp(40px, 6vw, 72px);
@@ -1543,6 +1551,7 @@ button:focus-visible, a:focus-visible {
 .comp-high { border-color: var(--ink-2); }
 .comp-med { border-color: var(--warn); }
 .comp-low { border-color: var(--line-strong); }
+.comp-peer { border-color: var(--signal); }
 
 /* Focus-visible для всех новых триггеров */
 .roadmap-card-trigger:focus-visible,
@@ -1996,7 +2005,7 @@ window.SITE_DATA = {
     version: '2026.05.05',
     lastUpdate: '2026-05-04',
     author: 'Антон Кузменков',
-    status: 'OPEN CONCEPT · v3.0',
+    status: 'ОТКРЫТЫЙ КОНЦЕПТ · v3.0',
   },
 
   hero: {
@@ -2070,7 +2079,7 @@ window.SITE_DATA = {
     title: 'Прометей-РФ',
     italic: 'Лабораторный прототип',
     lede: 'Лабораторный прототип маглев-катапульты длиной 30–50 м за ₽300–450 миллионов как обязательный промежуточный шаг между концептом и демонстратором.',
-    why: 'Без него концепт остаётся на бумаге — это «valley of death» между $0,12 млрд Фазы 0 и $2,5 млрд Фазы 1. ₽300–450 млн на железо — самый высокий ROI в опционной архитектуре.',
+    why: 'Без него концепт остаётся на бумаге — это «долина смерти» между $0,12 млрд Фазы 0 и $2,5 млрд Фазы 1. ₽300–450 млн на железо — самый высокий ROI в опционной архитектуре.',
     specs: [
       ['Длина', '30–50 м'],
       ['Скорость', '200–500 м/с'],
@@ -2080,7 +2089,7 @@ window.SITE_DATA = {
     funding: [
       { src: 'МО НИОКР', share: 35, note: 'рельсотрон ОИВТ, школа',
         amount: '₽105–158 млн',
-        details: 'Министерство обороны РФ финансирует рельсотрон-исследования через ОИВТ РАН (программа «Импульсная энергетика для систем поражения»). Прометей-РФ может быть оформлен как двойного назначения: военный (электромагнитная катапульта для палубной авиации, аналог Type 076) + гражданский (cargo launcher). Канал на $105–158 млн опирается на действующие программы НИОКР МО + советскую школу импульсной энергетики ВНИИЭФ.',
+        details: 'Министерство обороны РФ финансирует рельсотрон-исследования через ОИВТ РАН (программа «Импульсная энергетика для систем поражения»). Прометей-РФ может быть оформлен как двойного назначения: военный (электромагнитная катапульта для палубной авиации, аналог Type 076) + гражданский (грузовой запуск). Канал на $105–158 млн опирается на действующие программы НИОКР МО + советскую школу импульсной энергетики ВНИИЭФ.',
         contacts: 'ОИВТ РАН (Москва), ВНИИЭФ (Саров), Морская коллегия при Правительстве РФ',
         risk: 'Двойное назначение технологии может привести к закрытому статусу части результатов, что мешает международным публикациям и научному признанию.',
         timing: 'Подача заявки 2026 Q3–Q4, решение 2027 Q1, финансирование 2027–2030',
@@ -2125,7 +2134,7 @@ window.SITE_DATA = {
           'Найм команды: 8–12 чел. (главный конструктор, физики, электрики, криогенщики)',
         ],
         risks: 'Неправильный выбор LSM/LIM на этом этапе = переделка всего проекта на стадии engineering design. Решается через симуляции в COMSOL/ANSYS Maxwell + консультации с авторами Auriga Prometheus.' },
-      { id: 'mr2', period: '2027 Q3–2028 Q2', title: 'Engineering design',
+      { id: 'mr2', period: '2027 Q3–2028 Q2', title: 'Инженерное проектирование',
         what: 'Полный пакет КД, заказ силовых блоков, площадка ВНИИЭФ или ОИВТ.',
         budget: '₽80–120 млн',
         deliverables: [
@@ -2192,7 +2201,7 @@ window.SITE_DATA = {
         'Программа испытаний: 100+ пусков, V до 500 м/с',
         'Публикации в IEEE/AIAA, защиты PhD',
       ],
-      whyNow: 'Это «valley of death» между концептом и демонстратором: без физического прототипа за ₽300–450 млн нельзя обосновать $2,5 млрд на Фазу 1. Auriga в США уже идёт этим путём (Prometheus 2026) — у нас 2 года forward, потом окно закроется.',
+      whyNow: 'Это «долина смерти» между концептом и демонстратором: без физического прототипа за ₽300–450 млн нельзя обосновать $2,5 млрд на Фазу 1. Auriga в США уже идёт этим путём (Prometheus 2026) — у нас 2 года форы, потом окно закроется.',
       risks: 'Может оказаться что КПД 75% недостижим в импульсном режиме на наших магнитах — тогда бюджет Фазы 1 нужно пересматривать. Риск частично mitigation-ируется через школу НИИЭФА (опыт ИТЭР) и ВНИИЭФ (импульсной энергетики).',
       gate: 'Достижение 200–500 м/с на 30–50 м прототипе. Открывает финансирование Фазы 1.',
       sources: [
@@ -2262,7 +2271,7 @@ window.SITE_DATA = {
       risks: 'Если СБСП к 2045 окажется нерентабельным или Starship V5 при $50/кг — рынок УД сжимается до ВПК + нишевых. Минимум для безубыточности: 800 т/год при $300/кг. См. сценарии S1–S4 в /#economics.',
       gate: 'Окупаемость $370 млн опекс / 5000 т → $74/кг операционных + амортизация.',
       sources: [
-        { title: 'Концепт — глава 8 (Customer-mix)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/08_customer_mix.md' },
+        { title: 'Концепт — глава 8 (Микс заказчиков)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/08_customer_mix.md' },
         { title: 'Опция B — лунный масс-драйвер', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/10_option_b_lunar.md' },
       ] },
   ],
@@ -2281,7 +2290,7 @@ window.SITE_DATA = {
         { title: 'Sensitivity-анализ УД vs Starship', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/research/01_market_and_competitors.md' },
       ] },
     { name: 'Auriga Space', funding: '$12,2 млн', status: 'Prometheus prototype 2026',
-      sig: 'Прямой бенчмарк УД в малом масштабе. Электромагнит, инкремент.', threat: 'direct',
+      sig: 'Прямой бенчмарк УД в малом масштабе. Электромагнит, инкремент.', threat: 'peer',
       hq: 'Maryland · США', founded: '2020',
       tech: 'Маглев + LSM, прототип Prometheus 2026, target Thunderbird 2030: 1 кг на 1500 м/с, $2000/кг',
       details: 'Самый прямой технологический аналог УД, но в 100× меньшем масштабе. Auriga идёт инкрементами: сначала прототип Prometheus (2026, на стендах), потом Thunderbird для запуска малых (1–10 кг) полезных нагрузок на скоростях 1–2 км/с к 2030. Они пока ВЕРНО решают первую задачу — наработать physics + engineering + команду на маленьком масштабе. УД-РФ должен учиться у них: Прометей-РФ это наша версия Prometheus, тоже инкремент, тот же физический принцип (маглев + LSM).',
@@ -2301,19 +2310,19 @@ window.SITE_DATA = {
       sources: [
         { title: 'Stoke Space — Nova', url: 'https://www.stokespace.com/' },
       ] },
-    { name: 'SpinLaunch', funding: '~$200 млн', status: 'Pivot → Meridian constellation',
-      sig: '8 лет на launcher, не нашли клиента. Урок: customer-first.', threat: 'low',
+    { name: 'SpinLaunch', funding: '~$200 млн', status: 'Поворот → группировка Meridian',
+      sig: '8 лет на разгонник — не нашли клиента. Урок: сначала заказчик, потом физика.', threat: 'low',
       hq: 'Long Beach, California · США', founded: '2014',
-      tech: 'Кинетический launcher: центрифуга радиус 50 м, разгон до 8000 км/ч, выброс капсулы',
-      details: 'Главный антипример. SpinLaunch потратил 8 лет (2014–2024) на разработку центрифугного launcher (центробежная катапульта на земле + 2-я ракетная ступень). Технически суборбитальные тесты прошли (33-м прототип в Spaceport America), но они не нашли коммерческих клиентов и в 2024 пивотнули в спутниковую группировку Meridian. Урок: physics first без customer development — путь к pivot или смерти. Они так и не достигли орбитальной скорости (8 км/с) в физическом пуске.',
+      tech: 'Кинетический разгонник: центрифуга радиус 50 м, разгон до 8000 км/ч, выброс капсулы',
+      details: 'Главный антипример. SpinLaunch потратил 8 лет (2014–2024) на разработку центрифужного разгонника (центробежная катапульта на земле + 2-я ракетная ступень). Технически суборбитальные тесты прошли (33-м прототип в Spaceport America), но они не нашли коммерческих клиентов и в 2024 свернули в спутниковую группировку Meridian. Урок: «сначала физика без заказчика» — путь к развороту или смерти. Они так и не достигли орбитальной скорости (8 км/с) в физическом пуске.',
       forUD: 'УД должен учиться на ошибках SpinLaunch. Главные уроки: (1) перегрузки 10000g на капсуле слишком высоки даже для рад-устойчивых грузов — мы ставим 50–100g; (2) нужно сразу подписывать LOI с заказчиками и работать на их боль, а не на «технологию ради технологии»; (3) hybrid (катапульта + 2-я ступень) — компромисс который не выигрывает у чистой ракеты.',
       risks: 'SpinLaunch — публичное доказательство что «катапульты в космос» = провал. УД должен дифференцироваться: маглев vs центрифуга, 50g vs 10000g, тоннель в горе vs наземная башня. Иначе любой инвестор будет видеть SpinLaunch parallel.',
       sources: [
         { title: 'SpinLaunch — Wikipedia', url: 'https://en.wikipedia.org/wiki/SpinLaunch' },
-        { title: 'Pivot to Meridian — TechCrunch 2024', url: 'https://techcrunch.com/2024/' },
+        { title: 'Поворот к Meridian — TechCrunch 2024', url: 'https://techcrunch.com/2024/' },
       ] },
     { name: 'Longshot Space', funding: '$5 млн + SHIELD', status: 'Space-gun в пустыне',
-      sig: 'Не маглев — газовая пушка. Ниша suborbital cargo.', threat: 'low',
+      sig: 'Не маглев — газовая пушка. Ниша suborbital cargo.', threat: 'peer',
       hq: 'Невада · США', founded: '2022',
       tech: 'Газовая пушка (helium-driven 2-stage): разгон до 5–7 км/с в горизонтальном стволе 1+ км',
       details: 'Электромагнит они не используют — это компрессор + газовая пушка. Концепция родственная УД (масс-драйвер на земле + хорошая физика разгона), но физический принцип другой: вместо магнитного поля ускоряют сжатым газом. Получили DARPA SHIELD контракт 2024 на исследование экстремальной защиты материалов от перегрузок 30000g+ — нишевая задача (DOD payloads). Текущий target — суборбитальный cargo для DARPA, не орбита.',
@@ -2327,8 +2336,8 @@ window.SITE_DATA = {
       hq: 'Шанхай · КНР', founded: '2018 (Type 076 program)',
       tech: 'EMALS (электромагнитная катапульта для палубной авиации) на 78 МВт, ~80 м длина, разгон самолёта до 250 км/ч',
       details: 'Type 076 — китайский авианосец нового типа с электромагнитной катапультой EMALS (78 МВт). Это первая EMALS вне США (после Gerald Ford). Физика — те же импульсные сверхпроводящие магниты что у УД, только в военной палубной конфигурации. Китай за 10 лет создал полную школу EMALS (производство, инженерные кадры, импульсная энергетика, сверхпроводимость). Это означает что физика «электромагнит для разгона тяжёлых грузов» на государственном уровне освоена, и при политической воле может быть масштабирована до УД-уровня.',
-      forUD: 'Прямой угрозы нет — Type 076 это военная палубная катапульта, не launcher в космос. Но это БЕНЧМАРК ШКОЛЫ КАДРОВ: если Китай за 10 лет вырастил инженеров под EMALS, то Россия с её НИИЭФА (прошлого ИТЭР опыта) и ВНИИЭФ (импульсной энергетики) может вырастить кадры под УД-маглев за те же 10 лет. Доказательство feasibility school-development.',
-      risks: 'Если Китай решит масштабировать EMALS-знания в гражданский launcher (вероятность 5–15%), они станут прямым геополитическим конкурентом РФ-проекту с большими ресурсами. Watch for: китайские публикации по «вакуумному маглев», статьи КАСТ.',
+      forUD: 'Прямой угрозы нет — Type 076 это военная палубная катапульта, не запуск в космос. Но это ЭТАЛОН ШКОЛЫ КАДРОВ: если Китай за 10 лет вырастил инженеров под EMALS, то Россия с её НИИЭФА (прошлого ИТЭР опыта) и ВНИИЭФ (импульсной энергетики) может вырастить кадры под УД-маглев за те же 10 лет. Доказательство реализуемости подготовки школы.',
+      risks: 'Если Китай решит масштабировать EMALS-знания в гражданский запуск (вероятность 5–15%), они станут прямым геополитическим конкурентом РФ-проекту с большими ресурсами. На что смотреть: китайские публикации по «вакуумному маглев», статьи КАСТ.',
       sources: [
         { title: 'Type 076 — Naval News', url: 'https://www.navalnews.com/' },
       ] },
@@ -2451,7 +2460,7 @@ window.SITE_DATA = {
         ['Прототип', 'к 2030 году'],
       ],
       key: ['Зевс/Нуклон', 'до 6 МВт реактора', 'федпроект «Космический атом»'],
-      forUD: 'Зевс — потенциальный customer катапульты: запускается на промежуточную орбиту катапультой (1500–2000 км), дальше работает своим реактором к Луне или дальше. Курчатовский даёт криогенику, контроль тепловых режимов в экстремальных условиях, безопасность подземных объектов.',
+      forUD: 'Зевс — потенциальный заказчик катапульты: запускается на промежуточную орбиту катапультой (1500–2000 км), дальше работает своим реактором к Луне или дальше. Курчатовский даёт криогенику, контроль тепловых режимов в экстремальных условиях, безопасность подземных объектов.',
       sources: [
         { title: 'Роскосмос и Курчатовский подписали соглашение по ядерной космической программе', url: 'https://prokosmos.ru/2025/04/10/roskosmos-budet-rabotat-s-kurchatovskim-institutom-po-yadernoi-kosmicheskoi-programme/' },
         { title: 'Курчатовский институт — официально', url: 'https://nrcki.ru/catalog/o-centre/' },
@@ -2485,7 +2494,7 @@ window.SITE_DATA = {
     { n: '03', name: 'Гибрид «катапульта + скайхук»',
       detail: 'Тоннель сокращается до 25 км (−37%), катапульта разгоняет до 4–5 км/с, скайхук добирает остальное. Чистая экономия $3–5 млрд + гибкость по орбитам.',
       capex: '−13%', load: '—', cost: '−10–15%', tier: 2 },
-    { n: '04', name: 'Существующие блоки АЭС (long-term PPA)',
+    { n: '04', name: 'Существующие блоки АЭС (долгосрочный контракт)',
       detail: 'Балансировка с Белоярской АЭС: избыточная мощность ВВЭР ночью идёт в накопители. Не нужен новый блок ВВЭР-1200.',
       capex: '−10%', load: '—', cost: '−7–10%', tier: 2 },
     { n: '05', name: 'Унификация капсул с Союз-7 / ПТК НП',
@@ -2648,7 +2657,7 @@ window.SITE_DATA = {
       body: 'Что делает одиночка без бюджета. 4 параллельных канала: государственный (МО НИОКР, РНФ, Сколково), общественный (сайт + MAX-канал + книга + фильм + крауд), международный (NIAC через US co-PI, ESA workshop), бизнес (LOI от российских customers). Краудфандинг ₽3–30 млн = signal-капитал, не финансирование.',
       kw: ['4 канала', 'крауд = signal', '12-месячный план'] },
     { n: '11', t: 'Прометей-РФ — лабораторный прототип', s: 'new', d: '28 мин',
-      body: 'Главное обновление мая 2026. Лабораторный электромагнитный разгонник 30–50 м, 200–500 м/с, ₽300–450 млн за 3 года — российский эквивалент Auriga Prometheus. Mix-финансирование: 35% МО НИОКР, 25% РНФ, 20% in-kind институтов, 12% Сколково, 8% краудфандинг. Главный шаг к снятию «valley of death» между концептом и демонстратором $2,5 млрд.',
+      body: 'Главное обновление мая 2026. Лабораторный электромагнитный разгонник 30–50 м, 200–500 м/с, ₽300–450 млн за 3 года — российский эквивалент Auriga Prometheus. Микс-финансирование: 35% МО НИОКР, 25% РНФ, 20% натуральный вклад институтов, 12% Сколково, 8% краудфандинг. Главный шаг к снятию «долины смерти» между концептом и демонстратором $2,5 млрд.',
       kw: ['30–50 м', '₽300 млн', 'Auriga мирор'] },
   ],
 
@@ -2970,8 +2979,8 @@ const ChaptersAccordion = ({ chapters }) => {
               <span className="chapter-n mono">{c.n}</span>
               <span className="chapter-t">{c.t}</span>
               <span className="chapter-meta mono dim">
-                {c.s==='new' && <span className="chip chip-new">NEW</span>}
-                {c.s==='updated' && <span className="chip chip-upd">UPD</span>}
+                {c.s==='new' && <span className="chip chip-new">НОВОЕ</span>}
+                {c.s==='updated' && <span className="chip chip-upd">ОБНОВ</span>}
                 <span className="chapter-d">{c.d}</span>
                 <span className="chapter-caret">{isOpen?'−':'+'}</span>
               </span>
@@ -3481,7 +3490,7 @@ const WaterfallChart = () => {
     { label: '01 · 2-я нитка',     delta: -80,  fill: '#ff5b1f' },
     { label: '02 · 12–15 т',       delta: -28,  fill: '#ff5b1f' },
     { label: '03 · скайхук',       delta: -10,  fill: '#ff7340' },
-    { label: '04 · АЭС PPA',       delta: -3,   fill: '#ff7340' },
+    { label: '04 · АЭС',           delta: -3,   fill: '#ff7340' },
     { label: '05 · унификация',    delta: -3,   fill: '#ff7340' },
     { label: '06 · выработки',     delta: -2,   fill: '#ff8a55' },
     { label: '07 · криогеника',    delta: -1,   fill: '#ff8a55' },
@@ -3951,7 +3960,7 @@ const ChromeNav = ({ data, route, setRoute }) => {
           </svg>
           <div className="nav-brand-text">
             <div className="nav-brand-name">Урал-Драйвер</div>
-            <div className="nav-brand-sub mono">{data.meta.version} · open concept</div>
+            <div className="nav-brand-sub mono">{data.meta.version} · открытый концепт</div>
           </div>
         </a>
         <nav className="nav-menu">
@@ -4061,7 +4070,7 @@ const PageHome = ({ data, setRoute }) => {
         <SpaceBackdrop/>
         <GridPattern opacity={0.18}/>
         <div className="hero-meta">
-          <div className="mono dim">URAL-DRIVER · ОТКРЫТЫЙ КОНЦЕПТ · {data.meta.version}</div>
+          <div className="mono dim">УРАЛ-ДРАЙВЕР · ОТКРЫТЫЙ КОНЦЕПТ · {data.meta.version}</div>
           <div className="mono dim">N 65°02′ · E 60°07′ · 1895 m</div>
         </div>
         <div className="hero-grid">
@@ -4078,19 +4087,25 @@ const PageHome = ({ data, setRoute }) => {
             </div>
           </div>
           <aside className="hero-side">
-            <Frame tag="ОБЪЕКТ · 0.5 km × 40 km">
+            <Frame tag="ОБЪЕКТ · 0,5 км × 40 км">
               {/* Schematic of underground catapult */}
               <svg viewBox="0 0 280 360" className="hero-svg">
+                <defs>
+                  <filter id="heroGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2.5"/>
+                  </filter>
+                </defs>
                 {/* Mountain silhouette */}
                 <path d="M0 240 L60 180 L100 200 L140 130 L180 170 L220 150 L280 200 L280 360 L0 360 Z"
-                      fill="currentColor" opacity="0.06"/>
+                      fill="currentColor" opacity="0.08"/>
                 <path d="M0 240 L60 180 L100 200 L140 130 L180 170 L220 150 L280 200"
-                      fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+                      fill="none" stroke="currentColor" strokeWidth="1" opacity="0.55"/>
                 {/* Surface line */}
-                <line x1="0" y1="240" x2="280" y2="240" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2,3" opacity="0.4"/>
+                <line x1="0" y1="240" x2="280" y2="240" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2,3" opacity="0.55"/>
+                {/* Tunnel halo */}
+                <path d="M40 320 Q140 320 240 200" fill="none" stroke="var(--accent)" strokeWidth="9" opacity="0.18" filter="url(#heroGlow)"/>
                 {/* Tunnel */}
-                <path d="M40 320 Q140 320 240 200" fill="none" stroke="var(--accent)" strokeWidth="2"/>
-                <path d="M40 320 Q140 320 240 200" fill="none" stroke="var(--accent)" strokeWidth="6" opacity="0.15"/>
+                <path d="M40 320 Q140 320 240 200" fill="none" stroke="var(--accent)" strokeWidth="2.5"/>
                 {/* Stations */}
                 {[0.0,0.25,0.5,0.75].map((t,i)=>{
                   const x = 40 + (240-40)*t;
@@ -4099,20 +4114,21 @@ const PageHome = ({ data, setRoute }) => {
                 })}
                 {/* Exit */}
                 <g transform="translate(240, 200)">
+                  <circle r="9" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4"/>
                   <circle r="6" fill="none" stroke="var(--accent)" strokeWidth="1.5"/>
                   <circle r="2" fill="var(--accent)"/>
                 </g>
                 {/* Trajectory */}
-                <path d="M240 200 Q260 100 280 0" fill="none" stroke="var(--accent)" strokeWidth="1" strokeDasharray="2,2"/>
+                <path d="M240 200 Q260 100 280 0" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="3,3" opacity="0.85"/>
                 {/* Labels */}
-                <g className="mono" fontSize="8" fill="currentColor" opacity="0.6">
-                  <text x="6" y="252">BASE · 0 m</text>
-                  <text x="244" y="196">EXIT · 1895 m</text>
-                  <text x="100" y="280">маглев · LSM · 40 km</text>
-                  <text x="244" y="100" textAnchor="end">→ orbit</text>
+                <g className="mono" fontSize="8" fill="currentColor" opacity="0.85">
+                  <text x="6" y="252">БАЗА · 0 м</text>
+                  <text x="244" y="196">ВЫХОД · 1895 м</text>
+                  <text x="100" y="280">маглев · LSM · 40 км</text>
+                  <text x="244" y="100" textAnchor="end">→ орбита</text>
                 </g>
               </svg>
-              <div className="hero-svg-foot mono">SCHEMATIC · NOT TO SCALE</div>
+              <div className="hero-svg-foot mono">СХЕМА · БЕЗ МАСШТАБА</div>
             </Frame>
           </aside>
         </div>
@@ -4183,7 +4199,7 @@ const PageHome = ({ data, setRoute }) => {
             <Btn onClick={()=>setRoute('phase05')}>Глава 11 целиком</Btn>
           </div>
           <div className="feature-side">
-            <Frame tag="SPEC · LAB-50">
+            <Frame tag="ПАРАМЕТРЫ · ЛАБ-50">
               <div className="feature-specs">
                 {data.feature.specs.map(([k,v]) => (
                   <div key={k} className="feature-spec">
@@ -4358,7 +4374,7 @@ Object.assign(window, { PageHome });
 const PageHead = ({ code, eyebrow, title, lede }) => (
   <header className="page-head">
     <div className="page-head-meta mono">
-      <span>CHAPTER · {code}</span>
+      <span className="page-head-stamp">ГЛАВА · {code}</span>
       <span className="dim">{eyebrow}</span>
     </div>
     <h1 className="page-title">{title}</h1>
@@ -4399,11 +4415,11 @@ const PagePhase05 = ({ data, setRoute }) => {
     <article className="page">
       <PageHead code="11" eyebrow="лабораторный прототип · 2027–2030"
         title="Прометей-РФ"
-        lede="Между концепт-документом и демонстратором лежит «valley of death». Лабораторный прототип маглев-катапульты длиной 30–50 м решает эту проблему за ₽300–450 миллионов — самый высокий ROI во всей опционной архитектуре. Кликни по любой карточке funding-mix или этапа roadmap чтобы развернуть детали." />
+        lede="Между концепт-документом и демонстратором лежит «долина смерти». Лабораторный прототип маглев-катапульты длиной 30–50 м решает эту проблему за ₽300–450 миллионов — самый высокий ROI во всей опционной архитектуре. Кликни по любой карточке финансирования или этапа дорожной карты чтобы развернуть детали." />
 
       {/* Hero spec block */}
       <section className="phase-hero">
-        <Frame tag="LAB-50 · схема" className="phase-hero-vis">
+        <Frame tag="ЛАБ-50 · схема" className="phase-hero-vis">
           <svg viewBox="0 0 720 240" className="lab-svg">
             <defs>
               <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -4423,13 +4439,13 @@ const PagePhase05 = ({ data, setRoute }) => {
             {/* Sled */}
             <g transform="translate(120,108)">
               <rect width="80" height="44" fill="var(--accent)" opacity="0.85"/>
-              <text x="40" y="28" fontSize="9" fontFamily="monospace" textAnchor="middle" fill="var(--bg)">SLED</text>
+              <text x="40" y="28" fontSize="9" fontFamily="monospace" textAnchor="middle" fill="var(--bg)">САНИ</text>
               <path d="M80 22 L120 22 M115 18 L120 22 L115 26" stroke="var(--accent)" strokeWidth="1.5" fill="none"/>
             </g>
             {/* Catch zone */}
             <g transform="translate(620, 100)">
               <rect width="60" height="60" fill="none" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3,3"/>
-              <text x="30" y="36" fontSize="8" fontFamily="monospace" textAnchor="middle" opacity="0.6">CATCH</text>
+              <text x="30" y="36" fontSize="8" fontFamily="monospace" textAnchor="middle" opacity="0.6">ЛОВУШКА</text>
             </g>
             {/* Power racks */}
             <g transform="translate(0,30)">
@@ -4440,20 +4456,20 @@ const PagePhase05 = ({ data, setRoute }) => {
                   <line x1="40" y1="50" x2="40" y2="70" stroke="currentColor" strokeWidth="0.4"/>
                 </g>
               ))}
-              <text x="20" y="20" fontSize="7" fontFamily="monospace" opacity="0.5">PSU·1</text>
-              <text x="660" y="20" fontSize="7" fontFamily="monospace" opacity="0.5">PSU·6</text>
+              <text x="20" y="20" fontSize="7" fontFamily="monospace" opacity="0.5">ИБП·1</text>
+              <text x="660" y="20" fontSize="7" fontFamily="monospace" opacity="0.5">ИБП·6</text>
             </g>
             {/* Dimension */}
             <g opacity="0.6">
               <line x1="40" y1="208" x2="680" y2="208" stroke="currentColor" strokeWidth="0.4"/>
               <line x1="40" y1="204" x2="40" y2="212" stroke="currentColor" strokeWidth="0.4"/>
               <line x1="680" y1="204" x2="680" y2="212" stroke="currentColor" strokeWidth="0.4"/>
-              <text x="360" y="222" fontSize="9" fontFamily="monospace" textAnchor="middle">L = 30–50 m · v = 200–500 m/s</text>
+              <text x="360" y="222" fontSize="9" fontFamily="monospace" textAnchor="middle">L = 30–50 м · v = 200–500 м/с</text>
             </g>
           </svg>
         </Frame>
         <div className="phase-hero-side">
-          <Frame tag="KEY SPECS">
+          <Frame tag="КЛЮЧЕВЫЕ ПАРАМЕТРЫ">
             {f.specs.map(([k,v])=>(
               <div className="big-spec" key={k}>
                 <div className="mono dim">{k}</div>
@@ -4473,7 +4489,7 @@ const PagePhase05 = ({ data, setRoute }) => {
             <p>Лабораторный прототип <b>Прометей-РФ</b> заполняет эту пустоту. 30–50 метров маглев-трассы с шестью силовыми блоками, скорость до 500 м/с, разгоняемая каретка массой 50–200 кг. Это уже не концепт, но ещё не миллиардные стройки.</p>
             <p>Модель — Auriga Space (Maryland), которая в 2026 году запускает свой <i>Prometheus</i> с похожими параметрами и привлекла $12,2 млн. Прометей-РФ — российский ответ той же логики, но с привязкой к школам ВНИИЭФ, ОИВТ и НИИЭФА.</p>
           </div>
-          <Frame tag="VALLEY OF DEATH">
+          <Frame tag="ДОЛИНА СМЕРТИ">
             <div className="valley">
               <div className="valley-row">
                 <span className="mono dim">Фаза 0</span>
@@ -4481,7 +4497,7 @@ const PagePhase05 = ({ data, setRoute }) => {
                 <span className="mono">$0,12 млрд</span>
               </div>
               <div className="valley-row valley-gap">
-                <span className="mono dim">↓ valley of death ↓</span>
+                <span className="mono dim">↓ долина смерти ↓</span>
               </div>
               <div className="valley-row valley-row-star">
                 <span className="mono"><IconStar/> Фаза 0.5</span>
@@ -4524,7 +4540,7 @@ const PagePhase05 = ({ data, setRoute }) => {
                     <div className="funding-card-amt mono">{src.amount}</div>
                   )}
                   <div className="funding-card-toggle mono dim">
-                    <span aria-hidden="true">{isOpen ? '−' : '+'}</span> {isOpen ? 'свернуть' : 'подробнее'}
+                    <span aria-hidden="true">[</span> {isOpen ? 'СВЕРНУТЬ' : 'ОТКРЫТЬ КАНАЛ'} <span aria-hidden="true">{isOpen ? ']' : '↗ ]'}</span>
                   </div>
                 </button>
                 {isOpen && (
@@ -4563,7 +4579,7 @@ const PagePhase05 = ({ data, setRoute }) => {
 
       {/* Roadmap of phase 0.5 */}
       <section className="section">
-        <SectionHead code="11.6" title="Roadmap Прометей-РФ (2027–2030)" sub="4 этапа с deliverables и рисками. Кликни по этапу для деталей."/>
+        <SectionHead code="11.6" title="Дорожная карта Прометея-РФ (2027–2030)" sub="4 этапа с результатами и рисками. Кликни по этапу для деталей."/>
         <div className="mini-roadmap">
           {(f.miniRoadmap || []).map((step, i) => {
             const isOpen = openStep === step.id;
@@ -4587,7 +4603,7 @@ const PagePhase05 = ({ data, setRoute }) => {
                   <div className="mini-roadmap-body" id={`step-panel-${step.id}`} role="region" aria-label={`Детали этапа — ${step.title}`}>
                     {step.deliverables && (
                       <div className="funding-block">
-                        <div className="mono funding-block-h funding-block-h-primary">DELIVERABLES</div>
+                        <div className="mono funding-block-h funding-block-h-primary">РЕЗУЛЬТАТЫ ЭТАПА</div>
                         <ul className="mini-roadmap-deliverables">
                           {step.deliverables.map((d, j) => <li key={j}>{d}</li>)}
                         </ul>
@@ -4744,13 +4760,13 @@ const PageCompetitors = ({ data, setRoute }) => {
                       onClick={() => setOpenName(isOpen ? null : c.name)}>
                 <div className="comp-head">
                   <h3 className="comp-name">{c.name}</h3>
-                  <Tag tone={c.threat}>{c.threat==='high'?'BENCHMARK':c.threat==='direct'?'DIRECT':c.threat==='med'?'WATCH':'NICHE'}</Tag>
+                  <Tag tone={c.threat}>{c.threat==='high'?'ЭТАЛОН':c.threat==='direct'?'ПРЯМОЙ':c.threat==='peer'?'ВАЛИДАТОР':c.threat==='med'?'НАБЛЮДЕНИЕ':'НИША'}</Tag>
                 </div>
-                <div className="comp-row"><span className="mono dim">finance</span><span className="mono">{c.funding}</span></div>
-                <div className="comp-row"><span className="mono dim">status</span><span>{c.status}</span></div>
+                <div className="comp-row"><span className="mono dim">финансы</span><span className="mono">{c.funding}</span></div>
+                <div className="comp-row"><span className="mono dim">статус</span><span>{c.status}</span></div>
                 <p className="comp-sig">{c.sig}</p>
                 <div className="comp-toggle mono dim">
-                  <span aria-hidden="true">{isOpen ? '−' : '+'}</span> {isOpen ? 'свернуть' : 'подробнее'}
+                  <span aria-hidden="true">[</span> {isOpen ? 'СВЕРНУТЬ ДОСЬЕ' : 'ОТКРЫТЬ ДОСЬЕ'} <span aria-hidden="true">{isOpen ? ']' : '↗ ]'}</span>
                 </div>
               </button>
               {isOpen && (
@@ -4759,13 +4775,13 @@ const PageCompetitors = ({ data, setRoute }) => {
                     <div className="comp-meta-grid">
                       {c.hq && (
                         <div className="comp-meta">
-                          <div className="mono dim">HQ</div>
+                          <div className="mono dim">ШТАБ-КВАРТИРА</div>
                           <div>{c.hq}</div>
                         </div>
                       )}
                       {c.founded && (
                         <div className="comp-meta">
-                          <div className="mono dim">FOUNDED</div>
+                          <div className="mono dim">ОСНОВАНА</div>
                           <div>{c.founded}</div>
                         </div>
                       )}
@@ -5160,7 +5176,7 @@ const PageFunding = ({ data, setRoute }) => {
           sub={f.contactsForLargeDonors.note}/>
         <div className="big-contacts">
           <a href={`mailto:${f.contactsForLargeDonors.email}`} className="big-contact">
-            <span className="mono dim">EMAIL</span>
+            <span className="mono dim">ПОЧТА</span>
             <span className="big-contact-val">{f.contactsForLargeDonors.email}</span>
           </a>
           <a href={f.contactsForLargeDonors.max} target="_blank" className="big-contact">
