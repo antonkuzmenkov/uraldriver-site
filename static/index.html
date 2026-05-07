@@ -1335,13 +1335,52 @@ button:focus-visible, a:focus-visible {
 .valley-gap { justify-content: center; padding: 6px 0; opacity: 0.5; display: block; text-align: center; }
 .valley-note { font-size: 13px; color: var(--ink-2); margin: 16px 0 0; line-height: 1.6; }
 
-.funding-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.funding-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: start; }
 @media (max-width: 1100px) { .funding-grid { grid-template-columns: repeat(2, 1fr); } }
-.funding-card { padding: 20px; }
+.funding-card { padding: 0; transition: border-color .2s; }
+.funding-card.is-open { grid-column: 1 / -1; border-color: var(--accent); }
+.funding-card-trigger {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: 0; cursor: pointer;
+  padding: 20px; transition: background .15s;
+}
+.funding-card-trigger:hover { background: var(--tbl-bg-hover); }
+.funding-card.is-open .funding-card-trigger { background: var(--tbl-bg-active); }
 .funding-card-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
 .funding-card-share { font-family: var(--serif); font-size: 32px; letter-spacing: -0.02em; color: var(--accent); }
-.funding-card-src { font-size: 15px; margin-bottom: 4px; }
+.funding-card-src { font-size: 15px; margin-bottom: 4px; color: var(--ink); }
 .funding-card-note { font-size: 10px; }
+.funding-card-amt {
+  font-size: 13px; color: var(--ink); margin-top: 10px;
+  padding-top: 8px; border-top: 1px dashed var(--line);
+}
+.funding-card-toggle {
+  font-size: 11px; letter-spacing: 0.05em;
+  padding: 8px 0 0; margin-top: 6px;
+  text-transform: uppercase; transition: color .15s;
+}
+.funding-card-trigger:hover .funding-card-toggle { color: var(--accent); }
+.funding-card.is-open .funding-card-toggle { color: var(--accent); }
+.funding-card-body {
+  padding: 4px 24px 24px;
+  background: var(--tbl-bg-active);
+  border-top: 1px solid var(--tbl-row-border);
+  animation: chapterSlide .25s ease-out;
+}
+.funding-block { margin-top: 16px; }
+.funding-block-h {
+  letter-spacing: 0.06em; font-size: 11px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.funding-block p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.65; }
+.funding-block-risk {
+  border-left: 2px solid var(--warn);
+  padding-left: 14px;
+  background: rgba(245,196,81,0.04);
+  padding-top: 10px; padding-bottom: 10px;
+}
+.funding-block-risk .funding-block-h { color: var(--warn); }
 
 .mini-roadmap { border-top: 1px solid var(--line); }
 .mini-roadmap-row {
@@ -1349,35 +1388,180 @@ button:focus-visible, a:focus-visible {
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
 }
-@media (max-width: 700px) { .mini-roadmap-row { grid-template-columns: 1fr; gap: 6px; } }
-.mini-roadmap-time { color: var(--accent); padding-top: 4px; font-size: 11px; }
+.mini-roadmap-row-clickable { display: block; padding: 0; }
+.mini-roadmap-trigger {
+  display: grid; grid-template-columns: 200px 1fr; gap: 24px;
+  width: 100%; text-align: left; background: transparent; border: 0; cursor: pointer;
+  padding: 20px 0; transition: background .15s;
+}
+@media (max-width: 700px) {
+  .mini-roadmap-row { grid-template-columns: 1fr; gap: 6px; }
+  .mini-roadmap-trigger { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
+}
+.mini-roadmap-trigger:hover { background: var(--tbl-bg-hover); }
+.mini-roadmap-row.is-open .mini-roadmap-trigger { background: var(--tbl-bg-active); }
+.mini-roadmap-time { color: var(--accent); padding-top: 4px; font-size: 11px; padding-left: 8px; }
 .mini-roadmap-h { font-size: 17px; margin-bottom: 6px; }
 .mini-roadmap-b { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.mini-roadmap-budget { font-size: 12px; }
+.mini-roadmap-caret { color: var(--dim); font-size: 18px; }
+.mini-roadmap-row.is-open .mini-roadmap-caret { color: var(--accent); }
+.mini-roadmap-body {
+  padding: 0 24px 24px 224px;
+  background: var(--tbl-bg-active);
+  animation: chapterSlide .25s ease-out;
+}
+@media (max-width: 700px) {
+  .mini-roadmap-body { padding: 0 16px 20px; }
+}
+.mini-roadmap-deliverables {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 6px;
+}
+.mini-roadmap-deliverables li {
+  position: relative; padding-left: 18px;
+  color: var(--ink-2); font-size: 13.5px; line-height: 1.55;
+}
+.mini-roadmap-deliverables li::before {
+  content: '▸'; position: absolute; left: 0;
+  color: var(--accent); font-size: 12px;
+}
 
 /* ─── ROADMAP DETAIL ───────────────────────────────────────────────────── */
 .roadmap-detail { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
-.roadmap-card { padding: 24px; }
+.roadmap-card { padding: 0; overflow: hidden; transition: border-color .2s; }
 .roadmap-card-head {
   display: flex; justify-content: space-between; gap: 24px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  padding: 24px 24px 8px;
 }
+.roadmap-card-trigger {
+  width: 100%; text-align: left; background: transparent; border: 0;
+  cursor: pointer; transition: background .15s; align-items: start;
+}
+.roadmap-card-trigger:hover { background: var(--tbl-bg-hover); }
+.roadmap-card.is-open .roadmap-card-trigger { background: var(--tbl-bg-active); }
+.roadmap-card.is-open { border-color: var(--accent); }
 .roadmap-card-title { font-family: var(--serif); font-size: 22px; font-weight: 400; margin: 4px 0 0; letter-spacing: -0.01em; }
-.roadmap-card-meta { text-align: right; }
+.roadmap-card-meta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .roadmap-card-meta .mono:first-child { color: var(--ink); font-size: 12px; }
-.roadmap-card-what { color: var(--ink-2); font-size: 14.5px; margin: 0 0 12px; line-height: 1.6; }
+.roadmap-card-meta .acc-row-caret { margin-top: 6px; font-size: 18px; color: var(--dim); }
+.roadmap-card.is-open .acc-row-caret { color: var(--accent); }
+.roadmap-card-what { color: var(--ink-2); font-size: 14.5px; margin: 0; padding: 0 24px 16px; line-height: 1.6; }
 .roadmap-now { border-color: var(--ink); }
 .roadmap-next { border-color: var(--accent); }
+.roadmap-card-body {
+  padding: 4px 24px 28px;
+  background: var(--tbl-bg-active);
+  border-top: 1px solid var(--tbl-row-border);
+  animation: chapterSlide .25s ease-out;
+}
+.roadmap-block { margin-top: 18px; }
+.roadmap-block-h {
+  letter-spacing: 0.06em; font-size: 11px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.roadmap-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+.roadmap-goals {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 6px;
+}
+.roadmap-goals li {
+  position: relative; padding-left: 18px;
+  color: var(--ink-2); font-size: 13.5px; line-height: 1.55;
+}
+.roadmap-goals li::before {
+  content: '▸'; position: absolute; left: 0;
+  color: var(--accent); font-size: 12px;
+}
+.roadmap-gate-block {
+  border-left: 2px solid var(--accent);
+  padding-left: 16px;
+  background: rgba(255,91,31,0.04);
+  margin-left: -2px;
+  padding-top: 12px; padding-bottom: 12px;
+}
+.roadmap-gate-block .roadmap-block-h { color: var(--accent); }
+.roadmap-gate-block p { color: var(--ink); }
+.roadmap-sources {
+  list-style: none; margin: 0; padding: 0;
+}
+.roadmap-sources li { padding: 5px 0; }
+.roadmap-sources a {
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 6px;
+  border-bottom: 1px dashed var(--line);
+  transition: color .15s, border-color .15s;
+}
+.roadmap-sources a:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ─── COMPETITORS ──────────────────────────────────────────────────────── */
-.comp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.comp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 900px) { .comp-grid { grid-template-columns: 1fr; } }
-.comp { padding: 24px; }
+.comp { padding: 0; transition: border-color .2s; }
+.comp.is-open { grid-column: 1 / -1; border-color: var(--accent); }
+.comp-trigger {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: 0; cursor: pointer;
+  padding: 24px; transition: background .15s;
+}
+.comp-trigger:hover { background: var(--tbl-bg-hover); }
+.comp.is-open .comp-trigger { background: var(--tbl-bg-active); }
 .comp-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-bottom: 16px; }
-.comp-name { font-family: var(--serif); font-size: 22px; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+.comp-name { font-family: var(--serif); font-size: 22px; font-weight: 400; margin: 0; letter-spacing: -0.01em; color: var(--ink); }
 .comp-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 12px; gap: 16px; }
 .comp-row:last-of-type { border-bottom: 0; margin-bottom: 12px; }
-.comp-sig { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin: 8px 0 0; }
+.comp-sig { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin: 8px 0 12px; }
 .comp-direct { border-color: var(--accent); }
+.comp-toggle {
+  font-size: 11px; letter-spacing: 0.05em;
+  padding: 8px 0 0; border-top: 1px dashed var(--line);
+  text-transform: uppercase; transition: color .15s;
+}
+.comp-trigger:hover .comp-toggle { color: var(--accent); }
+.comp.is-open .comp-toggle { color: var(--accent); }
+.comp-body {
+  padding: 4px 24px 28px;
+  background: var(--tbl-bg-active);
+  border-top: 1px solid var(--tbl-row-border);
+  animation: chapterSlide .25s ease-out;
+}
+.comp-meta-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 16px; padding: 16px 0; border-bottom: 1px dashed var(--line);
+}
+.comp-meta div:first-child {
+  letter-spacing: 0.06em; font-size: 11px;
+  margin-bottom: 4px;
+}
+.comp-meta div:last-child { color: var(--ink); font-size: 13.5px; }
+.comp-block { margin-top: 18px; }
+.comp-block-h {
+  letter-spacing: 0.06em; font-size: 11px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.comp-block p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.65; }
+.comp-for-ud {
+  border-left: 2px solid var(--accent);
+  padding-left: 16px;
+  background: rgba(255,91,31,0.04);
+  padding-top: 12px; padding-bottom: 12px;
+}
+.comp-for-ud .comp-block-h { color: var(--accent); }
+.comp-for-ud p { color: var(--ink); }
+.comp-sources {
+  list-style: none; margin: 0; padding: 0;
+}
+.comp-sources li { padding: 5px 0; }
+.comp-sources a {
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 6px;
+  border-bottom: 1px dashed var(--line);
+  transition: color .15s, border-color .15s;
+}
+.comp-sources a:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ─── ACCORDION для внутренних страниц (Концепция/Площадка/Экономика) ──── */
 .acc-list {
@@ -1847,11 +2031,87 @@ window.SITE_DATA = {
       ['Срок', '2027–2030'],
     ],
     funding: [
-      { src: 'МО НИОКР', share: 35, note: 'рельсотрон ОИВТ, школа' },
-      { src: 'РНФ / Минобрнауки', share: 25, note: 'фундаментальные гранты' },
-      { src: 'In-kind институтов', share: 20, note: 'НИИЭФА, ВНИИЭФ' },
-      { src: 'Сколково / частные', share: 12, note: 'Sk-резидент' },
-      { src: 'Краудфандинг', share: 8, note: 'signal-канал' },
+      { src: 'МО НИОКР', share: 35, note: 'рельсотрон ОИВТ, школа',
+        amount: '₽105–158 млн',
+        details: 'Министерство обороны РФ финансирует рельсотрон-исследования через ОИВТ РАН (программа «Импульсная энергетика для систем поражения»). Прометей-РФ может быть оформлен как двойного назначения: военный (электромагнитная катапульта для палубной авиации, аналог Type 076) + гражданский (cargo launcher). Канал на $105–158 млн опирается на действующие программы НИОКР МО + советскую школу импульсной энергетики ВНИИЭФ.',
+        contacts: 'ОИВТ РАН (Москва), ВНИИЭФ (Саров), Морская коллегия при Правительстве РФ',
+        risk: 'Двойное назначение технологии может привести к закрытому статусу части результатов, что мешает международным публикациям и научному признанию.',
+        timing: 'Подача заявки 2026 Q3–Q4, решение 2027 Q1, финансирование 2027–2030',
+      },
+      { src: 'РНФ / Минобрнауки', share: 25, note: 'фундаментальные гранты',
+        amount: '₽75–113 млн',
+        details: 'Российский научный фонд + Минобрнауки финансируют фундаментальные исследования по сверхпроводимости, импульсной энергетике, плазменной физике. Конкурсы: РНФ (до ₽15 млн на 3 года), Президентская программа исследовательских проектов, Программа «Приоритет-2030». Под Прометея-РФ можно подать 5–7 параллельных заявок от разных институтов (НИИЭФА, ОИВТ, ИФМ УрО РАН, Курчатовский институт), каждая со своим срезом физики.',
+        contacts: 'РНФ (rscf.ru), Минобрнауки, кафедры физики МГУ/МФТИ/ИТМО',
+        risk: 'РНФ-гранты не позволяют покупать капитальное оборудование — только зарплаты + расходники + командировки. Капитал придётся искать в МО или Сколково.',
+        timing: 'Конкурсы РНФ — март-июнь и сентябрь-ноябрь ежегодно. Решения 4–6 мес. Финансирование 2027–2029.',
+      },
+      { src: 'In-kind институтов', share: 20, note: 'НИИЭФА, ВНИИЭФ',
+        amount: '₽60–90 млн',
+        details: 'In-kind contributions = вклад институтов оборудованием, площадями, рабочим временем без денежного потока. НИИЭФА может предоставить сверхпроводящие магниты ИТЭР-класса (производство уже отлажено), ВНИИЭФ — площадку под трассу 50 м (бывшие гермозона ы) и импульсные генераторы 100 МВт. Курчатовский — криогенику. Это не «деньги», а готовое железо стоимостью ₽60–90 млн которое мы получаем без покупки.',
+        contacts: 'НИИЭФА им. Ефремова (СПб), ВНИИЭФ (Саров), Курчатовский институт (Москва)',
+        risk: 'In-kind зависит от загруженности институтов. Если у НИИЭФА срочный заказ ИТЭР — приоритет уйдёт туда. Решается долгосрочными рамочными договорами на 3+ года.',
+        timing: 'Договоры о намерениях — Q4 2026, рамочные соглашения — Q1 2027, поставки — 2028',
+      },
+      { src: 'Сколково / частные', share: 12, note: 'Sk-резидент',
+        amount: '₽36–54 млн',
+        details: 'Резидентство в Сколково даёт: налоговые льготы (0% налог на прибыль до ₽300 млн), таможенные льготы, доступ к Skolkovo Industrial Park, грантовая поддержка до ₽20 млн. Параллельно — частные инвесторы из IT/космоса (Mail.ru-Group, X-Holding, частные семейные офисы). Это не венчур — а скорее patient capital с государственно-патриотической мотивацией.',
+        contacts: 'Sk Кластер «Космические технологии», Российская венчурная компания, частные офисы',
+        risk: 'Частные инвесторы в РФ на длинный горизонт 5+ лет — редкость. Большинство хотят выход за 3 года. Sk-льготы не покрывают весь риск.',
+        timing: 'Подача в Sk-резидентство — Q1 2027 (3 мес рассмотрение). Привлечение частных — параллельно Q2-Q4 2027.',
+      },
+      { src: 'Краудфандинг', share: 8, note: 'signal-канал',
+        amount: '₽24–36 млн',
+        details: 'Краудфандинг — НЕ основной канал, но критически важный signal-канал. Если получится собрать ₽5+ млн от 1000+ человек — это весомое доказательство публичной поддержки для государственных и институциональных инвесторов. Каналы: Planeta.ru, Boomstarter, прямые пожертвования через АНО + ЮKassa + СБП. Тематика — «лабораторный прототип маглев-катапульты» (научно-патриотическая).',
+        contacts: 'Planeta.ru, Boomstarter, прямые через сайт uraldriver.ru/#funding',
+        risk: 'Российский краудфандинг ограничен ФЗ-259 (₽30 млн совокупно за год от частных лиц). Превышение — дополнительная отчётность. На западный краудфандинг (Kickstarter, Indiegogo) есть санкционные риски и иноагент-статус.',
+        timing: 'Старт сразу после регистрации АНО (Q3-Q4 2026). Активная кампания — 2027.',
+      },
+    ],
+    miniRoadmap: [
+      { id: 'mr1', period: '2027 Q1–Q2', title: 'Концептуальный дизайн',
+        what: 'Параметры трассы, выбор архитектуры (LSM vs LIM), договоры с НИИЭФА.',
+        budget: '₽30–45 млн',
+        deliverables: [
+          'Полное ТЗ (физика + механика + электрика + криогеника)',
+          'Выбор архитектуры: LSM (Linear Synchronous Motor) vs LIM (Linear Induction Motor)',
+          'Подписание основных договоров с институтами (НИИЭФА, ОИВТ, ВНИИЭФ)',
+          'Найм команды: 8–12 чел. (главный конструктор, физики, электрики, криогенщики)',
+        ],
+        risks: 'Неправильный выбор LSM/LIM на этом этапе = переделка всего проекта на стадии engineering design. Решается через симуляции в COMSOL/ANSYS Maxwell + консультации с авторами Auriga Prometheus.' },
+      { id: 'mr2', period: '2027 Q3–2028 Q2', title: 'Engineering design',
+        what: 'Полный пакет КД, заказ силовых блоков, площадка ВНИИЭФ или ОИВТ.',
+        budget: '₽80–120 млн',
+        deliverables: [
+          'Полный пакет КД (конструкторской документации) на 30–50 м трассу',
+          'Заказ 6 силовых блоков (LSM коммутаторы 5–10 МВт каждый)',
+          'Заказ сверхпроводящих магнитов (НИИЭФА, partial-ITER технология)',
+          'Площадка готова: гермозона ВНИИЭФ или испытательный полигон ОИВТ',
+          'Расчёты безопасности + пожарка + АСУ ТП',
+        ],
+        risks: 'Сроки изготовления магнитов в НИИЭФА — 12–18 мес из-за загрузки на ИТЭР. Если ИТЭР задержит — у нас тоже задержка. Mitigation: рамочное соглашение со слотом производства.' },
+      { id: 'mr3', period: '2028 Q3–2029 Q4', title: 'Сборка и пусконаладка',
+        what: 'Монтаж трассы, холодные испытания, первые пуски на 50 м/с.',
+        budget: '₽120–180 млн',
+        deliverables: [
+          'Монтаж трассы 30–50 м с 6 LSM-блоками',
+          'Подключение криогеники (жидкий гелий 4.5 K)',
+          'Холодные испытания (без разгона) — проверка магнитной системы',
+          'Первые пуски на низких скоростях: 50 → 100 → 150 → 200 м/с',
+          'Журналирование, диагностика, доработка АСУ',
+        ],
+        risks: 'Первые пуски часто сопровождаются surprises: магнитное поле не такое как в симуляции, pickup в датчиках, перегрев silicon в коммутаторах. Запас 20% бюджета на доработки. График 18 мес учитывает 3-4 итерации проб и ошибок.' },
+      { id: 'mr4', period: '2030', title: 'Полный цикл',
+        what: '500 м/с, серия 100+ пусков, публикация результатов, переход к Фазе 1.',
+        budget: '₽70–105 млн',
+        deliverables: [
+          'Серия 100+ пусков на 500 м/с (целевая скорость прототипа)',
+          'Запись данных: КПД LSM, потери на каждом блоке, тепловой режим',
+          '5+ публикаций в IEEE Trans. on Plasma Science / AIAA Journal',
+          'Защита 2–3 PhD-диссертаций по тематикам',
+          'Презентация результатов на международных конференциях (если возможно — IAC)',
+          'Защита TЗ Фазы 1 ($2,5 млрд) перед стратегическим инвестором',
+        ],
+        risks: 'Если КПД LSM на больших скоростях окажется ниже 70% — концепт УД-40 км пересматривается (ВВЭР-1200 → ВВЭР-1200×2). Если выше 75% — наоборот, можно сократить энергобаланс.' },
     ],
   },
 
@@ -1868,7 +2128,13 @@ window.SITE_DATA = {
         'LOI заказчика — СБСП, ВПК, ОАК-Спутник ($5 млн)',
         'Госэкспертиза + ЮНЕСКО + экологическая ($20 млн)',
       ],
-      gate: 'Подтверждённая физика (через Прометея-РФ), геология, LOI на 200+ т/год, решение по ЮНЕСКО.' },
+      whyNow: 'Сейчас — единственное окно для концепта без больших ресурсов: концепт-документ опубликован, начальный авторитет автора есть, инвесторы ещё не требуют hardware. После 2028 без подтверждения физики на Прометее-РФ окно закроется.',
+      risks: 'ЮНЕСКО — главный блокер (Югыд ва). Без формального согласования стройка невозможна, а оно требует 2–3 года политической работы и компенсации (изменение границ парка). Альтернатива: ждать пересмотра границ при достаточной государственной воле.',
+      gate: 'Подтверждённая физика (через Прометея-РФ), геология, LOI на 200+ т/год, решение по ЮНЕСКО.',
+      sources: [
+        { title: 'Концепт — глава 5 (План развития)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/05_development_plan.md' },
+        { title: 'Югыд ва — UNESCO', url: 'https://whc.unesco.org/en/list/719' },
+      ] },
     { id: '0.5', label: 'Фаза 0.5', title: 'Прометей-РФ', period: '2027–2030',
       budget: '₽300–450 млн', state: 'next', star: true,
       what: 'Лабораторный прототип маглев-катапульты 30–50 м.',
@@ -1879,7 +2145,13 @@ window.SITE_DATA = {
         'Программа испытаний: 100+ пусков, V до 500 м/с',
         'Публикации в IEEE/AIAA, защиты PhD',
       ],
-      gate: 'Достижение 200–500 м/с на 30–50 м прототипе. Открывает финансирование Фазы 1.' },
+      whyNow: 'Это «valley of death» между концептом и демонстратором: без физического прототипа за ₽300–450 млн нельзя обосновать $2,5 млрд на Фазу 1. Auriga в США уже идёт этим путём (Prometheus 2026) — у нас 2 года forward, потом окно закроется.',
+      risks: 'Может оказаться что КПД 75% недостижим в импульсном режиме на наших магнитах — тогда бюджет Фазы 1 нужно пересматривать. Риск частично mitigation-ируется через школу НИИЭФА (опыт ИТЭР) и ВНИИЭФ (импульсной энергетики).',
+      gate: 'Достижение 200–500 м/с на 30–50 м прототипе. Открывает финансирование Фазы 1.',
+      sources: [
+        { title: 'Прометей-РФ — детальная страница', url: '#phase05' },
+        { title: 'Концепт — глава 11', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/11_lab_prototype.md' },
+      ] },
     { id: '1', label: 'Фаза 1', title: 'Демонстратор', period: '2028–2033',
       budget: '$2,5 млрд', state: 'next',
       what: 'Тоннель 1,5 км, отработка LSM, маглев, MHD-окно.',
@@ -1890,7 +2162,12 @@ window.SITE_DATA = {
         'Капсулы и автоматика — $300 млн',
         'Энергоснабжение и инфраструктура — $300 млн',
       ],
-      gate: '50% от расчётной скорости (3–4 км/с при цели 7,5 км/с), 100 успешных пусков, надёжность 95%+.' },
+      whyNow: 'Демонстратор обосновывается только после Прометея-РФ. Сначала — физика на 50 м (₽300–450 млн), потом — 1,5 км ($2,5 млрд). Без промежуточного шага ни один LP не подпишется на $2,5 млрд unverified physics. Параллельно идут ЮНЕСКО-переговоры и геология.',
+      risks: 'MHD-окно (главный риск проекта, TRL 3–4 на 2026) — может потребовать R&D ₽1–2 млрд сверх бюджета. Альтернатива: гибрид с малым плазменным зеркалом + механическая крышка. Запас в 20% бюджета на R&D-сверхрасходы.',
+      gate: '50% от расчётной скорости (3–4 км/с при цели 7,5 км/с), 100 успешных пусков, надёжность 95%+.',
+      sources: [
+        { title: 'Концепт — глава 4 (CAPEX)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/04_economics.md' },
+      ] },
     { id: '2', label: 'Фаза 2', title: 'Стройка', period: '2033–2040',
       budget: '$18 млрд', state: 'planned',
       what: 'Тоннель 40 км, ВВЭР-1200, полная маглев-линия.',
@@ -1902,7 +2179,12 @@ window.SITE_DATA = {
         'Капсулы серийного производства — $0,5 млрд',
         'Инфраструктура (посёлок, ЛЭП, логистика) — $0,5 млрд',
       ],
-      gate: 'Все системы pass-test, тоннель эвакуирован, ВВЭР запущен в накопительный режим.' },
+      whyNow: 'Самая капиталоёмкая фаза — нельзя заходить без подтверждённой физики (Фаза 1) и гарантированных контрактов на 200+ т/год (LOI из Фазы 0). Стройка 7 лет — окно для отказа на любом этапе («опционная архитектура»).',
+      risks: 'Cost overrun тоннелей в РФ исторически 1.5–2× (Северомуйский, Лефортовский). При 50% запасе CAPEX до $25 млрд — нужен дополнительный фондирующий канал. Альтернатива: фазированная стройка тоннеля (10 км → 25 км → 40 км).',
+      gate: 'Все системы pass-test, тоннель эвакуирован, ВВЭР запущен в накопительный режим.',
+      sources: [
+        { title: 'Концепт — глава 6 (Стройка и инжиниринг)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/06_construction.md' },
+      ] },
     { id: '3', label: 'Фаза 3', title: 'Лётно-конструкторские испытания', period: '2040–2045',
       budget: '$7 млрд', state: 'planned',
       what: '200+ испытательных пусков, аттестация трассы.',
@@ -1913,7 +2195,12 @@ window.SITE_DATA = {
         'Доработка по результатам испытаний — $1 млрд',
         'Резерв на нештатные ситуации — $1 млрд',
       ],
-      gate: '95% надёжность, 5000+ т проектной мощности подтверждены, контракты на регулярную эксплуатацию.' },
+      whyNow: 'Сначала надо доказать что трасса работает на полной скорости (7,5 км/с) и что MHD-окно держит 1000+ пусков. Только потом — переход в коммерческую эксплуатацию. ЛКИ — обязательный этап международной авиа-космической сертификации.',
+      risks: 'Какой-то процент пусков упадёт (опыт SpaceX: 10–15% на новых системах). Каждое падение = $5–10 млн потери + 3–6 мес стопа на анализ. Бюджет ЛКИ должен учитывать 15–20 incidents.',
+      gate: '95% надёжность, 5000+ т проектной мощности подтверждены, контракты на регулярную эксплуатацию.',
+      sources: [
+        { title: 'Концепт — глава 7 (Эксплуатация)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/07_operations.md' },
+      ] },
     { id: '4', label: 'Фаза 4', title: 'Эксплуатация', period: '2045+',
       budget: 'опекс', state: 'horizon',
       what: '1000+ пусков/год, $200/кг.',
@@ -1924,23 +2211,80 @@ window.SITE_DATA = {
         'Международный коммерческий — 15–25%, $250–350/кг',
         'Опция B (лунный масс-драйвер) — расширение к 2055',
       ],
-      gate: 'Окупаемость $370 млн опекс / 5000 т → $74/кг операционных + амортизация.' },
+      whyNow: 'К 2045 предположительно есть рынок СБСП (космической солнечной энергетики) на ≥1500 т/год — это базовая загрузка УД. Опция B (лунный масс-драйвер на ровере к 2055) удваивает рынок: вместо «грузить с Земли» — «грузить с Луны на околоземные орбиты».',
+      risks: 'Если СБСП к 2045 окажется нерентабельным или Starship V5 при $50/кг — рынок УД сжимается до ВПК + нишевых. Минимум для безубыточности: 800 т/год при $300/кг. См. сценарии S1–S4 в /#economics.',
+      gate: 'Окупаемость $370 млн опекс / 5000 т → $74/кг операционных + амортизация.',
+      sources: [
+        { title: 'Концепт — глава 8 (Customer-mix)', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/08_customer_mix.md' },
+        { title: 'Опция B — лунный масс-драйвер', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/chapters/10_option_b_lunar.md' },
+      ] },
   ],
 
   // Конкуренты на 2026.05
   competitors: [
     { name: 'SpaceX Starship', funding: '$15 млрд', status: 'V3 in flight, V4–V5 в разработке',
-      sig: 'Базовый. $250–600/кг single-use; orbital refueling не работает.', threat: 'high' },
+      sig: 'Базовый. $250–600/кг single-use; orbital refueling не работает.', threat: 'high',
+      hq: 'Boca Chica, Texas · США', founded: '2002 (SpaceX) / 2019 (Starship)',
+      tech: 'Полностью многоразовая 2-ступенчатая ракета: Super Heavy + Starship, Raptor 3 (метан), масса 5000 т',
+      details: 'Главный бенчмарк для всей космической индустрии. После 9 лётных тестов (IFT-1 — IFT-9) Starship V3 достиг орбиты в 2025, но ключевая фича — orbital refueling (заправка на орбите) — НЕ ПРОДЕМОНСТРИРОВАНА. Без неё Starship не может выйти за пределы LEO с полной нагрузкой, а целевая цена $20–50/кг к Луне и Марсу — недостижима. Реальная экономика single-use конфигурации: $250–600/кг к LEO. Программа Artemis HLS требует 14–20 заправочных пусков для одной лунной миссии — это не работает.',
+      forUD: 'Если Starship V4 (2032+) выйдет на $50–100/кг с reuseable refueling, рынок LEO уйдёт ему. Но УД работает на дополнительной нише: cargo-only, перегрузки, грузопоток >2000 т/год где Starship упирается в cadence. Sensitivity-сценарии S1/S2/S3/S4 в /#economics детально показывают разные исходы.',
+      risks: 'Starship может не масштабироваться (refueling провал) → УД становится единственной опцией для тяжёлого cargo. Или наоборот — масштабируется чище ожидаемого → УД нишевый.',
+      sources: [
+        { title: 'SpaceX Starship — официальная страница', url: 'https://www.spacex.com/vehicles/starship/' },
+        { title: 'Sensitivity-анализ УД vs Starship', url: 'https://github.com/antonkuzmenkov/uraldriver-site/blob/master/concept-document/research/01_market_and_competitors.md' },
+      ] },
     { name: 'Auriga Space', funding: '$12,2 млн', status: 'Prometheus prototype 2026',
-      sig: 'Прямой бенчмарк УД в малом масштабе. Электромагнит, инкремент.', threat: 'direct' },
+      sig: 'Прямой бенчмарк УД в малом масштабе. Электромагнит, инкремент.', threat: 'direct',
+      hq: 'Maryland · США', founded: '2020',
+      tech: 'Маглев + LSM, прототип Prometheus 2026, target Thunderbird 2030: 1 кг на 1500 м/с, $2000/кг',
+      details: 'Самый прямой технологический аналог УД, но в 100× меньшем масштабе. Auriga идёт инкрементами: сначала прототип Prometheus (2026, на стендах), потом Thunderbird для запуска малых (1–10 кг) полезных нагрузок на скоростях 1–2 км/с к 2030. Они пока ВЕРНО решают первую задачу — наработать physics + engineering + команду на маленьком масштабе. УД-РФ должен учиться у них: Прометей-РФ это наша версия Prometheus, тоже инкремент, тот же физический принцип (маглев + LSM).',
+      forUD: 'Доказательство что подход «маглев в космос» — не фантастика. Auriga в Maryland уже привлекли $12 млн, имеют пилотные контракты с DARPA. Если они достигнут 1500 м/с к 2030 — это валидация ALL OF УД физики. Сотрудничество маловероятно (US export control), но сравнительный бенчмаркинг полезен.',
+      risks: 'Если Auriga зайдёт в тупик технологически — сигнал что и УД физика не сработает. Если они шагнут к большим масштабам быстрее нас — заберут себе западный сегмент рынка.',
+      sources: [
+        { title: 'Auriga Space — официальный сайт', url: 'https://aurigaspace.com/' },
+        { title: 'Prometheus prototype анонс', url: 'https://www.prnewswire.com/news-releases/auriga-space-301842710.html' },
+      ] },
     { name: 'Stoke Space', funding: '$860 млн Series D', status: 'Nova прицеливание',
-      sig: 'Reusable upper stage. Один из лучших шансов на Starship-альтернативу.', threat: 'med' },
+      sig: 'Reusable upper stage. Один из лучших шансов на Starship-альтернативу.', threat: 'med',
+      hq: 'Kent, Washington · США', founded: '2019',
+      tech: 'Полностью многоразовая 2-ступенчатая Nova, актюальная теплозащита из активно охлаждаемого металла, target $500/кг',
+      details: 'Stoke решает ту же задачу что Starship — полная переиспользуемость — но с более консервативной архитектурой и в меньшем размере (Nova ~14 т к LEO vs Starship 100+ т). После Series D ($860 млн в 2025) они один из самых вероятных «Starship-альтернатив» если базовый сценарий SpaceX откатится. Активно охлаждаемая теплозащита Nova-upper-stage — инновация которая может перевернуть отрасль (никто кроме SpaceX не имеет работающую reusable upper stage).',
+      forUD: 'Если Stoke выйдет на $500/кг с маленькими payloads — это конкурент УД в нише <14 т. Но УД играет в крупный cargo (5+ т капсулы по тысяче в год) — другой сегмент. Дополнительный риск: Stoke может стать «дешёвым средним» которое заберёт средний сегмент рынка, оставив УД только тяжёлые volume-плеи.',
+      risks: 'Малый-средний сегмент LEO в 2030+ может быть полностью занят Stoke и Rocket Lab Neutron. УД должен фокусироваться на ультра-cheap cargo которое им недоступно из-за ограничений ракеты как инструмента.',
+      sources: [
+        { title: 'Stoke Space — Nova', url: 'https://www.stokespace.com/' },
+      ] },
     { name: 'SpinLaunch', funding: '~$200 млн', status: 'Pivot → Meridian constellation',
-      sig: '8 лет на launcher, не нашли клиента. Урок: customer-first.', threat: 'low' },
+      sig: '8 лет на launcher, не нашли клиента. Урок: customer-first.', threat: 'low',
+      hq: 'Long Beach, California · США', founded: '2014',
+      tech: 'Кинетический launcher: центрифуга радиус 50 м, разгон до 8000 км/ч, выброс капсулы',
+      details: 'Главный антипример. SpinLaunch потратил 8 лет (2014–2024) на разработку центрифугного launcher (центробежная катапульта на земле + 2-я ракетная ступень). Технически суборбитальные тесты прошли (33-м прототип в Spaceport America), но они не нашли коммерческих клиентов и в 2024 пивотнули в спутниковую группировку Meridian. Урок: physics first без customer development — путь к pivot или смерти. Они так и не достигли орбитальной скорости (8 км/с) в физическом пуске.',
+      forUD: 'УД должен учиться на ошибках SpinLaunch. Главные уроки: (1) перегрузки 10000g на капсуле слишком высоки даже для рад-устойчивых грузов — мы ставим 50–100g; (2) нужно сразу подписывать LOI с заказчиками и работать на их боль, а не на «технологию ради технологии»; (3) hybrid (катапульта + 2-я ступень) — компромисс который не выигрывает у чистой ракеты.',
+      risks: 'SpinLaunch — публичное доказательство что «катапульты в космос» = провал. УД должен дифференцироваться: маглев vs центрифуга, 50g vs 10000g, тоннель в горе vs наземная башня. Иначе любой инвестор будет видеть SpinLaunch parallel.',
+      sources: [
+        { title: 'SpinLaunch — Wikipedia', url: 'https://en.wikipedia.org/wiki/SpinLaunch' },
+        { title: 'Pivot to Meridian — TechCrunch 2024', url: 'https://techcrunch.com/2024/' },
+      ] },
     { name: 'Longshot Space', funding: '$5 млн + SHIELD', status: 'Space-gun в пустыне',
-      sig: 'Не маглев — газовая пушка. Ниша suborbital cargo.', threat: 'low' },
+      sig: 'Не маглев — газовая пушка. Ниша suborbital cargo.', threat: 'low',
+      hq: 'Невада · США', founded: '2022',
+      tech: 'Газовая пушка (helium-driven 2-stage): разгон до 5–7 км/с в горизонтальном стволе 1+ км',
+      details: 'Электромагнит они не используют — это компрессор + газовая пушка. Концепция родственная УД (масс-драйвер на земле + хорошая физика разгона), но физический принцип другой: вместо магнитного поля ускоряют сжатым газом. Получили DARPA SHIELD контракт 2024 на исследование экстремальной защиты материалов от перегрузок 30000g+ — нишевая задача (DOD payloads). Текущий target — суборбитальный cargo для DARPA, не орбита.',
+      forUD: 'Прямого пересечения нет. Longshot — газовая пушка для DOD, УД — маглев для коммерческого cargo. Их публичные данные (особенно про материалы устойчивые к 30000g) полезны как референс. Но никакой угрозы рынку УД они не представляют.',
+      risks: 'Если Longshot достигнет хороших результатов в g-устойчивых материалах — это ускорит наш собственный материаловедческий стек (mil-spec электроника устойчивая к 100g нам нужна).',
+      sources: [
+        { title: 'Longshot Space — DARPA SHIELD', url: 'https://www.darpa.mil/news-events/2024-' },
+      ] },
     { name: 'China Type 076', funding: 'гос', status: 'EMALS 78 МВт на испытаниях',
-      sig: 'Военное применение, но школа кадров и физика — зеркало нашей.', threat: 'med' },
+      sig: 'Военное применение, но школа кадров и физика — зеркало нашей.', threat: 'med',
+      hq: 'Шанхай · КНР', founded: '2018 (Type 076 program)',
+      tech: 'EMALS (электромагнитная катапульта для палубной авиации) на 78 МВт, ~80 м длина, разгон самолёта до 250 км/ч',
+      details: 'Type 076 — китайский авианосец нового типа с электромагнитной катапультой EMALS (78 МВт). Это первая EMALS вне США (после Gerald Ford). Физика — те же импульсные сверхпроводящие магниты что у УД, только в военной палубной конфигурации. Китай за 10 лет создал полную школу EMALS (производство, инженерные кадры, импульсная энергетика, сверхпроводимость). Это означает что физика «электромагнит для разгона тяжёлых грузов» на государственном уровне освоена, и при политической воле может быть масштабирована до УД-уровня.',
+      forUD: 'Прямой угрозы нет — Type 076 это военная палубная катапульта, не launcher в космос. Но это БЕНЧМАРК ШКОЛЫ КАДРОВ: если Китай за 10 лет вырастил инженеров под EMALS, то Россия с её НИИЭФА (прошлого ИТЭР опыта) и ВНИИЭФ (импульсной энергетики) может вырастить кадры под УД-маглев за те же 10 лет. Доказательство feasibility school-development.',
+      risks: 'Если Китай решит масштабировать EMALS-знания в гражданский launcher (вероятность 5–15%), они станут прямым геополитическим конкурентом РФ-проекту с большими ресурсами. Watch for: китайские публикации по «вакуумному маглев», статьи КАСТ.',
+      sources: [
+        { title: 'Type 076 — Naval News', url: 'https://www.navalnews.com/' },
+      ] },
   ],
 
   // Российский технологический стек
@@ -3978,11 +4322,13 @@ const PageHead = ({ code, eyebrow, title, lede }) => (
 // ─── Page: Прометей-РФ (Phase 0.5) ─────────────────────────────────────────
 const PagePhase05 = ({ data, setRoute }) => {
   const f = data.feature;
+  const [openFund, setOpenFund] = useState(null);
+  const [openStep, setOpenStep] = useState(null);
   return (
     <article className="page">
       <PageHead code="11" eyebrow="лабораторный прототип · 2027–2030"
         title="Прометей-РФ"
-        lede="Между концепт-документом и демонстратором лежит «valley of death». Лабораторный прототип маглев-катапульты длиной 30–50 м решает эту проблему за ₽300–450 миллионов — самый высокий ROI во всей опционной архитектуре." />
+        lede="Между концепт-документом и демонстратором лежит «valley of death». Лабораторный прототип маглев-катапульты длиной 30–50 м решает эту проблему за ₽300–450 миллионов — самый высокий ROI во всей опционной архитектуре. Кликни по любой карточке funding-mix или этапа roadmap чтобы развернуть детали." />
 
       {/* Hero spec block */}
       <section className="phase-hero">
@@ -4084,42 +4430,107 @@ const PagePhase05 = ({ data, setRoute }) => {
 
       {/* Funding */}
       <section className="section">
-        <SectionHead code="11.4" title="Финансирование mix-каналов" sub="₽300–450 млн собирается из пяти параллельных источников. Ни один источник не блокирующий — выпадение любого замещается остальными."/>
+        <SectionHead code="11.4" title="Финансирование mix-каналов" sub="₽300–450 млн собирается из пяти параллельных источников. Ни один источник не блокирующий — выпадение любого замещается остальными. Кликни по карточке для деталей."/>
         <div className="funding-grid">
-          {f.funding.map((src,i)=>(
-            <Frame key={src.src} className="funding-card">
-              <div className="funding-card-head">
-                <span className="mono dim">0{i+1}</span>
-                <span className="funding-card-share">{src.share}%</span>
-              </div>
-              <div className="funding-card-src">{src.src}</div>
-              <div className="funding-card-note mono dim">{src.note}</div>
-              <div className="funding-bar funding-bar-lg">
-                <div className="funding-fill" style={{width:`${src.share*2.5}%`}}/>
-              </div>
-            </Frame>
-          ))}
+          {f.funding.map((src,i)=>{
+            const isOpen = openFund === src.src;
+            return (
+              <Frame key={src.src} className={`funding-card ${isOpen ? 'is-open' : ''}`}>
+                <button className="funding-card-trigger"
+                        onClick={() => setOpenFund(isOpen ? null : src.src)}
+                        aria-expanded={isOpen}>
+                  <div className="funding-card-head">
+                    <span className="mono dim">0{i+1}</span>
+                    <span className="funding-card-share">{src.share}%</span>
+                  </div>
+                  <div className="funding-card-src">{src.src}</div>
+                  <div className="funding-card-note mono dim">{src.note}</div>
+                  <div className="funding-bar funding-bar-lg">
+                    <div className="funding-fill" style={{width:`${src.share*2.5}%`}}/>
+                  </div>
+                  {src.amount && (
+                    <div className="funding-card-amt mono">{src.amount}</div>
+                  )}
+                  <div className="funding-card-toggle mono dim">
+                    {isOpen ? '− свернуть' : '+ подробнее'}
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="funding-card-body">
+                    {src.details && (
+                      <div className="funding-block">
+                        <div className="mono dim funding-block-h">ОПИСАНИЕ КАНАЛА</div>
+                        <p>{src.details}</p>
+                      </div>
+                    )}
+                    {src.contacts && (
+                      <div className="funding-block">
+                        <div className="mono dim funding-block-h">КОНТАКТЫ И КАНАЛЫ</div>
+                        <p>{src.contacts}</p>
+                      </div>
+                    )}
+                    {src.timing && (
+                      <div className="funding-block">
+                        <div className="mono dim funding-block-h">ТАЙМИНГ</div>
+                        <p>{src.timing}</p>
+                      </div>
+                    )}
+                    {src.risk && (
+                      <div className="funding-block funding-block-risk">
+                        <div className="mono dim funding-block-h">РИСК</div>
+                        <p>{src.risk}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Frame>
+            );
+          })}
         </div>
       </section>
 
       {/* Roadmap of phase 0.5 */}
       <section className="section">
-        <SectionHead code="11.6" title="Roadmap Прометей-РФ (2027–2030)"/>
+        <SectionHead code="11.6" title="Roadmap Прометей-РФ (2027–2030)" sub="4 этапа с deliverables и рисками. Кликни по этапу для деталей."/>
         <div className="mini-roadmap">
-          {[
-            ['2027 Q1–Q2', 'Концептуальный дизайн', 'Параметры трассы, выбор архитектуры (LSM vs LIM), договоры с НИИЭФА.'],
-            ['2027 Q3–2028 Q2', 'Engineering design', 'Полный пакет КД, заказ силовых блоков, площадка ВНИИЭФ или ОИВТ.'],
-            ['2028 Q3–2029 Q4', 'Сборка и пусконаладка', 'Монтаж трассы, холодные испытания, первые пуски на 50 м/с.'],
-            ['2030', 'Полный цикл', '500 м/с, серия 100+ пусков, публикация результатов, переход к Фазе 1.'],
-          ].map(([t,h,b],i)=>(
-            <div key={i} className="mini-roadmap-row">
-              <div className="mini-roadmap-time mono">{t}</div>
-              <div className="mini-roadmap-content">
-                <div className="mini-roadmap-h">{h}</div>
-                <div className="mini-roadmap-b">{b}</div>
+          {(f.miniRoadmap || []).map((step, i) => {
+            const isOpen = openStep === step.id;
+            return (
+              <div key={step.id} className={`mini-roadmap-row mini-roadmap-row-clickable ${isOpen ? 'is-open' : ''}`}>
+                <button className="mini-roadmap-trigger"
+                        onClick={() => setOpenStep(isOpen ? null : step.id)}
+                        aria-expanded={isOpen}>
+                  <div className="mini-roadmap-time mono">{step.period}</div>
+                  <div className="mini-roadmap-content">
+                    <div className="mini-roadmap-h">
+                      {step.title}
+                      <span className="mono dim mini-roadmap-budget"> · {step.budget}</span>
+                      <span className="mono mini-roadmap-caret">{isOpen ? ' −' : ' +'}</span>
+                    </div>
+                    <div className="mini-roadmap-b">{step.what}</div>
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="mini-roadmap-body">
+                    {step.deliverables && (
+                      <div className="funding-block">
+                        <div className="mono dim funding-block-h">DELIVERABLES</div>
+                        <ul className="mini-roadmap-deliverables">
+                          {step.deliverables.map((d, j) => <li key={j}>{d}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {step.risks && (
+                      <div className="funding-block funding-block-risk">
+                        <div className="mono dim funding-block-h">РИСКИ И MITIGATION</div>
+                        <p>{step.risks}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -4132,58 +4543,183 @@ const PagePhase05 = ({ data, setRoute }) => {
 };
 
 // ─── Page: Roadmap ─────────────────────────────────────────────────────────
-const PageRoadmap = ({ data, setRoute }) => (
-  <article className="page">
-    <PageHead code="07" eyebrow="6 фаз · 2026–2045+"
-      title="Дорожная карта"
-      lede="Опционная архитектура: каждая следующая фаза открывается только если предыдущая дала ожидаемые результаты. Никаких unconditional commitments на 19 лет — серия gate-условий с правом выхода."/>
+const PageRoadmap = ({ data, setRoute }) => {
+  const [openId, setOpenId] = useState(null);
+  return (
+    <article className="page">
+      <PageHead code="07" eyebrow="6 фаз · 2026–2045+"
+        title="Дорожная карта"
+        lede="Опционная архитектура: каждая следующая фаза открывается только если предыдущая дала ожидаемые результаты. Никаких unconditional commitments на 19 лет — серия gate-условий с правом выхода. Кликни по любой фазе чтобы развернуть детали."/>
 
-    <PhaseTimeline phases={data.phases} onSelect={(id)=>{ if(id==='0.5') setRoute('phase05'); }} />
+      <PhaseTimeline phases={data.phases} onSelect={(id)=>{ if(id==='0.5') setRoute('phase05'); }} />
 
-    <div className="roadmap-detail">
-      {data.phases.map(p => (
-        <Frame key={p.id} className={`roadmap-card roadmap-${p.state}`}>
-          <div className="roadmap-card-head">
-            <div>
-              <div className="mono dim">{p.label}</div>
-              <h3 className="roadmap-card-title">{p.title} {p.star && <span className="phasebar-star"><IconStar/></span>}</h3>
-            </div>
-            <div className="roadmap-card-meta">
-              <div className="mono">{p.period}</div>
-              <div className="mono dim">{p.budget}</div>
-            </div>
-          </div>
-          <p className="roadmap-card-what">{p.what}</p>
-          {p.id==='0.5' && (
-            <Btn kind="ghost" onClick={()=>setRoute('phase05')}>детально → Глава 11</Btn>
-          )}
-        </Frame>
-      ))}
-    </div>
-  </article>
-);
+      <div className="roadmap-detail">
+        {data.phases.map(p => {
+          const isOpen = openId === p.id;
+          return (
+            <Frame key={p.id} className={`roadmap-card roadmap-${p.state} ${isOpen ? 'is-open' : ''}`}>
+              <button className="roadmap-card-head roadmap-card-trigger"
+                      onClick={() => setOpenId(isOpen ? null : p.id)}
+                      aria-expanded={isOpen}>
+                <div>
+                  <div className="mono dim">{p.label}</div>
+                  <h3 className="roadmap-card-title">{p.title} {p.star && <span className="phasebar-star"><IconStar/></span>}</h3>
+                </div>
+                <div className="roadmap-card-meta">
+                  <div className="mono">{p.period}</div>
+                  <div className="mono dim">{p.budget}</div>
+                  <div className="mono acc-row-caret">{isOpen ? '−' : '+'}</div>
+                </div>
+              </button>
+              <p className="roadmap-card-what">{p.what}</p>
+              {isOpen && (
+                <div className="roadmap-card-body">
+                  {p.goals && (
+                    <div className="roadmap-block">
+                      <div className="mono dim roadmap-block-h">ЦЕЛИ ФАЗЫ</div>
+                      <ul className="roadmap-goals">
+                        {p.goals.map((g, i) => <li key={i}>{g}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                  {p.whyNow && (
+                    <div className="roadmap-block">
+                      <div className="mono dim roadmap-block-h">ПОЧЕМУ СЕЙЧАС</div>
+                      <p>{p.whyNow}</p>
+                    </div>
+                  )}
+                  {p.risks && (
+                    <div className="roadmap-block">
+                      <div className="mono dim roadmap-block-h">РИСКИ И MITIGATION</div>
+                      <p>{p.risks}</p>
+                    </div>
+                  )}
+                  {p.gate && (
+                    <div className="roadmap-block roadmap-gate-block">
+                      <div className="mono dim roadmap-block-h">GATE — УСЛОВИЕ ПЕРЕХОДА К СЛЕДУЮЩЕЙ ФАЗЕ</div>
+                      <p><b>{p.gate}</b></p>
+                    </div>
+                  )}
+                  {p.sources && p.sources.length > 0 && (
+                    <div className="roadmap-block">
+                      <div className="mono dim roadmap-block-h">ИСТОЧНИКИ</div>
+                      <ul className="roadmap-sources">
+                        {p.sources.map((s, i) => (
+                          <li key={i}>
+                            {s.url.startsWith('#')
+                              ? <a href={s.url} onClick={(e)=>{e.preventDefault(); setRoute(s.url.slice(1));}}>{s.title} →</a>
+                              : <a href={s.url} target="_blank" rel="noopener noreferrer">{s.title} <IconExternal/></a>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {p.id==='0.5' && (
+                    <div className="roadmap-block">
+                      <Btn onClick={()=>setRoute('phase05')}>Полная страница Прометея-РФ → Глава 11</Btn>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Frame>
+          );
+        })}
+      </div>
+    </article>
+  );
+};
 
 // ─── Page: Competitors ─────────────────────────────────────────────────────
-const PageCompetitors = ({ data }) => (
-  <article className="page">
-    <PageHead code="09" eyebrow="ландшафт 2026.05"
-      title="Конкуренты и альтернативы"
-      lede="Карта игроков, которые делают похожее или решают тот же запрос. Бенчмарк — SpaceX Starship; ближайший аналог — Auriga Space; антипример — SpinLaunch."/>
-    <div className="comp-grid">
-      {data.competitors.map(c => (
-        <Frame key={c.name} className={`comp comp-${c.threat}`}>
-          <div className="comp-head">
-            <h3 className="comp-name">{c.name}</h3>
-            <Tag tone={c.threat}>{c.threat==='high'?'BENCHMARK':c.threat==='direct'?'DIRECT':c.threat==='med'?'WATCH':'NICHE'}</Tag>
-          </div>
-          <div className="comp-row"><span className="mono dim">finance</span><span className="mono">{c.funding}</span></div>
-          <div className="comp-row"><span className="mono dim">status</span><span>{c.status}</span></div>
-          <p className="comp-sig">{c.sig}</p>
-        </Frame>
-      ))}
-    </div>
-  </article>
-);
+const PageCompetitors = ({ data }) => {
+  const [openName, setOpenName] = useState(null);
+  return (
+    <article className="page">
+      <PageHead code="09" eyebrow="ландшафт 2026.05"
+        title="Конкуренты и альтернативы"
+        lede="Карта игроков, которые делают похожее или решают тот же запрос. Бенчмарк — SpaceX Starship; ближайший аналог — Auriga Space; антипример — SpinLaunch. Кликни по карточке чтобы развернуть аналитику."/>
+      <div className="comp-grid">
+        {data.competitors.map(c => {
+          const isOpen = openName === c.name;
+          return (
+            <Frame key={c.name} className={`comp comp-${c.threat} ${isOpen ? 'is-open' : ''}`}>
+              <button className="comp-trigger" aria-expanded={isOpen}
+                      onClick={() => setOpenName(isOpen ? null : c.name)}>
+                <div className="comp-head">
+                  <h3 className="comp-name">{c.name}</h3>
+                  <Tag tone={c.threat}>{c.threat==='high'?'BENCHMARK':c.threat==='direct'?'DIRECT':c.threat==='med'?'WATCH':'NICHE'}</Tag>
+                </div>
+                <div className="comp-row"><span className="mono dim">finance</span><span className="mono">{c.funding}</span></div>
+                <div className="comp-row"><span className="mono dim">status</span><span>{c.status}</span></div>
+                <p className="comp-sig">{c.sig}</p>
+                <div className="comp-toggle mono dim">
+                  {isOpen ? '− свернуть' : '+ подробнее'}
+                </div>
+              </button>
+              {isOpen && (
+                <div className="comp-body">
+                  {(c.hq || c.founded) && (
+                    <div className="comp-meta-grid">
+                      {c.hq && (
+                        <div className="comp-meta">
+                          <div className="mono dim">HQ</div>
+                          <div>{c.hq}</div>
+                        </div>
+                      )}
+                      {c.founded && (
+                        <div className="comp-meta">
+                          <div className="mono dim">FOUNDED</div>
+                          <div>{c.founded}</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {c.tech && (
+                    <div className="comp-block">
+                      <div className="mono dim comp-block-h">ТЕХНОЛОГИЯ</div>
+                      <p>{c.tech}</p>
+                    </div>
+                  )}
+                  {c.details && (
+                    <div className="comp-block">
+                      <div className="mono dim comp-block-h">АНАЛИЗ</div>
+                      <p>{c.details}</p>
+                    </div>
+                  )}
+                  {c.forUD && (
+                    <div className="comp-block comp-for-ud">
+                      <div className="mono dim comp-block-h">ЧТО ЭТО ЗНАЧИТ ДЛЯ УРАЛ-ДРАЙВЕРА</div>
+                      <p>{c.forUD}</p>
+                    </div>
+                  )}
+                  {c.risks && (
+                    <div className="comp-block">
+                      <div className="mono dim comp-block-h">РИСКИ И ВОЗМОЖНОСТИ</div>
+                      <p>{c.risks}</p>
+                    </div>
+                  )}
+                  {c.sources && c.sources.length > 0 && (
+                    <div className="comp-block">
+                      <div className="mono dim comp-block-h">ИСТОЧНИКИ</div>
+                      <ul className="comp-sources">
+                        {c.sources.map((s, i) => (
+                          <li key={i}>
+                            <a href={s.url} target="_blank" rel="noopener noreferrer">
+                              {s.title} <IconExternal/>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Frame>
+          );
+        })}
+      </div>
+    </article>
+  );
+};
 
 // ─── Generic placeholder page ──────────────────────────────────────────────
 // Универсальный аккордеон-страница: раскрытие пунктов на клик с деталями
