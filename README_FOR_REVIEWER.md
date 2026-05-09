@@ -1,11 +1,14 @@
 # Урал-Драйвер — материалы для ревью (свежий снапшот)
 
 Полная копия репозитория **uraldriver-site** + исходный концепт-документ.
-Свежий снапшот после серии правок 5 мая 2026.
+Свежий снапшот после переработки v3.2 — 9 мая 2026.
 
 🌐 Живой сайт: **https://uraldriver.ru**
 📦 Репо: **https://github.com/antonkuzmenkov/uraldriver-site**
-🎨 Версия: **v3 — aerospace SPA с космическим фоном**
+🎨 Версия концепта: **v3.2** (после критики на [Хабре](https://habr.com/ru/articles/1033192/))
+🎨 Версия дизайна: **v3 — aerospace SPA с космическим фоном**
+
+> Снапшот после переработки v3.2 (9 мая 2026). Скорость в тоннеле снижена с 6,5 до 2,5 км/с (Mach 7,3) при 8 g sustained, MHD plasma window заменён на Helium-Buffered Exit (He buffer + кевларовая мембрана + FAV), добавлена бортовая ГПВРД-ступень. Подробности — в [главе 12 концепт-документа](concept-document/chapters/12_v3_2_pivot.md).
 
 ---
 
@@ -89,18 +92,19 @@ UralDriver/
 ├── concept-document/              ⭐ ИСХОДНЫЙ КОНЦЕПТ-ДОКУМЕНТ
 │   ├── README.md                  ← обзор всех 11 глав
 │   ├── chapters/                  ← 11 глав по порядку
-│   │   ├── 00_executive_summary.md         (5 мин)
-│   │   ├── 01_concept_and_physics.md       (14 мин — физика, MHD)
-│   │   ├── 02_site_analysis.md             (12 мин — гора Народная)
-│   │   ├── 03_technical_design.md          (22 мин — все системы)
-│   │   ├── 04_economics.md                 (24 мин — экономика, Starship)
-│   │   ├── 05_synergy_rosatom.md           (11 мин)
-│   │   ├── 06_demand_and_market.md         (18 мин — главный риск)
-│   │   ├── 07_roadmap.md                   (16 мин — 6 фаз)
-│   │   ├── 08_risks.md                     (13 мин)
+│   │   ├── 00_executive_summary.md         (5 мин · v2 базовый, v3.2 заметка вверху)
+│   │   ├── 01_concept_and_physics.md       (14 мин — физика v2, MHD)
+│   │   ├── 02_site_analysis.md             (12 мин — гора Народная, актуально)
+│   │   ├── 03_technical_design.md          (22 мин — все системы v2)
+│   │   ├── 04_economics.md                 (24 мин — экономика v2)
+│   │   ├── 05_synergy_rosatom.md           (11 мин — актуально)
+│   │   ├── 06_demand_and_market.md         (18 мин — спрос v2)
+│   │   ├── 07_roadmap.md                   (16 мин — фазы v2 + Опция B Луна)
+│   │   ├── 08_risks.md                     (13 мин — риски v2)
 │   │   ├── 09_alternatives_comparison.md   (20 мин — конкуренты)
-│   │   ├── 10_strategy_for_promotion.md    (17 мин)
-│   │   └── 11_prometheus_rf_lab_prototype.md ⭐ (28 мин — главное обновление)
+│   │   ├── 10_strategy_for_promotion.md    (17 мин — актуально)
+│   │   ├── 11_prometheus_rf_lab_prototype.md (28 мин — Прометей-РФ Фаза 0,5)
+│   │   └── 12_v3_2_pivot.md ⭐ (15 мин — главное обновление 2026-05-09: pivot после критики Хабра)
 │   ├── research/
 │   ├── sources.md
 │   └── UPDATES_2026-05-04.md
