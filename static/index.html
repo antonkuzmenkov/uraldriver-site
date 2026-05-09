@@ -3491,19 +3491,19 @@ const MercuryBackdrop = () => (
   </svg>
 );
 
-// ─── SVG: Waterfall-диаграмма рычагов снижения $/кг ─────────────────────
+// ─── SVG: Waterfall-диаграмма marginal $/кг по интенсивности эксплуатации ───
 const WaterfallChart = () => {
-  const start = 230;  // $/кг базовое (сценарий Б)
-  // Δ подобраны так, чтобы 230 + Σδ = 103 (середина диапазона $95-110)
+  const start = 500;  // $/кг marginal в сценарии 200 пусков/год (минимум суверенитета)
+  // Δ подобраны так, чтобы start + Σδ ≈ 220 (marginal в сценарии 1000 пусков/год)
   const steps = [
-    { label: 'Базовая Б',          delta: 0,    fill: '#4a5058', isStart: true },
-    { label: '01 · 2-я нитка',     delta: -80,  fill: '#ff5b1f' },
-    { label: '02 · 12–15 т',       delta: -28,  fill: '#ff5b1f' },
-    { label: '03 · скайхук',       delta: -10,  fill: '#ff7340' },
-    { label: '04 · АЭС',           delta: -3,   fill: '#ff7340' },
-    { label: '05 · унификация',    delta: -3,   fill: '#ff7340' },
-    { label: '06 · выработки',     delta: -2,   fill: '#ff8a55' },
-    { label: '07 · криогеника',    delta: -1,   fill: '#ff8a55' },
+    { label: '200 пусков/год',     delta: 0,    fill: '#4a5058', isStart: true },
+    { label: '01 · 500 пусков',    delta: -120, fill: '#ff5b1f' },
+    { label: '02 · многораз. ГПВРД', delta: -80,  fill: '#ff5b1f' },
+    { label: '03 · 1000 пусков',   delta: -50,  fill: '#ff7340' },
+    { label: '04 · АЭС-tariff',    delta: -15,  fill: '#ff7340' },
+    { label: '05 · унификация',    delta: -10,  fill: '#ff7340' },
+    { label: '06 · He-recovery',   delta: -3,   fill: '#ff8a55' },
+    { label: '07 · криогеника',    delta: -2,   fill: '#ff8a55' },
     { label: 'Итог',               delta: 0,    fill: '#4dd0a0', isEnd: true },
   ];
   const W = 900, H = 360, padL = 60, padR = 30, padT = 40, padB = 80;
@@ -3511,13 +3511,13 @@ const WaterfallChart = () => {
   const innerH = H - padT - padB;
   const barW = innerW / steps.length * 0.7;
   const gap = innerW / steps.length;
-  const maxV = 250;  // верх шкалы
+  const maxV = 600;  // верх шкалы
   const yScale = v => padT + innerH - (v / maxV) * innerH;
   let running = start;
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="chart-svg" aria-label="Рычаги снижения $/кг">
       {/* gridlines */}
-      {[0, 50, 100, 150, 200, 250].map(v => (
+      {[0, 100, 200, 300, 400, 500, 600].map(v => (
         <g key={v}>
           <line x1={padL} y1={yScale(v)} x2={W - padR} y2={yScale(v)}
                 stroke="#262c34" strokeWidth="0.5"/>
@@ -3593,7 +3593,7 @@ const CapexChart = () => {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="chart-svg" aria-label="Структура капитальных затрат">
       <text x={20} y={20} fill="#dfe7f4" fontFamily="Source Serif 4, serif"
-            fontSize="14" fontStyle="italic">$30–35 млрд · 100% программы</text>
+            fontSize="14" fontStyle="italic">$30 млрд · 100% программы (15 лет 2030–2045)</text>
       {items.map((it, i) => {
         const y = padT + i * rowH;
         const barW = (it.value / maxVal) * maxBar;
@@ -3618,41 +3618,45 @@ const CapexChart = () => {
   );
 };
 
-// ─── SVG: Перекрёстная матрица Starship × загрузка ──────────────────────
+// ─── SVG: Матрица применимости УД vs Starship по нишам ──────────────────
 const StarshipMatrix = () => {
+  // Колонки — типы грузов. Строки — критические свойства миссии.
+  // Зелёное = УД подходит. Красное = Starship лучше или УД не справится.
   const cols = [
-    { id: 'S1', name: 'S1 «Плато»',   price: '$1750/кг', prob: '15%' },
-    { id: 'S2', name: 'S2 «База»',    price: '$400/кг',  prob: '50%' },
-    { id: 'S3', name: 'S3 «Цель»',    price: '$125/кг',  prob: '25%' },
-    { id: 'S4', name: 'S4 «Гипер»',   price: '$40/кг',   prob: '10%' },
+    { id: 'C1', name: 'Bulk propellant',  desc: '~5 т H2O/RP-1 на orbital depot' },
+    { id: 'C2', name: 'Металлы / расходники', desc: 'Элементы лунной/орбитальной инфраструктуры' },
+    { id: 'C3', name: 'Стандартные спутники', desc: 'Связные / SSO / polar' },
+    { id: 'C4', name: 'Точная аппаратура', desc: 'Оптика / телескопы / экипажи' },
   ];
   const rows = [
-    { name: 'А · 15 000 т',  cost: '$115/кг',  values: [1635, 285,   10,  -75 ] },
-    { name: 'Б · 5 000 т',   cost: '$230/кг',  values: [1520, 170,  -105, -190] },
-    { name: 'В · 1 000 т',   cost: '$1000/кг', values: [750,  -600, -875, -960] },
-    { name: 'Г · 200 т',     cost: '$4500/кг', values: [-2750, -4100, -4375, -4460] },
+    { name: 'Допуск 8g',           cost: 'sustained 32 сек', values: [ 1,  1,  0, -1] },
+    { name: 'Допуск 4,5g spike',   cost: '0,5 сек drag',     values: [ 1,  1,  0, -1] },
+    { name: 'Орбита 65°+',         cost: 'SSO/polar/Молния', values: [ 1,  1,  1,  0] },
+    { name: 'Bulk-цикл 500/год',   cost: 'десятилетний поток', values: [ 1,  1,  0, -1] },
   ];
   const W = 900, H = 400, padL = 140, padT = 80, padR = 40, padB = 30;
   const colW = (W - padL - padR) / cols.length;
   const rowH = (H - padT - padB) / rows.length;
-  // Цвет ячейки по значению
+  // Цвет ячейки по соответствию ниши: 1 = УД оправдан, 0 = граница, -1 = Starship/ракета лучше
   const colorOf = (v) => {
-    if (v >= 500)  return '#1d6e54';
-    if (v >= 100)  return '#2f9d72';
-    if (v >= 0)    return '#5fc096';
-    if (v >= -200) return '#c8941e';
-    if (v >= -500) return '#a8553a';
-    return '#7a2a2a';
+    if (v === 1)  return '#2f9d72';   // зелёное — УД подходит
+    if (v === 0)  return '#c8941e';   // оранжевое — граница, нужен анализ
+    return '#7a2a2a';                  // красное — Starship/ракета лучше
+  };
+  const labelOf = (v) => {
+    if (v === 1)  return 'УД';
+    if (v === 0)  return '?';
+    return 'Ракета';
   };
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="chart-svg" aria-label="Матрица Starship × загрузка">
+    <svg viewBox={`0 0 ${W} ${H}`} className="chart-svg" aria-label="Матрица применимости УД по нишам">
       {/* col headers */}
       {cols.map((c, i) => (
         <g key={c.id} transform={`translate(${padL + i * colW + colW/2}, ${padT - 10})`}>
           <text y={-30} fill="#dfe7f4" fontFamily="Source Serif 4, serif"
                 fontSize="14" textAnchor="middle">{c.name}</text>
-          <text y={-12} fill="#ff5b1f" fontFamily="JetBrains Mono, monospace"
-                fontSize="11" textAnchor="middle">{c.price} · {c.prob}</text>
+          <text y={-12} fill="#9aa2af" fontFamily="JetBrains Mono, monospace"
+                fontSize="10" textAnchor="middle">{c.desc}</text>
         </g>
       ))}
       {/* row headers + cells */}
@@ -3673,8 +3677,8 @@ const StarshipMatrix = () => {
                       fill={colorOf(v)} opacity="0.85"/>
                 <text x={x + colW/2} y={y + rowH/2 + 6}
                       fill="#fff" fontFamily="Source Serif 4, serif"
-                      fontSize="18" textAnchor="middle">
-                  {v >= 0 ? '+$' : '−$'}{Math.abs(v).toLocaleString('ru')}
+                      fontSize="16" textAnchor="middle">
+                  {labelOf(v)}
                 </text>
               </g>
             );
@@ -3683,7 +3687,7 @@ const StarshipMatrix = () => {
       ))}
       <text x={W/2} y={H - 6} fill="#6f7884" fontFamily="Inter, sans-serif"
             fontSize="11" fontStyle="italic" textAnchor="middle">
-        Δ $/кг катапульты vs Starship · положительное = катапульта дешевле
+        Где УД оправдан · УД и Starship не конкуренты, а инструменты разных ниш
       </text>
     </svg>
   );
@@ -4275,12 +4279,12 @@ const PageHome = ({ data, setRoute }) => {
       <div className="scene-section">
         <NebulaBackdrop/>
       <section className="section">
-        <SectionHead code="// 04.6" kicker="что снижает цену" title="Рычаги $/кг"
-          sub="$230/кг → $95–110/кг через комбинацию инженерных и операционных интервенций. Кликни по рычагу чтобы развернуть детали."/>
+        <SectionHead code="// 04.6" kicker="экономика по интенсивности" title="Marginal $/кг по объёму пусков"
+          sub="$500/кг при 200 пусков/год → $220/кг при 1000 пусков/год для bulk propellant. Главные рычаги — каденс, многоразовая ГПВРД-ступень, оптовая цена электричества Белоярской АЭС."/>
         <LeversAccordion levers={data.levers} total={data.leversTotal}/>
         <figure className="chart-fig">
           <WaterfallChart/>
-          <figcaption className="chart-cap mono dim">FIG · 04.6 · водопад: каждый рычаг съедает кусок $/кг (база $230 → итог $103)</figcaption>
+          <figcaption className="chart-cap mono dim">FIG · 04.6 · marginal $/кг по интенсивности: 200 пусков $500/кг → 1000 пусков $220/кг (bulk propellant)</figcaption>
         </figure>
         <div className="levers-bottom">
           <div className="frame levers-final">
@@ -4309,11 +4313,11 @@ const PageHome = ({ data, setRoute }) => {
       <div className="scene-section">
         <NeptuneBackdrop/>
       <section className="section">
-        <SectionHead code="// 06" kicker="чувствительность" title="Перекрёстная матрица Starship × загрузка"
-          sub="Главная внешняя переменная — ценовая траектория Starship 2032–2035. 4 сценария Starship × 4 сценария загрузки = матрица решений."/>
+        <SectionHead code="// 06" kicker="ниши, не конкуренция" title="Где УД оправдан, где нет"
+          sub="УД и Starship не конкуренты, а инструменты разных ниш. УД — стратегическая инфраструктура для bulk propellant и металлов на полярные/SSO орбиты с допуском 8g. Starship — универсальный коммерческий launcher для точной аппаратуры и экипажей. Решение принимает заказчик по природе груза, не по $/кг."/>
         <figure className="chart-fig">
           <StarshipMatrix/>
-          <figcaption className="chart-cap mono dim">FIG · 06 · Δ $/кг катапульта vs Starship · зелёное = победа УД</figcaption>
+          <figcaption className="chart-cap mono dim">FIG · 06 · Где УД оправдан · зелёное = ниша УД (bulk propellant, металлы), красное = ниша Starship/ракет (точная аппаратура, экипажи)</figcaption>
         </figure>
       </section>
       </div>
