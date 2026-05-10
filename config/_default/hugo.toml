@@ -16,3 +16,7 @@ disableKinds = ["home", "taxonomy", "term", "RSS", "sitemap"]
 
 [outputs]
   home = ["HTML"]
+
+# Разрешаем raw HTML/SVG в Markdown — нужно для inline-диаграмм
+[markup.goldmark.renderer]
+  unsafe = true
