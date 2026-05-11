@@ -13,8 +13,8 @@ date: 2026-05-11
     <input type="range" id="capex" min="20" max="50" step="1" value="30">
   </div>
   <div class="ud-calc-row">
-    <label>Темп пусков в год: <output id="rate-out">500</output></label>
-    <input type="range" id="rate" min="100" max="2000" step="50" value="500">
+    <label>Темп пусков в год (логарифмический): <output id="rate-out">500</output></label>
+    <input type="range" id="rate" min="0" max="100" step="1" value="50">
   </div>
   <div class="ud-calc-row">
     <label>Полезная нагрузка на капсулу, т: <output id="pn-out">1.0</output></label>
@@ -129,9 +129,16 @@ date: 2026-05-11
 
   function fmt(n) { return Math.round(n).toLocaleString('ru-RU').replace(/,/g, ' '); }
 
+  // Логарифмический пересчёт 0..100 → 10..10000 пусков
+  function logScale(v) {
+    const minLog = Math.log10(10);
+    const maxLog = Math.log10(10000);
+    return Math.round(Math.pow(10, minLog + (v/100) * (maxLog - minLog)));
+  }
+
   function recalc() {
     const capex = +inputs.capex.value;
-    const rate = +inputs.rate.value;
+    const rate = logScale(+inputs.rate.value);
     const pn = +inputs.pn.value;
     const opex = +inputs.opex.value;
     const years = +inputs.years.value;

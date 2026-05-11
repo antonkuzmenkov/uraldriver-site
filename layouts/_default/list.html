@@ -124,6 +124,54 @@ article th, article td {
 article th { color: var(--accent); font-weight: 600; background: var(--bg-2); }
 article tr:hover td { background: rgba(255,255,255,0.02); }
 
+.page-cta {
+  max-width: 880px;
+  margin: 60px auto 20px;
+  padding: 28px 30px;
+  background: linear-gradient(135deg, rgba(78,195,212,0.06), rgba(110,224,163,0.04));
+  border: 1px solid rgba(78,195,212,0.25);
+  border-radius: 6px;
+}
+.page-cta-h {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.page-cta-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.page-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.page-cta-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 14px;
+  background: transparent;
+  border: 1px solid var(--frame-2);
+  color: var(--ink-2);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all .15s;
+}
+.page-cta-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.page-cta-btn-primary {
+  background: rgba(78,195,212,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.page-cta-btn-primary:hover {
+  background: rgba(78,195,212,0.2);
+}
 .page-footer {
   max-width: 880px; margin: 40px auto 0; padding: 24px;
   border-top: 1px solid var(--frame); text-align: center;
@@ -158,6 +206,25 @@ article tr:hover td { background: rgba(255,255,255,0.02); }
   <article>
     {{ .Content }}
   </article>
+
+  <aside class="page-cta">
+    <div class="page-cta-h mono">// ПОДКЛЮЧАЙТЕСЬ К ПРОЕКТУ</div>
+    <div class="page-cta-body">
+      Согласны? Не согласны? Заметили ошибку в расчётах?
+      Урал-Драйвер — открытый концепт, и любая обратная связь делает его сильнее.
+    </div>
+    <div class="page-cta-actions">
+      <a href="https://t.me/uraldriver" target="_blank" rel="noopener" class="page-cta-btn page-cta-btn-primary">
+        Telegram-канал →
+      </a>
+      <a href="https://github.com/antonkuzmenkov/uraldriver-site" target="_blank" rel="noopener" class="page-cta-btn">
+        GitHub репозиторий
+      </a>
+      <a href="/support/" class="page-cta-btn">
+        Поддержать проект
+      </a>
+    </div>
+  </aside>
   <script>
     // Lazy-load на всех картинках статьи + обёртка таблиц в .table-wrap для адаптива
     document.addEventListener('DOMContentLoaded', () => {
