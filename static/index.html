@@ -2112,6 +2112,16 @@ button:focus-visible, a:focus-visible {
 .nav-docs-ext { color: var(--accent); font-size: 11px; margin-left: auto; }
 @media (max-width: 900px) { .nav-docs-wrap { display: none; } }
 
+.nav-mobile-section {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 14px 18px 6px;
+  text-transform: uppercase;
+  border-top: 1px solid var(--frame);
+  margin-top: 4px;
+}
+.nav-mobile-section:first-child { border-top: none; margin-top: 0; }
+
 /* Кнопка «Наверх» — sticky */
 .scroll-top {
   position: fixed;
@@ -2763,29 +2773,38 @@ window.SITE_DATA = {
     },
   },
 
-  // Главное меню — 6 основных в nav-bar + dropdown «Главы» с Hugo-страницами
-  menu: [
+  // Главные пункты nav-bar — целевые действия (главная + ⭐ Прометей)
+  menuMain: [
     { id: 'home', label: 'Главная', code: '00' },
-    { id: 'concept', label: 'Концепция', code: '01' },
-    { id: 'economics', label: 'Экономика', code: '04' },
-    { id: 'roadmap', label: 'Дорожная карта', code: '07' },
     { id: 'phase05', label: 'Прометей-РФ', code: '11', star: true },
-    { id: 'competitors', label: 'Конкуренты', code: '09' },
-    { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
-    { id: 'support', label: 'Поддержать', code: '$', heart: true },
   ],
 
-  // Группа «Главы» — открывается в dropdown / на мобильном раскрывается в подменю
-  menuDocs: [
+  // Главы концепта — все 13 в одном dropdown по порядку номеров
+  menuChapters: [
+    { id: 'concept', label: 'Концепция', code: '01' },
     { id: 'site', label: 'Площадка', code: '02' },
     { id: 'technical', label: 'Технология', code: '03', href: '/technical/' },
+    { id: 'economics', label: 'Экономика', code: '04' },
+    { id: 'roadmap', label: 'Дорожная карта', code: '07' },
+    { id: 'competitors', label: 'Конкуренты', code: '09' },
     { id: 'risks', label: 'Риски', code: '10', href: '/risks/' },
-    { id: 'option-b', label: 'Земля→Луна', code: '12', href: '/option-b/' },
+    { id: 'option-b', label: 'Земля → Луна', code: '12', href: '/option-b/' },
     { id: 'synergy', label: 'Синергия', code: '13', href: '/synergy/' },
+  ],
+
+  // Инструменты — функциональные страницы (не главы концепта)
+  menuTools: [
     { id: 'faq', label: 'Частые вопросы', code: '?', href: '/faq/' },
     { id: 'glossary', label: 'Глоссарий', code: 'A→Z', href: '/glossary/' },
     { id: 'calculator', label: 'Калькулятор $/кг', code: '∑', href: '/calculator/' },
     { id: 'blog', label: 'Блог', code: '··' },
+    { id: 'changelog', label: 'История правок', code: 'LOG', href: '/changelog/' },
+  ],
+
+  // Целевые действия справа в nav (донаты + поддержка)
+  menuActions: [
+    { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
+    { id: 'support', label: 'Поддержать', code: '$', heart: true },
   ],
 
   // Все 11 глав концепт-документа — с раскрывающимся summary
@@ -4125,15 +4144,43 @@ Object.assign(window, {
 const ChromeNav = ({ data, route, setRoute }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [docsOpen, setDocsOpen] = useState(false);
-  const docsRef = useRef(null);
+  const [chOpen, setChOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const chRef = useRef(null);
+  const toolsRef = useRef(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll);
-    const onClickOut = (e) => { if (docsRef.current && !docsRef.current.contains(e.target)) setDocsOpen(false); };
+    const onClickOut = (e) => {
+      if (chRef.current && !chRef.current.contains(e.target)) setChOpen(false);
+      if (toolsRef.current && !toolsRef.current.contains(e.target)) setToolsOpen(false);
+    };
     document.addEventListener('mousedown', onClickOut);
     return () => { window.removeEventListener('scroll', onScroll); document.removeEventListener('mousedown', onClickOut); };
   }, []);
+
+  const navLink = (m, extra={}) => (
+    <a key={m.id} href={m.href || `#${m.id}`}
+       onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
+       className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''} ${extra.cls||''}`}>
+      <span className="nav-link-code mono">{m.code}</span>
+      <span>{m.label}</span>
+      {m.star && <span className="nav-link-star"><IconStar/></span>}
+      {m.heart && <span className="nav-link-heart-ico"><IconHeart/></span>}
+    </a>
+  );
+
+  const dropItem = (m, closeFn) => (
+    <a key={m.id} href={m.href || `#${m.id}`}
+       onClick={(e)=>{ closeFn(); if(m.href) return; e.preventDefault();setRoute(m.id); }}
+       className="nav-docs-item">
+      <span className="nav-link-code mono">{m.code}</span>
+      <span>{m.label}</span>
+      {m.href && <span className="nav-docs-ext mono">↗</span>}
+    </a>
+  );
+
   return (
     <header className={`nav ${scrolled?'nav-scrolled':''}`}>
       <div className="nav-inner">
@@ -4149,45 +4196,37 @@ const ChromeNav = ({ data, route, setRoute }) => {
           </div>
         </a>
         <nav className="nav-menu">
-          {data.menu.slice(0, 6).map(m => (
-            <a key={m.id} href={m.href || `#${m.id}`}
-               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
-               className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
-              <span className="nav-link-code mono">{m.code}</span>
-              <span>{m.label}</span>
-              {m.star && <span className="nav-link-star"><IconStar/></span>}
-            </a>
-          ))}
-          <div className="nav-docs-wrap" ref={docsRef}>
-            <button className={`nav-link nav-docs-btn ${docsOpen?'is-open':''}`}
-                    onClick={() => setDocsOpen(!docsOpen)}>
-              <span className="nav-link-code mono">··</span>
-              <span>Главы</span>
+          {data.menuMain.map(m => navLink(m))}
+
+          <div className="nav-docs-wrap" ref={chRef}>
+            <button className={`nav-link nav-docs-btn ${chOpen?'is-open':''}`}
+                    onClick={() => { setChOpen(!chOpen); setToolsOpen(false); }}>
+              <span className="nav-link-code mono">01-13</span>
+              <span>Главы концепта</span>
               <span className="nav-docs-chev mono">▾</span>
             </button>
-            {docsOpen && (
+            {chOpen && (
               <div className="nav-docs-menu">
-                {data.menuDocs.map(m => (
-                  <a key={m.id} href={m.href || `#${m.id}`}
-                     onClick={(e)=>{ setDocsOpen(false); if(m.href) return; e.preventDefault();setRoute(m.id); }}
-                     className="nav-docs-item">
-                    <span className="nav-link-code mono">{m.code}</span>
-                    <span>{m.label}</span>
-                    {m.href && <span className="nav-docs-ext mono">↗</span>}
-                  </a>
-                ))}
+                {data.menuChapters.map(m => dropItem(m, () => setChOpen(false)))}
               </div>
             )}
           </div>
-          {data.menu.slice(6).map(m => (
-            <a key={m.id} href={m.href || `#${m.id}`}
-               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
-               className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
-              <span className="nav-link-code mono">{m.code}</span>
-              <span>{m.label}</span>
-              {m.heart && <span className="nav-link-heart-ico"><IconHeart/></span>}
-            </a>
-          ))}
+
+          <div className="nav-docs-wrap" ref={toolsRef}>
+            <button className={`nav-link nav-docs-btn ${toolsOpen?'is-open':''}`}
+                    onClick={() => { setToolsOpen(!toolsOpen); setChOpen(false); }}>
+              <span className="nav-link-code mono">✦</span>
+              <span>Инструменты</span>
+              <span className="nav-docs-chev mono">▾</span>
+            </button>
+            {toolsOpen && (
+              <div className="nav-docs-menu">
+                {data.menuTools.map(m => dropItem(m, () => setToolsOpen(false)))}
+              </div>
+            )}
+          </div>
+
+          {data.menuActions.map(m => navLink(m))}
         </nav>
         <button className="nav-burger" onClick={()=>setOpen(!open)} aria-label="menu">
           <span/><span/><span/>
@@ -4195,13 +4234,44 @@ const ChromeNav = ({ data, route, setRoute }) => {
       </div>
       {open && (
         <div className="nav-mobile">
-          {[...data.menu, ...data.menuDocs].map(m => (
+          <div className="nav-mobile-section mono dim">// ОСНОВНЫЕ</div>
+          {data.menuMain.map(m => (
+            <a key={m.id} href={m.href || `#${m.id}`}
+               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
+               className={`nav-link ${route===m.id?'is-active':''}`}>
+              <span className="nav-link-code mono">{m.code}</span>
+              <span>{m.label}</span>
+              {m.star && <span className="nav-link-star"><IconStar/></span>}
+            </a>
+          ))}
+          <div className="nav-mobile-section mono dim">// ГЛАВЫ КОНЦЕПТА</div>
+          {data.menuChapters.map(m => (
             <a key={m.id} href={m.href || `#${m.id}`}
                onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
                className={`nav-link ${route===m.id?'is-active':''}`}>
               <span className="nav-link-code mono">{m.code}</span>
               <span>{m.label}</span>
               {m.href && <span className="nav-docs-ext mono">↗</span>}
+            </a>
+          ))}
+          <div className="nav-mobile-section mono dim">// ИНСТРУМЕНТЫ</div>
+          {data.menuTools.map(m => (
+            <a key={m.id} href={m.href || `#${m.id}`}
+               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
+               className={`nav-link ${route===m.id?'is-active':''}`}>
+              <span className="nav-link-code mono">{m.code}</span>
+              <span>{m.label}</span>
+              {m.href && <span className="nav-docs-ext mono">↗</span>}
+            </a>
+          ))}
+          <div className="nav-mobile-section mono dim">// ПОДДЕРЖКА</div>
+          {data.menuActions.map(m => (
+            <a key={m.id} href={`#${m.id}`}
+               onClick={(e)=>{ e.preventDefault();setRoute(m.id);setOpen(false); }}
+               className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
+              <span className="nav-link-code mono">{m.code}</span>
+              <span>{m.label}</span>
+              {m.heart && <span className="nav-link-heart-ico"><IconHeart/></span>}
             </a>
           ))}
         </div>
@@ -4223,10 +4293,27 @@ const ChromeFooter = ({ data, setRoute }) => (
         </p>
       </div>
       <div className="footer-col">
-        <div className="footer-h mono">Навигация</div>
-        {data.menu.slice(0,8).map(m => (
+        <div className="footer-h mono">Главы концепта</div>
+        {data.menuChapters.map(m => (
           <a key={m.id} href={m.href || `#${m.id}`}
              onClick={(e)=>{ if(m.href){return;} e.preventDefault();setRoute(m.id); }}
+             className="footer-link">
+            <span className="mono dim">{m.code}</span> {m.label}
+          </a>
+        ))}
+      </div>
+      <div className="footer-col">
+        <div className="footer-h mono">Инструменты</div>
+        {data.menuTools.map(m => (
+          <a key={m.id} href={m.href || `#${m.id}`}
+             onClick={(e)=>{ if(m.href){return;} e.preventDefault();setRoute(m.id); }}
+             className="footer-link">
+            <span className="mono dim">{m.code}</span> {m.label}
+          </a>
+        ))}
+        {data.menuActions.map(m => (
+          <a key={m.id} href={`#${m.id}`}
+             onClick={(e)=>{ e.preventDefault();setRoute(m.id); }}
              className="footer-link">
             <span className="mono dim">{m.code}</span> {m.label}
           </a>
@@ -5547,7 +5634,8 @@ function App() {
   uE(() => {
     const onHash = () => {
       const h = (window.location.hash || '').replace('#','');
-      if (h && data.menu.find(m=>m.id===h)) setRoute(h);
+      const allMenu = [...(data.menuMain||[]), ...(data.menuChapters||[]), ...(data.menuTools||[]), ...(data.menuActions||[])];
+      if (h && allMenu.find(m=>m.id===h)) setRoute(h);
       else if (!h) setRoute('home');
     };
     window.addEventListener('hashchange', onHash);
