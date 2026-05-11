@@ -1985,6 +1985,78 @@ button:focus-visible, a:focus-visible {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* MORE — карточки глав концепта (главная → внешние Hugo-страницы) */
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+@media (max-width: 760px) { .more-grid { grid-template-columns: 1fr; } }
+.more-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--frame-2);
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.more-card:hover {
+  border-color: var(--accent);
+  background: rgba(60,180,200,0.05);
+  transform: translateY(-2px);
+}
+.more-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.more-tag {
+  font-size: 11px;
+  color: var(--accent);
+  padding: 2px 8px;
+  border: 1px solid var(--frame-2);
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.more-title {
+  font-size: 22px;
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.more-body {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 18px;
+  flex: 1;
+}
+.more-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11.5px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--frame-2);
+}
+.more-stats span:not(:last-child)::after {
+  content: '·';
+  margin-left: 12px;
+  opacity: 0.5;
+}
+.more-cta {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+
 </style>
 </head>
 <body>
@@ -2612,10 +2684,14 @@ window.SITE_DATA = {
     { id: 'home', label: 'Главная', code: '00' },
     { id: 'concept', label: 'Концепция', code: '01' },
     { id: 'site', label: 'Площадка', code: '02' },
+    { id: 'technical', label: 'Технология', code: '03', href: '/technical/' },
     { id: 'economics', label: 'Экономика', code: '04' },
     { id: 'roadmap', label: 'Дорожная карта', code: '07' },
-    { id: 'phase05', label: 'Прометей-РФ', code: '11', star: true },
     { id: 'competitors', label: 'Конкуренты', code: '09' },
+    { id: 'risks', label: 'Риски', code: '10', href: '/risks/' },
+    { id: 'phase05', label: 'Прометей-РФ', code: '11', star: true },
+    { id: 'option-b', label: 'Земля→Луна', code: '12', href: '/option-b/' },
+    { id: 'synergy', label: 'Синергия', code: '13', href: '/synergy/' },
     { id: 'blog', label: 'Блог', code: '··' },
     { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
     { id: 'support', label: 'Поддержать', code: '$', heart: true },
@@ -3979,8 +4055,8 @@ const ChromeNav = ({ data, route, setRoute }) => {
         </a>
         <nav className="nav-menu">
           {data.menu.map(m => (
-            <a key={m.id} href={`#${m.id}`}
-               onClick={(e)=>{e.preventDefault();setRoute(m.id);setOpen(false);}}
+            <a key={m.id} href={m.href || `#${m.id}`}
+               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
                className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
               <span className="nav-link-code mono">{m.code}</span>
               <span>{m.label}</span>
@@ -3996,8 +4072,8 @@ const ChromeNav = ({ data, route, setRoute }) => {
       {open && (
         <div className="nav-mobile">
           {data.menu.map(m => (
-            <a key={m.id} href={`#${m.id}`}
-               onClick={(e)=>{e.preventDefault();setRoute(m.id);setOpen(false);}}
+            <a key={m.id} href={m.href || `#${m.id}`}
+               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
                className={`nav-link ${route===m.id?'is-active':''}`}>
               <span className="nav-link-code mono">{m.code}</span>
               <span>{m.label}</span>
@@ -4023,8 +4099,9 @@ const ChromeFooter = ({ data, setRoute }) => (
       </div>
       <div className="footer-col">
         <div className="footer-h mono">Навигация</div>
-        {data.menu.slice(0,6).map(m => (
-          <a key={m.id} href={`#${m.id}`} onClick={(e)=>{e.preventDefault();setRoute(m.id);}}
+        {data.menu.slice(0,8).map(m => (
+          <a key={m.id} href={m.href || `#${m.id}`}
+             onClick={(e)=>{ if(m.href){return;} e.preventDefault();setRoute(m.id); }}
              className="footer-link">
             <span className="mono dim">{m.code}</span> {m.label}
           </a>
@@ -4306,6 +4383,12 @@ const PageHome = ({ data, setRoute }) => {
           <CapexChart/>
           <figcaption className="chart-cap mono dim">FIG · 04.1.1 · структура капекса по статьям</figcaption>
         </figure>
+        <figure className="chart-fig" style={{marginTop:'24px'}}>
+          <img src="/img/v3_2/10_capex_breakdown.png"
+               alt="Структура бюджета Урал-Драйвер 2,7 трлн ₽ за 15 лет: 30% тоннель, 23% магниты, 17% энергетика, 14% ВВЭР-1200, 11% капсулы, 5% логистика, 5% посёлок и ЛЭП"
+               style={{width:'100%',maxWidth:'1100px',display:'block',margin:'0 auto',borderRadius:'4px',border:'1px solid var(--frame-2)'}}/>
+          <figcaption className="chart-cap mono dim">FIG · 04.1.2 · CAPEX-диаграмма по статьям бюджета · полная страница → <a href="/economics/" style={{color:'var(--accent)'}}>/economics/</a></figcaption>
+        </figure>
       </section>
       </div>
 
@@ -4314,10 +4397,16 @@ const PageHome = ({ data, setRoute }) => {
         <NeptuneBackdrop/>
       <section className="section">
         <SectionHead code="// 06" kicker="ниши, не конкуренция" title="Где УД оправдан, где нет"
-          sub="УД и Starship не конкуренты, а инструменты разных ниш. УД — стратегическая инфраструктура для массовое топливо и металлов на полярные/SSO орбиты с допуском 8g. Starship — универсальный коммерческая катапульта для точной аппаратуры и экипажей. Решение принимает заказчик по природе груза, не по $/кг."/>
+          sub="УД и Starship не конкуренты, а инструменты разных ниш. УД — стратегическая инфраструктура для массового топлива и металлов на полярные/SSO орбиты с допуском 8g. Starship — универсальная коммерческая катапульта для точной аппаратуры и экипажей. Решение принимает заказчик по природе груза, не по $/кг."/>
         <figure className="chart-fig">
           <StarshipMatrix/>
-          <figcaption className="chart-cap mono dim">FIG · 06 · Где УД оправдан · зелёное = ниша УД (массовое топливо, металлы), красное = ниша Starship/ракет (точная аппаратура, экипажи)</figcaption>
+          <figcaption className="chart-cap mono dim">FIG · 06.1 · Где УД оправдан · зелёное = ниша УД (массовое топливо, металлы), красное = ниша Starship/ракет (точная аппаратура, экипажи)</figcaption>
+        </figure>
+        <figure className="chart-fig" style={{marginTop:'24px'}}>
+          <img src="/img/v3_2/12_concepts_comparison.png"
+               alt="Родственные концепты — масштаб и зрелость: Lofstrom Loop / StarTram / Урал-Драйвер / SpinLaunch с TRL-шкалой 1–9. УД — золотая середина"
+               style={{width:'100%',maxWidth:'1100px',display:'block',margin:'0 auto',borderRadius:'4px',border:'1px solid var(--frame-2)'}}/>
+          <figcaption className="chart-cap mono dim">FIG · 06.2 · Родственные концепты по TRL · полная страница → <a href="/competitors/" style={{color:'var(--accent)'}}>/competitors/</a></figcaption>
         </figure>
       </section>
       </div>
@@ -4330,6 +4419,78 @@ const PageHome = ({ data, setRoute }) => {
           title="Российский технологический стек"
           sub="Кликни по любой карточке чтобы развернуть детальное описание, ключевые параметры и источники."/>
         <TechStackAccordion items={data.techStack}/>
+      </section>
+      </div>
+
+      {/* MORE — глубже в концепт, переход на полные страницы */}
+      <div className="scene-section">
+      <section className="section">
+        <SectionHead code="// 03 · 10 · 12 · 13" kicker="главы концепта"
+          title="Глубже — отдельные страницы"
+          sub="Четыре раздела расположены на отдельных страницах сайта. Краткое описание здесь, полная статья — по кнопке."/>
+        <div className="more-grid">
+
+          <a href="/technical/" className="more-card">
+            <div className="more-head">
+              <span className="mono dim">// 03</span>
+              <span className="more-tag mono">технология</span>
+            </div>
+            <h3 className="more-title">Техническое решение</h3>
+            <p className="more-body">Шесть ключевых подсистем: тоннель 40 км в скальном массиве, маглев Inductrack II на сверхпроводящих магнитах, импульсный линейный двигатель, трёхстадийная импульсная энергетика (ВВЭР → ГАЭС → SMES → разряд), гелиевый буфер на выходе (2 км + кевларовая мембрана + быстрый клапан), капсулы 20 т с UHTC-обтекателем и ГПВРД-ступенью.</p>
+            <div className="more-stats mono dim">
+              <span>40 км тоннель</span>
+              <span>2,5 км/с в стволе</span>
+              <span>8 g sustained</span>
+            </div>
+            <div className="more-cta mono">Подробнее → /technical/</div>
+          </a>
+
+          <a href="/risks/" className="more-card">
+            <div className="more-head">
+              <span className="mono dim">// 10</span>
+              <span className="more-tag mono">риски</span>
+            </div>
+            <h3 className="more-title">Карта рисков v3.2</h3>
+            <p className="more-body">12 категорий рисков с вероятностями и митигацией. Топ-3: быстрый клапан на 2 м (TRL 2–3, главный технологический), цислунарный спрос меньше прогноза (35%, рыночный), смена правительства за 15-летний горизонт (35%, политический). Отдельный раздел про квенч сверхпроводящего магнита и аварийные сценарии.</p>
+            <div className="more-stats mono dim">
+              <span>12 рисков</span>
+              <span>топ-3 митигации</span>
+              <span>опционность каждой фазы</span>
+            </div>
+            <div className="more-cta mono">Подробнее → /risks/</div>
+          </a>
+
+          <a href="/option-b/" className="more-card">
+            <div className="more-head">
+              <span className="mono dim">// 12</span>
+              <span className="more-tag mono">земля → луна</span>
+            </div>
+            <h3 className="more-title">Двухфазный концепт</h3>
+            <p className="more-body">Фаза 1 (Земля 2030–2045): маглев-катапульта на Урале — обкатка технологии и поставка массового топлива на цислунарное депо. Фаза 2 (Луна 2045+): та же установка переносится на реголит — лунная катапульта О'Нила без атмосферы, гелиевого буфера и теплозащиты. Тоннельная скорость УД 2,5 км/с почти точно совпадает с лунной второй космической 2,38 км/с.</p>
+            <div className="more-stats mono dim">
+              <span>2030–2045 Земля</span>
+              <span>2045+ Луна</span>
+              <span>G → 0 по Мецгеру</span>
+            </div>
+            <div className="more-cta mono">Подробнее → /option-b/</div>
+          </a>
+
+          <a href="/synergy/" className="more-card">
+            <div className="more-head">
+              <span className="mono dim">// 13</span>
+              <span className="more-tag mono">синергия</span>
+            </div>
+            <h3 className="more-title">Синергия с Росатомом</h3>
+            <p className="more-body">УД даёт гражданское применение пяти ключевым школам Росатома: НИИЭФА (магниты ИТЭР), ВНИИКП (сверхпроводящие кабели), ВНИИЭФ (импульсная электротехника Сахарова), Курчатовский (криогеника), ВВЭР-1200 для накопителей. В обмен Росатом инвестирует натуральным взносом ~₽13–20 млрд эквивалент.</p>
+            <div className="more-stats mono dim">
+              <span>5 школ Росатома</span>
+              <span>₽13–20 млрд in-kind</span>
+              <span>буксир Зевс как заказчик</span>
+            </div>
+            <div className="more-cta mono">Подробнее → /synergy/</div>
+          </a>
+
+        </div>
       </section>
       </div>
 
