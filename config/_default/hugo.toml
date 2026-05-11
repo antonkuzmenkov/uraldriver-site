@@ -16,6 +16,8 @@ disableKinds = ["home", "taxonomy", "term", "RSS", "sitemap"]
 
 [outputs]
   home = ["HTML"]
+  section = ["HTML"]
+  page = ["HTML"]
 
 # Разрешаем raw HTML/SVG в Markdown — нужно для inline-диаграмм
 [markup.goldmark.renderer]
