@@ -72,7 +72,7 @@ cascade:
 
 ## Подтверждение от Мецгера (UCF, 2024)
 
-![Метцер r/G: экономика лунного топлива — зоны Death (хим. лунный лендер), Marginal (открытая добыча), Profitable (сублимация под тентом), Mass driver (УД Фаза 5)](/img/v3_2/04_metzger_rg.png)
+![Метцер r/G: экономика лунного топлива — зоны Death (хим. лунный лендер), Marginal (открытая добыча), Profitable (сублимация под тентом), Катапульта (УД Фаза 5)](/img/v3_2/04_metzger_rg.png)
 
 
 Philip T. Metzger (Florida Space Institute, University of Central Florida, [arXiv 2024](https://habr.com/ru/articles/1019344/) — рус. перевод на Хабре) свёл всю экономику космической индустрии к двум параметрам:
