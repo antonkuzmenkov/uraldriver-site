@@ -2056,6 +2056,75 @@ button:focus-visible, a:focus-visible {
   color: var(--accent);
   letter-spacing: 0.5px;
 }
+.more-card { min-height: 280px; }
+
+/* Dropdown «Главы» в nav */
+.nav-docs-wrap { position: relative; }
+.nav-docs-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.nav-docs-btn.is-open { color: var(--accent); }
+.nav-docs-chev { font-size: 10px; margin-left: 2px; opacity: 0.6; transition: transform .15s; }
+.nav-docs-btn.is-open .nav-docs-chev { transform: rotate(180deg); opacity: 1; }
+.nav-docs-menu {
+  position: absolute;
+  top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: 8px;
+  min-width: 220px;
+  background: rgba(13,21,37,0.98);
+  border: 1px solid var(--frame-2);
+  border-radius: 4px;
+  padding: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 100;
+}
+.nav-docs-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  text-decoration: none;
+  color: var(--ink-2);
+  border-radius: 3px;
+  font-size: 14px;
+  transition: background .12s, color .12s;
+}
+.nav-docs-item:hover { background: rgba(78,195,212,0.08); color: var(--ink); }
+.nav-docs-ext { color: var(--accent); font-size: 11px; margin-left: auto; }
+@media (max-width: 900px) { .nav-docs-wrap { display: none; } }
+
+/* Кнопка «Наверх» — sticky */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(13,21,37,0.92);
+  border: 1px solid var(--frame-2);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s, background .15s;
+  font-size: 18px;
+  backdrop-filter: blur(8px);
+}
+.scroll-top.is-visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover {
+  background: rgba(78,195,212,0.12);
+  transform: translateY(-2px);
+}
+@media (max-width: 600px) { .scroll-top { bottom: 16px; right: 16px; } }
 
 </style>
 </head>
@@ -2679,22 +2748,26 @@ window.SITE_DATA = {
     },
   },
 
-  // Главное меню
+  // Главное меню — 6 основных в nav-bar + dropdown «Главы» с Hugo-страницами
   menu: [
     { id: 'home', label: 'Главная', code: '00' },
     { id: 'concept', label: 'Концепция', code: '01' },
-    { id: 'site', label: 'Площадка', code: '02' },
-    { id: 'technical', label: 'Технология', code: '03', href: '/technical/' },
     { id: 'economics', label: 'Экономика', code: '04' },
     { id: 'roadmap', label: 'Дорожная карта', code: '07' },
-    { id: 'competitors', label: 'Конкуренты', code: '09' },
-    { id: 'risks', label: 'Риски', code: '10', href: '/risks/' },
     { id: 'phase05', label: 'Прометей-РФ', code: '11', star: true },
+    { id: 'competitors', label: 'Конкуренты', code: '09' },
+    { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
+    { id: 'support', label: 'Поддержать', code: '$', heart: true },
+  ],
+
+  // Группа «Главы» — открывается в dropdown / на мобильном раскрывается в подменю
+  menuDocs: [
+    { id: 'site', label: 'Площадка', code: '02' },
+    { id: 'technical', label: 'Технология', code: '03', href: '/technical/' },
+    { id: 'risks', label: 'Риски', code: '10', href: '/risks/' },
     { id: 'option-b', label: 'Земля→Луна', code: '12', href: '/option-b/' },
     { id: 'synergy', label: 'Синергия', code: '13', href: '/synergy/' },
     { id: 'blog', label: 'Блог', code: '··' },
-    { id: 'funding', label: 'Финансирование', code: '$$', heart: true },
-    { id: 'support', label: 'Поддержать', code: '$', heart: true },
   ],
 
   // Все 11 глав концепт-документа — с раскрывающимся summary
@@ -4034,10 +4107,14 @@ Object.assign(window, {
 const ChromeNav = ({ data, route, setRoute }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
+  const docsRef = useRef(null);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const onClickOut = (e) => { if (docsRef.current && !docsRef.current.contains(e.target)) setDocsOpen(false); };
+    document.addEventListener('mousedown', onClickOut);
+    return () => { window.removeEventListener('scroll', onScroll); document.removeEventListener('mousedown', onClickOut); };
   }, []);
   return (
     <header className={`nav ${scrolled?'nav-scrolled':''}`}>
@@ -4054,13 +4131,42 @@ const ChromeNav = ({ data, route, setRoute }) => {
           </div>
         </a>
         <nav className="nav-menu">
-          {data.menu.map(m => (
+          {data.menu.slice(0, 6).map(m => (
             <a key={m.id} href={m.href || `#${m.id}`}
                onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
                className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
               <span className="nav-link-code mono">{m.code}</span>
               <span>{m.label}</span>
               {m.star && <span className="nav-link-star"><IconStar/></span>}
+            </a>
+          ))}
+          <div className="nav-docs-wrap" ref={docsRef}>
+            <button className={`nav-link nav-docs-btn ${docsOpen?'is-open':''}`}
+                    onClick={() => setDocsOpen(!docsOpen)}>
+              <span className="nav-link-code mono">··</span>
+              <span>Главы</span>
+              <span className="nav-docs-chev mono">▾</span>
+            </button>
+            {docsOpen && (
+              <div className="nav-docs-menu">
+                {data.menuDocs.map(m => (
+                  <a key={m.id} href={m.href || `#${m.id}`}
+                     onClick={(e)=>{ setDocsOpen(false); if(m.href) return; e.preventDefault();setRoute(m.id); }}
+                     className="nav-docs-item">
+                    <span className="nav-link-code mono">{m.code}</span>
+                    <span>{m.label}</span>
+                    {m.href && <span className="nav-docs-ext mono">↗</span>}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+          {data.menu.slice(6).map(m => (
+            <a key={m.id} href={m.href || `#${m.id}`}
+               onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
+               className={`nav-link ${route===m.id?'is-active':''} ${m.heart?'nav-link-heart':''}`}>
+              <span className="nav-link-code mono">{m.code}</span>
+              <span>{m.label}</span>
               {m.heart && <span className="nav-link-heart-ico"><IconHeart/></span>}
             </a>
           ))}
@@ -4071,12 +4177,13 @@ const ChromeNav = ({ data, route, setRoute }) => {
       </div>
       {open && (
         <div className="nav-mobile">
-          {data.menu.map(m => (
+          {[...data.menu, ...data.menuDocs].map(m => (
             <a key={m.id} href={m.href || `#${m.id}`}
                onClick={(e)=>{ if(m.href){setOpen(false);return;} e.preventDefault();setRoute(m.id);setOpen(false); }}
                className={`nav-link ${route===m.id?'is-active':''}`}>
               <span className="nav-link-code mono">{m.code}</span>
               <span>{m.label}</span>
+              {m.href && <span className="nav-docs-ext mono">↗</span>}
             </a>
           ))}
         </div>
@@ -4146,7 +4253,22 @@ const ScrollProgress = () => {
   return <div className="scroll-progress" style={{transform:`scaleX(${p})`}}/>;
 };
 
-Object.assign(window, { ChromeNav, ChromeFooter, ScrollProgress });
+const ScrollTopBtn = () => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <button className={`scroll-top ${visible?'is-visible':''}`}
+            onClick={() => window.scrollTo({top:0, behavior:'smooth'})}
+            aria-label="Наверх">↑</button>
+  );
+};
+
+Object.assign(window, { ChromeNav, ChromeFooter, ScrollProgress, ScrollTopBtn });
 
 </script>
 <script type="text/babel" data-presets="react">
@@ -5436,6 +5558,7 @@ function App() {
       <ChromeNav data={data} route={route} setRoute={setRoute}/>
       {Page}
       <ChromeFooter data={data} setRoute={setRoute}/>
+      <ScrollTopBtn/>
     </div>
   );
 }
