@@ -6,6 +6,21 @@
 <title>Урал-Драйвер · открытый концепт</title>
 <meta name="description" content="Урал-Драйвер — концепт подземной электромагнитной катапульты на Приполярном Урале. Возвращаем мечту о Солнечной системе."/>
 <meta name="theme-color" content="#05070b"/>
+<link rel="canonical" href="https://uraldriver.ru/"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Урал-Драйвер"/>
+<meta property="og:title" content="Урал-Драйвер · открытый концепт"/>
+<meta property="og:description" content="Электромагнитная первая ступень, маглев-катапульта в Приполярном Урале. $30 млрд за 15 лет, $300-500/кг массового топлива к окололунному депо. Открытый концепт-документ v3.2."/>
+<meta property="og:url" content="https://uraldriver.ru/"/>
+<meta property="og:image" content="https://uraldriver.ru/img/og-cover.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="ru_RU"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Урал-Драйвер · открытый концепт"/>
+<meta name="twitter:description" content="Электромагнитная первая ступень, маглев-катапульта на Урале. $30 млрд за 15 лет."/>
+<meta name="twitter:image" content="https://uraldriver.ru/img/og-cover.png"/>
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
@@ -2767,6 +2782,9 @@ window.SITE_DATA = {
     { id: 'risks', label: 'Риски', code: '10', href: '/risks/' },
     { id: 'option-b', label: 'Земля→Луна', code: '12', href: '/option-b/' },
     { id: 'synergy', label: 'Синергия', code: '13', href: '/synergy/' },
+    { id: 'faq', label: 'Частые вопросы', code: '?', href: '/faq/' },
+    { id: 'glossary', label: 'Глоссарий', code: 'A→Z', href: '/glossary/' },
+    { id: 'calculator', label: 'Калькулятор $/кг', code: '∑', href: '/calculator/' },
     { id: 'blog', label: 'Блог', code: '··' },
   ],
 
@@ -4506,7 +4524,7 @@ const PageHome = ({ data, setRoute }) => {
           <figcaption className="chart-cap mono dim">FIG · 04.1.1 · структура капекса по статьям</figcaption>
         </figure>
         <figure className="chart-fig" style={{marginTop:'24px'}}>
-          <img src="/img/v3_2/10_capex_breakdown.png"
+          <img src="/img/v3_2/10_capex_breakdown.webp"
                alt="Структура бюджета Урал-Драйвер 2,7 трлн ₽ за 15 лет: 30% тоннель, 23% магниты, 17% энергетика, 14% ВВЭР-1200, 11% капсулы, 5% логистика, 5% посёлок и ЛЭП"
                style={{width:'100%',maxWidth:'1100px',display:'block',margin:'0 auto',borderRadius:'4px',border:'1px solid var(--frame-2)'}}/>
           <figcaption className="chart-cap mono dim">FIG · 04.1.2 · CAPEX-диаграмма по статьям бюджета · полная страница → <a href="/economics/" style={{color:'var(--accent)'}}>/economics/</a></figcaption>
@@ -4525,7 +4543,7 @@ const PageHome = ({ data, setRoute }) => {
           <figcaption className="chart-cap mono dim">FIG · 06.1 · Где УД оправдан · зелёное = ниша УД (массовое топливо, металлы), красное = ниша Starship/ракет (точная аппаратура, экипажи)</figcaption>
         </figure>
         <figure className="chart-fig" style={{marginTop:'24px'}}>
-          <img src="/img/v3_2/12_concepts_comparison.png"
+          <img src="/img/v3_2/12_concepts_comparison.webp"
                alt="Родственные концепты — масштаб и зрелость: Lofstrom Loop / StarTram / Урал-Драйвер / SpinLaunch с TRL-шкалой 1–9. УД — золотая середина"
                style={{width:'100%',maxWidth:'1100px',display:'block',margin:'0 auto',borderRadius:'4px',border:'1px solid var(--frame-2)'}}/>
           <figcaption className="chart-cap mono dim">FIG · 06.2 · Родственные концепты по TRL · полная страница → <a href="/competitors/" style={{color:'var(--accent)'}}>/competitors/</a></figcaption>

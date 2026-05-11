@@ -9,7 +9,7 @@ enableEmoji = true
 
 # Не строим списки (фазы/блог/категории) — всё SPA через #hash
 # home отключаем чтобы static/index.html (дизайнерский SPA) попал в public/
-disableKinds = ["home", "taxonomy", "term", "RSS", "sitemap"]
+disableKinds = ["home", "taxonomy", "term", "RSS"]
 
 [pagination]
   pagerSize = 100
