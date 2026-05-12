@@ -1,6 +1,6 @@
 ---
 title: "Калькулятор экономики"
-description: "Интерактивная модель удельной стоимости пуска. Подвигай ползунки и посмотри, как меняется $/кг при разном CAPEX, темпе пусков и операционных расходах."
+description: "Интерактивная модель удельной стоимости пуска. Подвигай ползунки и посмотри, как меняется $/кг при разном капитальные затраты, темпе пусков и операционных расходах."
 weight: 35
 date: 2026-05-11
 ---
@@ -9,7 +9,7 @@ date: 2026-05-11
 
 <div id="ud-calc">
   <div class="ud-calc-row">
-    <label>CAPEX капитальные затраты, $ млрд: <output id="capex-out">30</output></label>
+    <label>капитальные затраты капитальные затраты, $ млрд: <output id="capex-out">30</output></label>
     <input type="range" id="capex" min="20" max="50" step="1" value="30">
   </div>
   <div class="ud-calc-row">
@@ -21,8 +21,8 @@ date: 2026-05-11
     <input type="range" id="pn" min="0.5" max="2.0" step="0.1" value="1.0">
   </div>
   <div class="ud-calc-row">
-    <label>OPEX операционные расходы, $ млн/год: <output id="opex-out">370</output></label>
-    <input type="range" id="opex" min="200" max="700" step="10" value="370">
+    <label>эксплуатационные расходы операционные расходы, $ млн/год: <output id="эксплуатационные расходы-out">370</output></label>
+    <input type="range" id="эксплуатационные расходы" min="200" max="700" step="10" value="370">
   </div>
   <div class="ud-calc-row">
     <label>Срок амортизации, лет: <output id="years-out">30</output></label>
@@ -35,7 +35,7 @@ date: 2026-05-11
       <span class="ud-calc-value" id="full-out">$3 700</span>
     </div>
     <div class="ud-calc-big">
-      <span class="ud-calc-label">$/кг УДЕЛЬНАЯ (OPEX/ПН)</span>
+      <span class="ud-calc-label">$/кг УДЕЛЬНАЯ (эксплуатационные расходы/ПН)</span>
       <span class="ud-calc-value" id="marg-out">$740</span>
     </div>
   </div>
@@ -113,14 +113,14 @@ date: 2026-05-11
     capex: document.getElementById('capex'),
     rate: document.getElementById('rate'),
     pn: document.getElementById('pn'),
-    opex: document.getElementById('opex'),
+    эксплуатационные расходы: document.getElementById('эксплуатационные расходы'),
     years: document.getElementById('years'),
   };
   const outs = {
     capex: document.getElementById('capex-out'),
     rate: document.getElementById('rate-out'),
     pn: document.getElementById('pn-out'),
-    opex: document.getElementById('opex-out'),
+    эксплуатационные расходы: document.getElementById('эксплуатационные расходы-out'),
     years: document.getElementById('years-out'),
     full: document.getElementById('full-out'),
     marg: document.getElementById('marg-out'),
@@ -140,39 +140,39 @@ date: 2026-05-11
     const capex = +inputs.capex.value;
     const rate = logScale(+inputs.rate.value);
     const pn = +inputs.pn.value;
-    const opex = +inputs.opex.value;
+    const эксплуатационные расходы = +inputs.эксплуатационные расходы.value;
     const years = +inputs.years.value;
 
     outs.capex.textContent = capex;
     outs.rate.textContent = rate;
     outs.pn.textContent = pn.toFixed(1);
-    outs.opex.textContent = opex;
+    outs.эксплуатационные расходы.textContent = эксплуатационные расходы;
     outs.years.textContent = years;
 
     const totalPN_tons = rate * pn;
     const totalPN_kg = totalPN_tons * 1000;
 
     const capexPerYear_M = (capex * 1000) / years;
-    const totalCost_M_per_year = capexPerYear_M + opex;
+    const totalCost_M_per_year = capexPerYear_M + эксплуатационные расходы;
 
     const fullCostPerKg = totalCost_M_per_year * 1e6 / totalPN_kg;
-    const marginalCostPerKg = opex * 1e6 / totalPN_kg;
+    const marginalCostPerKg = эксплуатационные расходы * 1e6 / totalPN_kg;
 
     outs.full.textContent = '$' + fmt(fullCostPerKg);
     outs.marg.textContent = '$' + fmt(marginalCostPerKg);
 
     let verdict = '';
     if (marginalCostPerKg < 200) {
-      verdict = `<strong>Сценарий А — конкурентен Starship.</strong> При ${rate} пусков/год и $${opex}М OPEX удельная стоимость $${fmt(marginalCostPerKg)}/кг пробивает целевую Starship $100-200/кг. Это режим максимального государственного спроса (Cislunar economy раскрылся к 2045+).`;
+      verdict = `<strong>Сценарий А — конкурентен Starship.</strong> При ${rate} пусков/год и $${эксплуатационные расходы}М эксплуатационные расходы удельная стоимость $${fmt(marginalCostPerKg)}/кг пробивает целевую Starship $100-200/кг. Это режим максимального государственного спроса (Cislunar economy раскрылся к 2045+).`;
     } else if (marginalCostPerKg < 500) {
-      verdict = `<strong>Сценарий Б — базовый v3.2.</strong> Удельная стоимость $${fmt(marginalCostPerKg)}/кг — реалистичный режим для массового топлива и металлов к околунному депо. УД и Starship — на разных рынках, не конкуренты.`;
+      verdict = `<strong>Сценарий Б — базовый v4.0.</strong> Удельная стоимость $${fmt(marginalCostPerKg)}/кг — реалистичный режим для массового топлива и металлов к околунному депо. УД и Starship — на разных рынках, не конкуренты.`;
     } else if (marginalCostPerKg < 1000) {
       verdict = `<strong>Сценарий В — минимум суверенитета.</strong> $${fmt(marginalCostPerKg)}/кг удельная — пользы для геополитической независимости больше, чем для коммерции. Окупаемость 30-50 лет, как у БАМ и Севморпути.`;
     } else {
-      verdict = `<strong>Сценарий Г — «памятник».</strong> $${fmt(marginalCostPerKg)}/кг — спрос не материализовался, программа работает в минимальном режиме. Это риск 25-35% в Карте рисков v3.2.`;
+      verdict = `<strong>Сценарий Г — «памятник».</strong> $${fmt(marginalCostPerKg)}/кг — спрос не материализовался, программа работает в минимальном режиме. Это риск 25-35% в Карте рисков v4.0.`;
     }
 
-    ctx.innerHTML = `Полная стоимость <strong>$${fmt(fullCostPerKg)}/кг</strong> учитывает амортизацию $${capex} млрд CAPEX за ${years} лет. Удельная <strong>$${fmt(marginalCostPerKg)}/кг</strong> — только следующий пуск без капитальных затрат (то, что коммерчески важно для конкуренции).<br><br>${verdict}<br><br>Подробнее в <a href="/economics/" style="color:var(--accent)">главе экономики</a> и <a href="/competitors/" style="color:var(--accent)">сравнении с конкурентами</a>.`;
+    ctx.innerHTML = `Полная стоимость <strong>$${fmt(fullCostPerKg)}/кг</strong> учитывает амортизацию $${capex} млрд капитальные затраты за ${years} лет. Удельная <strong>$${fmt(marginalCostPerKg)}/кг</strong> — только следующий пуск без капитальных затрат (то, что коммерчески важно для конкуренции).<br><br>${verdict}<br><br>Подробнее в <a href="/economics/" style="color:var(--accent)">главе экономики</a> и <a href="/competitors/" style="color:var(--accent)">сравнении с конкурентами</a>.`;
   }
 
   Object.values(inputs).forEach(i => i.addEventListener('input', recalc));
@@ -182,14 +182,14 @@ date: 2026-05-11
 
 ## Как это работает
 
-**Полная стоимость** = (CAPEX/срок_амортизации + OPEX) / (пусков_в_год × ПН_кг).
+**Полная стоимость** = (капитальные затраты/срок_амортизации + эксплуатационные расходы) / (пусков_в_год × ПН_кг).
 
-**Удельная стоимость** = OPEX / (пусков_в_год × ПН_кг). Без учёта капитальных затрат — это «следующий пуск», то что коммерчески важно для конкуренции со Starship.
+**Удельная стоимость** = эксплуатационные расходы / (пусков_в_год × ПН_кг). Без учёта капитальных затрат — это «следующий пуск», то что коммерчески важно для конкуренции со Starship.
 
-## Базовый сценарий v3.2
+## Базовый сценарий v4.0
 
-- **CAPEX**: $30 млрд за 15 лет программы 2030-2045 (тоннель, магниты, ВВЭР, импульсная энергетика, капсулы)
-- **OPEX**: $370 млн/год (электричество $150М + персонал $50М + амортизация капсул $80М + расходники + страховка)
+- **капитальные затраты**: $30 млрд за 15 лет программы 2030-2045 (тоннель, магниты, ВВЭР, импульсная энергетика, капсулы)
+- **эксплуатационные расходы**: $370 млн/год (электричество $150М + персонал $50М + амортизация капсул $80М + расходники + страховка)
 - **Темп**: 500-1000 пусков/год при выходе в рабочий режим
 - **ПН**: 1 т из 20 т стартовой массы (массовая доля 5%, как у обычной ракеты)
 - **Амортизация**: 30 лет — стандартный срок для государственной инфраструктуры
